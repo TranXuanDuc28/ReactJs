@@ -1,0 +1,47 @@
+@import "../../styles/common.scss";
+
+.header-container {
+    z-index: 99;
+    display: flex;
+    justify-content: space-between;
+    background-color: $colormain;
+    color: $common-text-color;
+    height: 40px;
+    position: relative;
+    .btn-logout {
+        color: $common-text-color;
+        line-height: 40px;
+        height: 40px;
+        padding: 0 10px;
+        &:hover {
+            background-color: darken($colormain, 5);
+        }
+        i {
+            font-size: $base-size + 1px;
+        }
+    }
+}
+.header-content-right{
+    display: flex;
+    align-items: center;
+    .nameuser{
+        margin-right: 10px;
+        font-weight: 600;
+        color: #dcff00;
+    }
+    .language{
+        display: flex;
+        padding: 10px 7px;
+        gap:15px;
+                cursor: pointer;
+        .subs-title2{
+         }       
+        .active-vi{
+            color: rgb(166, 1, 1);
+           
+        }
+        .active-en{
+            color: rgb(218, 192, 24);
+        }
+    }
+}

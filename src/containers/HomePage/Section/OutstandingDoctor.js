@@ -1,0 +1,120 @@
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import "slick-carousel/slick/slick.css";
+import * as actions from "../../../store/actions";
+import { LANGUAGE } from '../../../utils';
+import { withRouter } from 'react-router-dom';
+import Slider from "react-slick";
+import { NextArrow, PrevArrow } from "../CustomArrows";
+class OutstandingDoctor extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+          arrDoctors: []
+        
+        }
+       }
+   componentDidMount() {
+    this.props.getTopDoctorHomeRedux()
+   }
+   componentDidUpdate(prevProps, prevState, snapshot){
+        if(prevProps.listDoctorRedux !== this.props.listDoctorRedux){
+        this.setState({
+            arrDoctors : this.props.listDoctorRedux
+           
+        })
+        }
+    }
+    handelViewDetailDoctor = (doctor) => {
+        this.props.history.push(`/detail-doctor/${doctor.id}`)
+    }
+     render() {
+        let arrDoctors = this.state.arrDoctors 
+        arrDoctors = arrDoctors.concat(arrDoctors).concat(arrDoctors)
+        console.log("123",arrDoctors)
+        let language = this.props.language
+       
+        return (
+            <React.Fragment>
+               <div className='section-share section-background'>
+                  <div className='section-content'>
+                    <div className='section-header'>
+                        <div className='title-section'> Chuyên khoa</div>
+                        <div> <button className='btn-section'>Xem thêm</button></div>
+
+                    </div>
+                    <div className='section-body'>
+                    <Slider
+                            {...this.props.settings}
+                            nextArrow={<NextArrow />}
+                            prevArrow={<PrevArrow />}
+                        >
+                            {arrDoctors && arrDoctors.length>0 &&
+                            arrDoctors.map((item, index)=> {
+                                let nameVi = `${item.positionData.valueVi}, ${item.firstName} ${item.lastName}`;
+                                let nameEn = `${item.positionData.valueEn}, ${item.firstName} ${item.lastName}`;
+                                return(
+                                    <div className='section-customize customize-outstanding-doctor' key={index} onClick={()=>this.handelViewDetailDoctor(item)}>
+                                        <div className='bg-image section-outstanding-doctor'></div>
+                                        <div className='title-section'>
+                                        {language===LANGUAGE.VI ? nameVi : nameEn}<br/><span>Hô hấp - phổi</span></div>
+                                    </div>
+                                )
+                              
+                            })
+                            }
+                           
+                            {/* <div className='section-customize customize-outstanding-doctor'>
+                                <div className='bg-image section-outstanding-doctor'></div>
+                                <div className='title-section'>
+                                Bác sĩ Chuyên khoa II Lê Hồng Anh<br/><span>Hô hấp - phổi</span></div>
+                            </div>
+                            <div className='section-customize customize-outstanding-doctor'>
+                                <div className='bg-image section-outstanding-doctor'></div>
+                                <div className='title-section'>
+                                Bác sĩ Chuyên khoa II Lê Hồng Anh<br/><span>Hô hấp - phổi</span></div>
+                            </div>
+                            <div className='section-customize customize-outstanding-doctor'>
+                                <div className='bg-image section-outstanding-doctor'></div>
+                                <div className='title-section'>
+                                Bác sĩ Chuyên khoa II Lê Hồng Anh<br/><span>Hô hấp - phổi</span></div>
+                            </div>
+                            <div className='section-customize customize-outstanding-doctor'>
+                                <div className='bg-image section-outstanding-doctor'></div>
+                                <div className='title-section'>
+                                Bác sĩ Chuyên khoa II Lê Hồng Anh<br/><span>Hô hấp - phổi</span></div>
+                            </div>
+                            <div className='section-customize customize-outstanding-doctor'>
+                                <div className='bg-image section-outstanding-doctor'></div>
+                                <div className='title-section'>
+                                Bác sĩ Chuyên khoa II Lê Hồng Anh<br/><span>Hô hấp - phổi</span></div>
+                            </div> */}
+                            
+                        </Slider>
+                    </div>
+                 
+                  </div>               
+               </div>
+               
+            </React.Fragment>
+        );
+    }
+
+}
+
+const mapStateToProps = state => {
+    return {
+        language: state.app.language,
+        isLoggedIn: state.user.isLoggedIn,
+        listDoctorRedux: state.admin.listDoctor
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getTopDoctorHomeRedux: () => dispatch( actions.getTopDoctorHome()),
+    };
+};
+
+export default  withRouter(connect(mapStateToProps, mapDispatchToProps)(OutstandingDoctor));

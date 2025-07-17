@@ -1,0 +1,37 @@
+.detail-doctor-container{
+    
+    height: auto;
+    .intro-doctor{
+        margin: 20px 10%;
+     height: 160;
+     display: flex;
+        .content-left{
+            width: 20%;
+            height: 160;
+        }
+        .content-right{
+            padding-right: 300px;
+            margin-left: 20px;
+            .up{
+                font-size: 22px;
+                font-weight: 600;
+            }
+            width: 80%;
+        }
+    }
+    .schedule-doctor{
+        margin: 20px 10%;
+        display: flex;
+        .content-left{
+            width: 50%;
+        }
+        .content-right{
+            width: 50%;
+        }
+    }
+    .detail-infor-doctor{
+        padding: 0 10%;
+        padding-top: 20px;
+        border-top: 1px solid rgb(199, 199, 199);
+    }
+}

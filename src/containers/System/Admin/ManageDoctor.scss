@@ -1,0 +1,56 @@
+.manage-doctor-container{
+    padding: 0 5%;
+    .manage-doctor-title{
+        font-size: 22px;
+        font-weight: 600;
+        text-align: center;
+        padding: 20px;
+    }
+    .more-infor{
+        width: 100%;
+        display: flex;
+       
+        .content-left{
+            width: 50%;
+            padding-right: 30px;
+        }
+        .content-right{
+            width: 50%;
+        }
+    }
+    
+    .manage-doctor-editor{
+        margin: 30px 0px;
+    }
+    .btn-edit-doctor{
+        background-color: rgb(219, 125, 10);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 8px;
+        display: flex;
+        margin: auto;
+        margin-bottom: 20px;
+        &:hover{
+            opacity: 0.9;
+        }
+    }
+    .btn-save-doctor{
+        background-color: rgb(45, 31, 230);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 8px;
+        display: flex;
+        margin: auto;
+        margin-bottom: 20px;
+        &:hover{
+            opacity: 0.9;
+        }
+    }
+    .more-infor-detail{
+        display: flex;
+        padding: 2px;
+        flex-wrap: wrap;
+    }
+}

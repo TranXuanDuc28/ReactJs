@@ -1,0 +1,167 @@
+.home-header-container {
+  width: 100%;
+
+  padding: 0 10%;
+
+  .home-header-content {
+    padding: 15px 0px;
+    width: 100%;
+    display: flex;
+    background-color: rgb(237, 255, 250);
+    .left-content {
+      width: 20%;
+      display: flex;
+      justify-content: center;
+
+      align-items: center;
+      button {
+        font-size: 27px;
+        background-color: rgb(237, 255, 250);
+        border: none;
+        outline: none;
+        i {
+          color: gray;
+        }
+      }
+      .header-logo {
+        background: url("../../assets/images/bookingcare-2020.svg");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 46px;
+        width: 100%;
+      }
+    }
+    .center-content {
+      width: 60%;
+      display: flex;
+      .left-child-content {
+        width: 60%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 0 20px;
+        .subs-title1 {
+          font-weight: 500;
+          font-size: 17px;
+          padding: 7px 10px;
+        }
+        .subs-title1-yellow {
+          background-color: rgb(255, 196, 25);
+          border-radius: 25px;
+          color: white;
+        }
+      }
+      .right-child-content {
+        display: flex;
+        align-items: center;
+
+        .search-input {
+          width: fit-content;
+          height: auto;
+          border: 1px solid rgb(188, 188, 188);
+          padding: 13px 10px;
+          border-radius: 25px;
+          width: 280px;
+          background-color: white;
+        }
+        i {
+          font-size: 17px;
+        }
+        input {
+          outline: none;
+          border: none;
+        }
+      }
+    }
+    .right-content {
+      width: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .schedule,
+      .support,
+      .language {
+        color: rgb(91, 203, 215);
+        font-weight: 700;
+        text-align: center;
+
+        i {
+          font-size: 22px;
+        }
+        .subs-title2 {
+          margin-top: 5px;
+        }
+      }
+      .schedule,
+      .support {
+        margin-right: 20px;
+      }
+      .language {
+        cursor: pointer;
+        .active-vi {
+          color: red;
+        }
+        .active-en {
+          color: blue;
+        }
+      }
+    }
+  }
+  .home-banner-content {
+    background: url("../../assets/images/141422-144204-dat-lich-kham-bookingcare-pharmacity.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 410px;
+    width: 100%;
+    border-radius: 25px;
+    margin-top: 20px;
+  }
+}
+.home-body1-container {
+  width: 100%;
+  padding: 50px 10% 0px 10%;
+
+  .subs-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 25px 0px;
+  }
+  .home-body1-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .child-content {
+      width: 580px;
+      border-radius: 30px;
+      border: 1px solid rgb(226, 226, 226);
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 15px 30px;
+      margin: 20px 0px;
+      .image-container {
+        background: radial-gradient(
+          circle,
+          rgb(255, 211, 84),
+          rgb(255, 239, 195),
+          rgb(254, 253, 251),
+          rgb(255, 255, 255)
+        );
+        padding: 15px;
+        text-align: center;
+        img {
+          width: 60px;
+          height: 60px;
+        }
+      }
+      .child-subs-title {
+        font-weight: bold;
+        font-size: 20px;
+        margin-left: 40px;
+      }
+    }
+  }
+}

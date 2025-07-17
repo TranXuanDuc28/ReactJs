@@ -1,0 +1,178 @@
+.slick-prev {
+  margin-left: -15px !important;
+  height: 40px !important;
+  width: 44px !important;
+  border-radius: 10px;
+  border: 1px solid aqua;
+  outline: none;
+  position: absolute;
+  z-index: 1;
+  top: 50%; /* Đặt nút giữa theo chiều dọc */
+  transform: translateY(-50%); /* Chỉnh lại vị trí giữa theo chiều dọc */
+  background-color: white;
+}
+.slick-next {
+  height: 40px !important;
+  width: 44px !important;
+  border-radius: 10px;
+  border: 1px solid aqua;
+  outline: none;
+  position: absolute;
+  top: 50%; /* Đặt nút giữa theo chiều dọc */
+  transform: translateY(-50%); /* Chỉnh lại vị trí giữa theo chiều dọc */
+  right: -14px !important; /* Đặt vị trí của nút next ở bên phải */
+  background-color: white;
+}
+.slick-slide {
+  padding: 0px 15px;
+}
+.slick-disable {
+  display: none !important;
+}
+.section-share {
+  // margin: 100px 0px;
+  &.section-background {
+    width: 100%; /* Đảm bảo phần tử bao phủ hết chiều rộng của trình duyệt */
+    background-image: url("../../assets/images/140311-background5.png");
+    background-position: le;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .section-body {
+    width: auto;
+
+    .section-customize {
+      height: 400px;
+      // margin: 100px 0px;
+      padding: 20px 0px;
+
+      &.customize-outstanding-doctor {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer;
+      }
+      &.customize-specialty {
+        border: 1px solid #cae3e6;
+        border-radius: 20px;
+      }
+      &.customize-medical-facility {
+        border: 1px solid #cae3e6;
+        border-radius: 20px;
+      }
+      .bg-image {
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+
+        &.section-specialty {
+          background: url("../../assets/images/101713-tim-mach.png");
+          height: 250px;
+        }
+        &.section-medical-facility {
+          background: url("../../assets/images/152704logo-bvcr-moi.jpg");
+          height: 250px;
+        }
+        &.section-outstanding-doctor {
+          width: 200px;
+          height: 180px;
+          background: url("../../assets/images/103447-bs-hong-anh.jpg");
+          border-radius: 50%;
+        }
+        &.section-handlebook {
+          background: url("../../assets/images/HandBook/144434-dia-chi-kham-chua-benh-cong-veo-cot-song-tre-em.png");
+          width: 278px;
+          height: 250px;
+          background-size: contain !important;
+        }
+      }
+
+      .title-section {
+        font-weight: 550;
+        text-align: center;
+        font-size: 17px;
+        padding: 20px 0px;
+      }
+    }
+  }
+}
+
+.section-share {
+  // margin: 200px 0px;
+  padding: 0px 10%;
+
+  .section-content {
+    .section-header {
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 100px 0px 30px 0px;
+
+      .title-section {
+        font-size: 22px;
+        font-weight: 550;
+      }
+      .btn-section {
+        padding: 10px 15px;
+        background-color: #daf3f6;
+        font-size: 20px;
+        font-weight: 550;
+        border-radius: 15px;
+        border: none;
+        color: #4099a4;
+      }
+    }
+  }
+}
+.section-about {
+  .section-about-content {
+    margin: 50px 0px;
+    .section-header {
+      font-weight: 600;
+      font-size: 22px;
+      text-align: center;
+      padding: 25px 0px;
+    }
+    .section-body {
+      display: flex;
+      .content-left {
+        width: 50%;
+        iframe {
+          border-radius: 10px;
+          height: 335px;
+        }
+      }
+      .content-right {
+        width: 50%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 0px 20px;
+        .image-container {
+          background-color: white;
+          padding: 5px 20px;
+          height: 70px;
+          width: 270px;
+          display: flex;
+          justify-content: center;
+          border-radius: 10px;
+          .image-about {
+            width: 110px;
+            height: 60px;
+            background: url("../../assets/images/about/vtv1.png");
+            background-size: contain !important;
+            background-position: center center !important;
+            background-repeat: no-repeat;
+          }
+        }
+      }
+    }
+  }
+}
+.icon-hover:hover {
+  color: black; /* đổi màu khi hover */
+  transform: scale(1.2); /* phóng to nhẹ */
+  //   transition: all 0.2s ease;
+}

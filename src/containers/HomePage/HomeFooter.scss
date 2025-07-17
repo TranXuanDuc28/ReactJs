@@ -1,0 +1,24 @@
+.section-footer{
+    background-color: #64b9e5;
+   
+    width: 100%;
+    padding: 0px 10%;
+    .section-content{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 90px;
+        .footer-left{
+            color: white;
+        }
+        .footer-right{
+             i{
+                color: white;
+                font-size: 35px;
+             }
+        }
+    }
+    
+  
+   
+}

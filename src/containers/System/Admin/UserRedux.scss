@@ -1,0 +1,13 @@
+.preview-img-container{
+    .previewImage{
+        width: 50%;
+        height: 100px;
+        border: 1px solid gray;
+        background-size: contain;
+        background-repeat: no-repeat;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+    }
+}

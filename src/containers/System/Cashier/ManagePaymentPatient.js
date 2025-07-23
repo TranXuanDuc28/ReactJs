@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import * as actions from "../../../store/actions";
 import { CRUD_ACTION, dateFormat, LANGUAGE } from "../../../utils";
 import Select from "react-select";
-import "./ManagePatient.scss";
+import "./ManagePaymentPatient.scss";
 import DatePicker from "../../../components/Input/DatePicker";
 import { ToastContainer, toast } from "react-toastify";
 import _ from "lodash";
@@ -12,18 +12,19 @@ import "../../../utils/constant";
 import {
   getAllPatientForDoctor,
   postMedicalAppointmentStatus,
+  postSendPayment,
 } from "../../../services/userServices";
 import moment from "moment";
-import RemedyModal from "./RemedyModal";
+import RemedyModal from "./PaymentModal";
 import { postSendRemedy } from "../../../services/userServices";
 // import LoadingOverlay from "react-loading-overlay";
-class ManagePatient extends Component {
+class ManagePaymentPatient extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentDate: moment(new Date()).startOf("day").valueOf(),
       dataPatient: [],
-      isOpenModalRemedy: false,
+      isOpenModal: false,
       dataModal: {},
       isShowLoading: false,
     };
@@ -62,7 +63,7 @@ class ManagePatient extends Component {
       }
     );
   };
-  handleBtnConfirm = (item) => {
+  handleBtnPayment = (item) => {
     let data = {
       patientId: item.patientId,
       doctorId: item.doctorId,
@@ -72,74 +73,36 @@ class ManagePatient extends Component {
       patientName: item.patientData.firstName,
     };
     this.setState({
-      isOpenModalRemedy: true,
+      isOpenModal: true,
       dataModal: data,
     });
   };
-  handleBtnEnd = async (item) => {
-    let dataModal = {
-      patientId: item.patientId,
-      doctorId: item.doctorId,
-      timeType: item.timeType,
-      date: item.date,
-      email: item.patientData.email,
-      patientName: item.patientData.firstName,
-    };
-    try {
-      let res = await postMedicalAppointmentStatus({
-        doctorId: dataModal.doctorId,
-        patientId: dataModal.patientId,
-        timeType: dataModal.timeType,
-      });
-
-      if (res && res.errCode === 0) {
-        toast.success("Hoàn thành khám bệnh!");
-        this.setState({
-          isShowLoading: false,
-        });
-        await this.getDataPatient();
-      } else {
-        toast.error("Đã xảy ra sự cố!");
-        this.setState({ isShowLoading: false });
-      }
-    } catch (error) {
-      toast.error("Đã có lỗi xảy ra khi thực hiện!");
-      this.setState({ isShowLoading: false });
-    }
-  };
-  closeRemedyModal = () => {
-    this.setState({
-      isOpenModalRemedy: false,
-      dataModal: {},
-    });
-  };
-  sendRemedy = async (dataChild) => {
+  handleSendPayment = async (dataChild) => {
     let { dataModal } = this.state;
     this.setState({ isShowLoading: true });
     try {
-      let res = await postSendRemedy({
+      let res = await postSendPayment({
         doctorId: dataModal.doctorId,
         patientId: dataModal.patientId,
         timeType: dataModal.timeType,
+        patientName: dataModal.patientName,
 
         email: dataChild.email,
-        imagebase64: dataChild.imageBase64,
+        cashier: dataChild.cashier,
+        date: dataChild.date,
         language: this.props.language,
-        patientName: dataModal.patientName,
-        selectedMedicines: dataChild.selectedMedicines,
         totalPrice: dataChild.totalPrice,
+        description: dataChild.description,
       });
-      console.log("check res send remedy", res);
-
       if (res && res.errCode === 0) {
-        toast.success("Gửi hóa đơn thành công!");
+        toast.success("Thanh toán thành công!");
         this.setState({
           isShowLoading: false,
         });
         this.closeRemedyModal();
         await this.getDataPatient();
       } else {
-        toast.error("Gửi hóa đơn thất bại!");
+        toast.error("Thanh toán thất bại!");
         this.setState({ isShowLoading: false });
       }
     } catch (error) {
@@ -149,10 +112,15 @@ class ManagePatient extends Component {
       this.setState({ isShowLoading: false });
     }
   };
+  closeRemedyModal = () => {
+    this.setState({
+      isOpenModal: false,
+      dataModal: {},
+    });
+  };
 
   render() {
-    let { dataPatient, isOpenModalRemedy, dataModal } = this.state;
-
+    let { dataPatient, isOpenModal, dataModal } = this.state;
     let language = this.props.language;
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
     return (
@@ -206,19 +174,16 @@ class ManagePatient extends Component {
                           </td>
                           <td>{item.patientData.address}</td>
                           <td>
-                            {item.statusId === "S2" ? (
-                              <button
-                                className="btn btn-primary"
-                                onClick={() => this.handleBtnConfirm(item)}
-                              >
-                                Kê khai!
+                            {item.statusId === "S5" ? (
+                              <button className="btn btn-primary">
+                                Đã thanh toán!
                               </button>
-                            ) : item.statusId === "S3" ? (
+                            ) : item.statusId === "S6" ? (
                               <button
-                                className="text-success"
-                                onClick={() => this.handleBtnEnd(item)}
+                                className="text--danger"
+                                onClick={() => this.handleBtnPayment(item)}
                               >
-                                Kết thúc khám bệnh
+                                Thanh toán ngay!
                               </button>
                             ) : null}
                           </td>
@@ -237,12 +202,12 @@ class ManagePatient extends Component {
             </div>
           </div>
         </div>
-        {isOpenModalRemedy && (
+        {isOpenModal && (
           <RemedyModal
-            isOpenModal={isOpenModalRemedy}
+            isOpenModal={isOpenModal}
             dataModal={dataModal}
-            closeRemedyModal={this.closeRemedyModal}
-            sendRemedy={this.sendRemedy}
+            closePaymentModal={this.closeRemedyModal}
+            handleSendPayment={this.handleSendPayment}
           />
         )}
         {/* </LoadingOverlay> */}
@@ -265,4 +230,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManagePatient);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManagePaymentPatient);

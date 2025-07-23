@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { ConnectedRouter as Router } from "connected-react-router";
 import { history } from "../redux";
@@ -24,6 +24,44 @@ import CustomScrollbars from "../components/CustomScrollbars";
 import VerifyEmail from "./Patient/VerifyEmail";
 import DetailSpecialty from "./Patient/Specialty/DetailSpecialty";
 import DetailClinic from "./Patient/Clinic/DetailClinic";
+import PatientChat from "./Chat/PatientChat";
+import { useSelector } from "react-redux";
+import { getSocket } from "../socket";
+import { setOnlineDoctors } from "../store/actions/onlineDoctorsActions";
+
+// Hook emit ADD_USER khi patient login thành công
+function useRegisterPatientSocket() {
+  const patient = useSelector(state => state.patient.patientInfo);
+  React.useEffect(() => {
+    const socket = getSocket();
+    if (!socket.connected) socket.connect();
+    if (patient) {
+      socket.emit("ADD_USER", patient);
+    }
+  }, [patient]);
+}
+
+// Hook lắng nghe USER_ADDED và cập nhật redux onlineDoctors
+function useListenOnlineDoctors() {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    const socket = getSocket();
+    const handleUserAdded = (users) => {
+      dispatch(setOnlineDoctors(users.filter(u => u.roleId === "R2")));
+    };
+    socket.on("USER_ADDED", handleUserAdded);
+    return () => {
+      socket.off("USER_ADDED", handleUserAdded);
+    };
+  }, [dispatch]);
+}
+
+// Bọc App class bằng function component để dùng hook
+function AppWithSocket(props) {
+  useRegisterPatientSocket();
+  useListenOnlineDoctors();
+  return <App {...props} />;
+}
 
 class App extends Component {
   handlePersistorState = () => {
@@ -76,6 +114,10 @@ class App extends Component {
                     path={path.VERIFY_EMAIL_BOOKING}
                     component={VerifyEmail}
                   />
+                  <Route
+                    path={path.CHAT_PATIENT}
+                    component={PatientChat}
+                  />
                 </Switch>
               </CustomScrollbars>
             </span>
@@ -109,6 +151,7 @@ const mapStateToProps = (state) => {
   return {
     started: state.app.started,
     isLoggedIn: state.user.isLoggedIn,
+    isLoggedInPatient: state.patient.isLoggedInPatient,
   };
 };
 
@@ -116,4 +159,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(AppWithSocket);

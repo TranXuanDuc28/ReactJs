@@ -53,10 +53,10 @@ class Header extends Component {
         {/* nút logout */}
         <div className="header-content-right">
           <div className="nameuser">
-            {" " + userInfo && language === LANGUAGE.VI
+            {/* {" " + userInfo && language === LANGUAGE.VI
               ? userInfo.roleData.valueVi
               : userInfo.roleData.valueEn}
-            {" - "}
+            {" - "} */}
             {userInfo && userInfo.firstName
               ? userInfo.firstName + " " + userInfo.lastName
               : ""}

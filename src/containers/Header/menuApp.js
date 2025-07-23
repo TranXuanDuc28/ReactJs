@@ -29,6 +29,10 @@ export const adminMenu = [
         name: "menu.doctor.manage-schedule",
         link: "/doctor/manage-schedule",
       },
+      {
+        name: "menu.doctor.chat-patient",
+        link: "/doctor/chat",
+      },
     ],
   },
   {
@@ -74,6 +78,11 @@ export const doctorMenu = [
         name: "menu.doctor.manage-patient",
         link: "/doctor/manage-patient",
       },
+      {
+        name: "menu.doctor.chat-patient",
+        link: "/doctor/chat",
+      },
+      
     ],
   },
 ];
@@ -82,12 +91,12 @@ export const cashierMenu = [
     name: "menu.admin.manage-user",
     menus: [
       {
-        name: "menu.doctor.manage-schedule",
-        link: "/doctor/manage-schedule",
+        name: "menu.doctor.manage-patient",
+        link: "/system/manage-payment",
       },
       {
-        name: "menu.doctor.manage-patient",
-        link: "/doctor/manage-patient",
+        name: "menu.doctor.chat-patient",
+        link: "/doctor/chat",
       },
     ],
   },

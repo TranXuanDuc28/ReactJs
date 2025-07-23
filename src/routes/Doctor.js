@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import ManageSchedule from "../containers/System/Doctor/ManageSchedule";
 import ManagePatient from "../containers/System/Doctor/ManagePatient";
 import Header from "../containers/Header/Header";
+import Chat from "../containers/Chat/index"
 class Doctor extends Component {
   render() {
     const { systemMenuPath, isLoggedIn } = this.props;
@@ -18,6 +19,7 @@ class Doctor extends Component {
                 component={ManageSchedule}
               />
               <Route path="/doctor/manage-patient" component={ManagePatient} />
+              <Route path="/doctor/chat" component={Chat} />
             </Switch>
           </div>
         </div>

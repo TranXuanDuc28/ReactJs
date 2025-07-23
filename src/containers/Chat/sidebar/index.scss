@@ -1,0 +1,15 @@
+.online-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: #4caf50;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px #4caf50;
+    z-index: 2;
+  }
+.bg-light-custom{
+    background: #e9ecef !important;
+}

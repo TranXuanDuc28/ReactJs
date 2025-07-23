@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./BookingModal.scss";
 import { FormattedMessage } from "react-intl";
-import { Modal } from "reactstrap";
+import { Modal } from "react-bootstrap";
 import ProfileDoctor from "../ProfileDoctor";
 import { LANGUAGES } from "../../../../utils";
 import _ from "lodash";
@@ -156,7 +156,8 @@ class BookingModal extends Component {
     console.log("dataTime_Booking", dataTime);
     return (
       <Modal
-        isOpen={isOpenModalBooking}
+        show={isOpenModalBooking}
+        onHide={closeBookingModal}
         className={"modal-booking-container"}
         size="lg"
         centered

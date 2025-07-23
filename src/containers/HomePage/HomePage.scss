@@ -176,3 +176,77 @@
   transform: scale(1.2); /* phóng to nhẹ */
   //   transition: all 0.2s ease;
 }
+
+// Responsive cho tablet và mobile
+@media (max-width: 992px) {
+  .section-share {
+    padding: 0 2%;
+  }
+  .section-share .section-body .section-customize {
+    height: 300px;
+  }
+  .section-about .section-about-content .section-body {
+    flex-direction: column;
+    .content-left, .content-right {
+      width: 100%;
+      padding: 0;
+    }
+    .content-right {
+      margin-top: 20px;
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .slick-prev{
+    margin-left: -5px !important;
+  }
+  .slick-next{
+    margin-right: 8px !important;
+  }
+  .section-share, .section-specialty, .section-content{
+    
+    
+    .section-header{
+      .title-section{
+        font-size: 15px !important;
+      }
+
+    }
+    .section-body {
+      .section-customize {
+        height: 200px;
+        padding: 10px 0;
+        
+      }
+      .customize-specialty {
+        min-width: 70px;
+        height: 150px;
+        padding: 6px 0 10px 0;
+        .section-specialty{
+          width: 105px !important;
+          height: 70px;
+        }
+        .specialty-name.title-section {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+
+@media (max-width: 768px) {
+  .section-share .section-body .section-customize.customize-specialty {
+    min-width: 90px;
+    max-width: 110px;
+    .section-specialty {
+      width: 60px;
+      height: 70px;
+    }
+    .specialty-name.title-section {
+      font-size: 14px;
+    }
+  }
+}

@@ -4,6 +4,8 @@ import { connectRouter } from 'connected-react-router';
 import appReducer from "./appReducer";
 import userReducer from "./userReducer";
 import adminReducer from './adminReducer';
+import patientReducer from './patientReducer';
+import onlineDoctorsReducer from './onlineDoctorsReducer';
 
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
@@ -20,6 +22,12 @@ const userPersistConfig = {
     whitelist: ['isLoggedIn', 'userInfo']
 };
 
+const patientPersistConfig = {
+    ...persistCommonConfig,
+    key: 'patient',
+    whitelist: ['isLoggedInPatient', 'patientInfo']
+};
+
 const appPersistConfig = {
     ...persistCommonConfig,
     key: 'app',
@@ -29,8 +37,10 @@ const appPersistConfig = {
 export default (history) => combineReducers({
     router: connectRouter(history),
     user: persistReducer(userPersistConfig, userReducer),
+    patient: persistReducer(patientPersistConfig, patientReducer),
     app: persistReducer(appPersistConfig, appReducer),
     // user: userReducer,
     admin: adminReducer,
+    onlineDoctors: onlineDoctorsReducer,
     // app: appReducer
 })

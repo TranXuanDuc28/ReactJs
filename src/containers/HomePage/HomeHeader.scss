@@ -26,10 +26,11 @@
       .header-logo {
         background: url("../../assets/images/bookingcare-2020.svg");
         background-position: center;
-        background-size: cover;
+        background-size: contain;
         background-repeat: no-repeat;
         height: 46px;
         width: 100%;
+        cursor: pointer;
       }
     }
     .center-content {
@@ -81,6 +82,7 @@
       align-items: center;
       .schedule,
       .support,
+      .chat,
       .language {
         color: rgb(91, 203, 215);
         font-weight: 700;
@@ -94,8 +96,17 @@
         }
       }
       .schedule,
-      .support {
+      .support,
+      .chat {
         margin-right: 20px;
+      }
+      .chat {
+        cursor: pointer;
+        transition: color 0.2s;
+        
+        &:hover {
+          color: rgb(70, 180, 190);
+        }
       }
       .language {
         cursor: pointer;
@@ -163,5 +174,67 @@
         margin-left: 40px;
       }
     }
+  }
+}
+
+@media (max-width: 992px) {
+  .home-header-container {
+    padding: 0 2%;
+    .home-header-content {
+      flex-direction: column;
+      .left-content, .center-content, .right-content {
+        width: 100%;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+      }
+      .center-content {
+        flex-direction: column;
+        .left-child-content, .right-child-content {
+          width: 100%;
+          margin: 0;
+        }
+      }
+    }
+    .home-banner-content {
+      height: 250px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .home-header-container .home-header-content {
+    padding: 5px 0;
+    .left-content{
+      height: 150px;
+      
+      display: flex;
+      justify-content: center;
+      .header-logo{
+        height: 97px;
+        width: 80%;
+        background-position: center center;
+        background-size: cover;
+      }
+      
+    } 
+    .center-content{
+      font-size: 14px;
+      height: 100px;
+      .right-child-content .search-input {
+        width: 100%;
+        padding: 8px 10px;
+        margin: 15px ;
+      }
+    } 
+    .right-content {
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+  }
+  .home-header-container .home-banner-content {
+    height: 120px;
+    border-radius: 10px;
   }
 }

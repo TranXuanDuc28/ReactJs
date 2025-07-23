@@ -3,6 +3,12 @@ import axios from "../axios";
 const handleLoginApi = (email, password) => {
   return axios.post("/api/login", { email, password });
 };
+
+
+const handlePatientChatLogin = (email, password) => {
+  return axios.post('/api/login-patient-chat', { email, password });
+};
+
 const handleGetAllUsers = (id) => {
   return axios.get(`/api/get_all_users?id=${id}`);
 };
@@ -50,11 +56,21 @@ const getAllDetailClinicById = (data) => {
 
 const getAllPatientForDoctor = (data) => {
   return axios.get(
-    `/api/get-list-patient-for-doctor?doctorId=${data.doctorId}&date=${data.date}`
+    `/api/get-list-patient-for-doctor?doctorId=${data.doctorId}&roleId=${data.roleId}&date=${data.date}`
   );
 };
 const postSendRemedy = (data) => {
   return axios.post("/api/send-remedy", data);
+};
+const getAllMedicines = () => {
+  return axios.get("/api/get-medicines");
+};
+const postMedicalAppointmentStatus = (data) => {
+  return axios.post("/api/update-medical-appointment-status", data);
+};
+
+const postSendPayment = (data) => {
+  return axios.post("/api/send-payment", data);
 };
 
 export {
@@ -73,4 +89,8 @@ export {
   getAllDetailClinicById,
   getAllPatientForDoctor,
   postSendRemedy,
+  getAllMedicines,
+  postMedicalAppointmentStatus,
+  postSendPayment,
+  handlePatientChatLogin
 };

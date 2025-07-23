@@ -8,13 +8,14 @@ import DoctorSchedule from "./DoctorSchedule";
 import * as actions from "../../../store/actions"
 import { LANGUAGE } from "../../../utils";
 import DoctorExtraInfor from "./DoctorExtraInfor";
+import PatientChatBox from '../../Chat/PatientChatBox'; // sẽ tạo mới file này
 class DetailDoctors extends Component {
     constructor(props){
         super(props);
         this.state = {
             detailDoctorbyId: [],
-            currentDoctorId: '-1'
-        
+            currentDoctorId: '-1',
+            showChatBox: false // Thêm state này
         }
        }
     async componentDidMount(){
@@ -78,6 +79,14 @@ class DetailDoctors extends Component {
                 </span>
                 }
               </div>
+              {/* Nút Liên hệ */}
+              <button
+                className="btn btn-primary mt-3"
+                onClick={() => this.setState({ showChatBox: true })}
+                style={{ minWidth: 120 }}
+              >
+                Liên hệ
+              </button>
             </div>
           </div>
           <div className="schedule-doctor">
@@ -103,6 +112,13 @@ class DetailDoctors extends Component {
           </div>
           <div className="comment-doctor"></div>
         </div>
+        {/* Popup Chatbox */}
+        {this.state.showChatBox && (
+          <PatientChatBox
+            doctor={detailDoctorbyId}
+            onClose={() => this.setState({ showChatBox: false })}
+          />
+        )}
       </React.Fragment>
     );
   }

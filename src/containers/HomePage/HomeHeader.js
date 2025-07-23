@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { push } from "connected-react-router";
 import  './HomeHeader.scss';
 import logo1 from '../../assets/images/161905-iconkham-chuyen-khoa.webp';
 import logo2 from '../../assets/images/161817-iconkham-tu-xa.webp';
@@ -28,7 +29,7 @@ class HomeHeader extends Component {
                     <div className='home-header-content'>
                         <div className='left-content'>
                             <button><i class="fa fa-bars" aria-hidden="true"></i></button>
-                            <div className='header-logo'>
+                            <div className='header-logo ' onClick={() => this.props.navigate('/home')}>
                                 
                             </div>
                         </div>
@@ -51,6 +52,11 @@ class HomeHeader extends Component {
                             <div className='schedule'>
                                <i class="fa fa-calendar" aria-hidden="true"></i>
                                <div className='subs-title2'>Lịch hẹn</div>
+                            
+                            </div>
+                            <div className='chat'>
+                               <i class="fa fa-comments" aria-hidden="true"></i>
+                               <div className='subs-title2' onClick={() => this.props.navigate('/chat-patient')}>Chat với Bác sĩ</div>
                             
                             </div>
                             <div className='support'>
@@ -136,7 +142,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeLanguageRedux: (language) => dispatch(changeLanguage(language))
+        changeLanguageRedux: (language) => dispatch(changeLanguage(language)),
+        navigate: (path) => dispatch(push(path))
     };
 };
 

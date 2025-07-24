@@ -31,12 +31,23 @@ const PatientChat = () => {
       .catch(() => setAllDoctors([]));
   }, []);
 
-  // Đồng bộ lại selectedDoctor khi onlineDoctors thay đổi (doctor login lại sẽ có socketId mới)
+  // Đồng bộ lại selectedDoctor khi onlineDoctors hoặc selectedDoctor thay đổi (doctor login lại sẽ có socketId mới)
   useEffect(() => {
     if (!selectedDoctor) return;
     const onlineDoctor = onlineDoctors.find(d => d.id === selectedDoctor.id);
-    if (onlineDoctor && onlineDoctor.socketId !== selectedDoctor.socketId) {
-      dispatch(setSelectedDoctor({ ...selectedDoctor, socketId: onlineDoctor.socketId }));
+    if (onlineDoctor) {
+      // Luôn cập nhật lại toàn bộ thông tin doctor online (bao gồm socketId mới nhất)
+      if (
+        selectedDoctor.socketId !== onlineDoctor.socketId ||
+        selectedDoctor.firstName !== onlineDoctor.firstName // phòng trường hợp thông tin doctor thay đổi
+      ) {
+        dispatch(setSelectedDoctor({ ...onlineDoctor }));
+      }
+    } else {
+      // Nếu doctor offline, xóa socketId để không gửi nhầm
+      if (selectedDoctor.socketId) {
+        dispatch(setSelectedDoctor({ ...selectedDoctor, socketId: undefined }));
+      }
     }
   }, [onlineDoctors, selectedDoctor, dispatch]);
 

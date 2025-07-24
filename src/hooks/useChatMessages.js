@@ -7,7 +7,6 @@ import {
   addChatMessage,
   deleteChatMessage,
   setChatLoading,
-  setSelectedDoctor,
 } from "../store/actions/chatActions";
 
 const PATH = "http://localhost:8080";
@@ -17,20 +16,18 @@ export default function useChatMessages({ user, receiver }) {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.chat.messages);
   const isLoading = useSelector((state) => state.chat.isLoading);
-  // selectedDoctor sẽ được quản lý ở component cha hoặc qua Redux nếu muốn đồng bộ toàn app
 
   // Kết nối socket (singleton)
   useEffect(() => {
     const socket = getSocket();
     socketRef.current = socket;
     if (!socket.connected) socket.connect();
-    // Không cần setIsConnected, chỉ cần biết socket đã connect
     return () => {
       // KHÔNG disconnect ở đây, chỉ disconnect khi logout toàn app
     };
   }, []);
 
-  // Lắng nghe tin nhắn mới, luôn clear listener cũ trước khi gán mới
+  // Lắng nghe tin nhắn mới, chỉ gán listener 1 lần khi user login
   useEffect(() => {
     const socket = socketRef.current;
     if (socket.connected && user) {
@@ -39,7 +36,17 @@ export default function useChatMessages({ user, receiver }) {
       socket.off("RECEIVED_MSG");
       socket.on("RECEIVED_MSG", (data) => {
         const msg = data.data ? data.data : data;
-        dispatch(addChatMessage(msg));
+        // Kiểm tra nếu tin nhắn liên quan đến receiver hiện tại thì mới add
+        // (1) Nếu mình là sender hoặc receiver
+        // (2) Hoặc receiver là null (chưa chọn ai)
+        if (
+          (receiver &&
+            ((msg.sender?.id === user.id && msg.receiver?.id === receiver.id) ||
+              (msg.sender?.id === receiver.id && msg.receiver?.id === user.id))) ||
+          !receiver
+        ) {
+          dispatch(addChatMessage(msg));
+        }
       });
     }
     // Cleanup khi unmount
@@ -48,7 +55,8 @@ export default function useChatMessages({ user, receiver }) {
         socket.off("RECEIVED_MSG");
       }
     };
-  }, [user, receiver, dispatch]);
+    // eslint-disable-next-line
+  }, [user, dispatch]); // KHÔNG phụ thuộc receiver
 
   // Load tin nhắn khi receiver/user thay đổi
   useEffect(() => {
@@ -79,23 +87,7 @@ export default function useChatMessages({ user, receiver }) {
       .finally(() => dispatch(setChatLoading(false)));
   };
 
-  // Gửi tin nhắn
-  const sendMessage = (messageInput, fileMeta) => {
-    if (!receiver) return;
-    const socket = socketRef.current;
-    if (socket.connected) {
-      let sender = { ...user, socketId: socket.id };
-      const data = {
-        msg: messageInput,
-        receiver,
-        sender,
-        ...fileMeta,
-      };
-      socket.emit("SEND_MSG", data);
-      // Có thể optimistic update nếu muốn
-      // dispatch(addChatMessage({ ...data, id: Date.now(), createdAt: new Date() }));
-    }
-  };
+  // Gửi tin nhắn: đã tách ra hook riêng
 
   const handleDeleteMessage = (msgId) => {
     axios
@@ -115,7 +107,7 @@ export default function useChatMessages({ user, receiver }) {
   return {
     messages,
     isLoading,
-    sendMessage,
+    // sendMessage: đã tách ra hook riêng
     deleteMessage: handleDeleteMessage,
     loadMore,
     setMessages: (msgs) => dispatch(setChatMessages(msgs)),

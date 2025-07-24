@@ -28,6 +28,7 @@ import PatientChat from "./Chat/PatientChat";
 import { useSelector } from "react-redux";
 import { getSocket } from "../socket";
 import { setOnlineDoctors } from "../store/actions/onlineDoctorsActions";
+import useChatMessages from "../hooks/useChatMessages";
 
 // Hook emit ADD_USER khi patient login thành công
 function useRegisterPatientSocket() {
@@ -56,10 +57,18 @@ function useListenOnlineDoctors() {
   }, [dispatch]);
 }
 
+// Hook lắng nghe và quản lý chat socket toàn cục
+function useGlobalChatSocket() {
+  const patient = useSelector(state => state.patient.patientInfo);
+  const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
+  useChatMessages({ user: patient, receiver: selectedDoctor });
+}
+
 // Bọc App class bằng function component để dùng hook
 function AppWithSocket(props) {
   useRegisterPatientSocket();
   useListenOnlineDoctors();
+  useGlobalChatSocket(); // chỉ mount 1 lần duy nhất
   return <App {...props} />;
 }
 

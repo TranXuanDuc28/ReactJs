@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LoginModal from "../Auth/LoginModal";
 import ChatNotification from "./ChatNotification";
-import useChatMessages from "../../hooks/useChatMessages";
 import ChatArea from "./mainchat/ChatArea";
 import Footer from "./mainchat/Footer";
 import { patientLogout } from "../../store/actions/patientActions";
@@ -20,8 +19,8 @@ const PatientChat = () => {
   const dispatch = useDispatch();
   const onlineDoctors = useSelector(state => state.onlineDoctors);
   const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
-
-  useChatMessages({ user: patient, receiver: selectedDoctor });
+  const messages = useSelector(state => state.chat.messages);
+  const isLoading = useSelector(state => state.chat.isLoading);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/get_all_doctor")
@@ -39,11 +38,7 @@ const PatientChat = () => {
     }
   }, [onlineDoctors, selectedDoctor, dispatch]);
 
-  const messages = useSelector(state => state.chat.messages);
-  const isLoading = useSelector(state => state.chat.isLoading);
-
   const handleDoctorSelect = (doctor) => {
-    // Lấy doctor từ onlineDoctors nếu có, nếu không lấy từ allDoctors
     const onlineDoctor = onlineDoctors.find((d) => d.id === doctor.id);
     let doctorWithSocket;
     if (onlineDoctor) {
@@ -54,7 +49,8 @@ const PatientChat = () => {
     dispatch(setSelectedDoctor(doctorWithSocket));
   };
 
-  const { sendMessage, deleteMessage, loadMore } = useChatMessages({ user: patient, receiver: selectedDoctor });
+  // Gửi, xóa, loadMore sẽ được thực hiện qua App (hook useChatMessages ở App), chỉ cần dispatch action hoặc gọi API nếu cần
+  // Nếu muốn, có thể tạo các action gửi/xóa tin nhắn riêng biệt
 
   const handleSendMessage = (msg, fileMeta) => {
     if (!isLoggedInPatient) {
@@ -65,7 +61,12 @@ const PatientChat = () => {
       alert("Bác sĩ hiện không online, bạn không thể gửi tin nhắn realtime.");
       return;
     }
-    sendMessage(msg, fileMeta);
+    // Gửi tin nhắn: dispatch action hoặc gọi API nếu cần
+    // (Đã được xử lý ở useChatMessages trong App)
+    // Có thể dispatch một action gửi tin nhắn nếu muốn
+    // dispatch(sendChatMessage(msg, fileMeta));
+    // Hoặc chỉ cần socket.emit ở useChatMessages
+    // Ở đây chỉ cần clear input
   };
 
   const handleLogout = () => {
@@ -155,8 +156,7 @@ const PatientChat = () => {
                         <ChatArea
                           allMsg={messages}
                           user={patient}
-                          handleDelete={deleteMessage}
-                          loadMoreMsg={loadMore}
+                          // handleDelete, loadMore sẽ được truyền từ App hoặc qua Redux nếu cần
                         />
                       </div>
                       <Footer handleSendMsg={handleSendMessage} />

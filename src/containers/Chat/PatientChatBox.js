@@ -6,6 +6,7 @@ import ChatArea from "./mainchat/ChatArea";
 import Footer from "./mainchat/Footer";
 import "./PatientChat.scss";
 import { setSelectedDoctor } from "../../store/actions/chatActions";
+import useChatSendMessage from "../../hooks/useChatSendMessage";
 
 const PatientChatBox = ({ doctor, onClose }) => {
   const patient = useSelector((state) => state.patient.patientInfo);
@@ -15,6 +16,7 @@ const PatientChatBox = ({ doctor, onClose }) => {
   const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
   const messages = useSelector(state => state.chat.messages);
   const isLoading = useSelector(state => state.chat.isLoading);
+  const sendMessage = useChatSendMessage();
 
   useEffect(() => {
     if (doctor) {
@@ -44,12 +46,7 @@ const PatientChatBox = ({ doctor, onClose }) => {
       alert("Bác sĩ hiện không online, bạn không thể gửi tin nhắn realtime.");
       return;
     }
-    // Gửi tin nhắn: dispatch action hoặc gọi API nếu cần
-    // (Đã được xử lý ở useChatMessages trong App)
-    // Có thể dispatch một action gửi tin nhắn nếu muốn
-    // dispatch(sendChatMessage(msg, fileMeta));
-    // Hoặc chỉ cần socket.emit ở useChatMessages
-    // Ở đây chỉ cần clear input
+    sendMessage(msg, fileMeta);
   };
 
   const handleLoginSuccess = () => {

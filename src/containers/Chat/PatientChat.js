@@ -8,6 +8,7 @@ import { patientLogout } from "../../store/actions/patientActions";
 import HomeHeader from "../HomePage/HomeHeader";
 import "./PatientChat.scss";
 import { setSelectedDoctor } from "../../store/actions/chatActions";
+import useChatSendMessage from "../../hooks/useChatSendMessage";
 
 const PatientChat = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -21,6 +22,7 @@ const PatientChat = () => {
   const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
   const messages = useSelector(state => state.chat.messages);
   const isLoading = useSelector(state => state.chat.isLoading);
+  const sendMessage = useChatSendMessage();
 
   useEffect(() => {
     fetch("http://localhost:8080/api/get_all_doctor")
@@ -61,12 +63,7 @@ const PatientChat = () => {
       alert("Bác sĩ hiện không online, bạn không thể gửi tin nhắn realtime.");
       return;
     }
-    // Gửi tin nhắn: dispatch action hoặc gọi API nếu cần
-    // (Đã được xử lý ở useChatMessages trong App)
-    // Có thể dispatch một action gửi tin nhắn nếu muốn
-    // dispatch(sendChatMessage(msg, fileMeta));
-    // Hoặc chỉ cần socket.emit ở useChatMessages
-    // Ở đây chỉ cần clear input
+    sendMessage(msg, fileMeta);
   };
 
   const handleLogout = () => {

@@ -9,6 +9,7 @@ import HomeHeader from "../HomePage/HomeHeader";
 import "./PatientChat.scss";
 import { setSelectedDoctor } from "../../store/actions/chatActions";
 import useChatSendMessage from "../../hooks/useChatSendMessage";
+import { getSocket } from "../../socket";
 
 const PatientChat = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -60,6 +61,12 @@ const PatientChat = () => {
       doctorWithSocket = { ...doctor };
     }
     dispatch(setSelectedDoctor(doctorWithSocket));
+
+    // Emit sự kiện chọn lại doctor để server cập nhật trạng thái chat
+    const socket = getSocket();
+    if (socket && socket.connected && patient) {
+      socket.emit("START_CHAT", { patientId: patient.id, doctorId: doctor.id });
+    }
   };
 
   // Gửi, xóa, loadMore sẽ được thực hiện qua App (hook useChatMessages ở App), chỉ cần dispatch action hoặc gọi API nếu cần

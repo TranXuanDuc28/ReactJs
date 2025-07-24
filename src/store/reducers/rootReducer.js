@@ -35,6 +35,12 @@ const appPersistConfig = {
     whitelist: ['language']
 }
 
+const chatPersistConfig = {
+    ...persistCommonConfig,
+    key: 'chat',
+    whitelist: ['selectedDoctor', 'messages']
+};
+
 export default (history) => combineReducers({
     router: connectRouter(history),
     user: persistReducer(userPersistConfig, userReducer),
@@ -43,6 +49,6 @@ export default (history) => combineReducers({
     // user: userReducer,
     admin: adminReducer,
     onlineDoctors: onlineDoctorsReducer,
-    chat: chatReducer,
+    chat: persistReducer(chatPersistConfig, chatReducer),
     // app: appReducer
 })

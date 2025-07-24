@@ -36,9 +36,19 @@ function useRegisterPatientSocket() {
   React.useEffect(() => {
     const socket = getSocket();
     if (!socket.connected) socket.connect();
-    if (patient) {
+    const handleConnect = () => {
+      if (patient) {
+        socket.emit("ADD_USER", patient);
+      }
+    };
+    socket.on("connect", handleConnect);
+    // Nếu đã connect sẵn thì emit luôn
+    if (socket.connected && patient) {
       socket.emit("ADD_USER", patient);
     }
+    return () => {
+      socket.off("connect", handleConnect);
+    };
   }, [patient]);
 }
 

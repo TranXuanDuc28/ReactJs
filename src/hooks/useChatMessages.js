@@ -56,7 +56,7 @@ export default function useChatMessages({ user, receiver }) {
       }
     };
     // eslint-disable-next-line
-  }, [user, dispatch]); // KHÔNG phụ thuộc receiver
+  }, [user, receiver, dispatch]); // Thêm receiver vào dependency
 
   // Load tin nhắn khi receiver/user thay đổi
   useEffect(() => {

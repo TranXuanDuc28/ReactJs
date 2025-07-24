@@ -1,52 +1,52 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import LoginModal from "../Auth/LoginModal";
 import ChatNotification from "./ChatNotification";
 import ChatArea from "./mainchat/ChatArea";
 import Footer from "./mainchat/Footer";
 import useChatMessages from "../../hooks/useChatMessages";
 import "./PatientChat.scss";
-// import io from "socket.io-client"; // Đã xóa hoàn toàn
-// import { getSocket } from "../../socket";
+import { setSelectedDoctor } from "../../store/actions/chatActions";
 
 const PatientChatBox = ({ doctor, onClose }) => {
   const patient = useSelector((state) => state.patient.patientInfo);
   const isLoggedInPatient = useSelector((state) => state.patient.isLoggedInPatient);
   const onlineDoctors = useSelector(state => state.onlineDoctors);
+  const dispatch = useDispatch();
+  const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
 
-  // Lấy đúng doctor có socketId nếu online
-  const onlineDoctor = onlineDoctors.find((d) => d.id === doctor?.id);
-  const [doctorWithSocket, setDoctorWithSocket] = React.useState(
-    doctor ? { ...doctor, socketId: onlineDoctor?.socketId } : doctor
-  );
-
-  // Đồng bộ lại doctorWithSocket khi onlineDoctors thay đổi (doctor login lại sẽ có socketId mới)
-  React.useEffect(() => {
-    if (!doctor) return;
-    const onlineDoctor = onlineDoctors.find((d) => d.id === doctor.id);
-    if (onlineDoctor && onlineDoctor.socketId !== doctorWithSocket?.socketId) {
-      setDoctorWithSocket({ ...doctor, socketId: onlineDoctor.socketId });
+  // Khi mount, set selectedDoctor là doctor truyền vào
+  useEffect(() => {
+    if (doctor) {
+      const onlineDoctor = onlineDoctors.find((d) => d.id === doctor.id);
+      if (onlineDoctor) {
+        dispatch(setSelectedDoctor({ ...doctor, socketId: onlineDoctor.socketId }));
+      } else {
+        dispatch(setSelectedDoctor(doctor));
+      }
     }
-  }, [onlineDoctors, doctor]);
+    // Khi unmount, clear selectedDoctor nếu muốn (tùy logic app)
+    // return () => dispatch(setSelectedDoctor(null));
+    // eslint-disable-next-line
+  }, [doctor, onlineDoctors, dispatch]);
 
-  const {
-    messages,
-    isLoading,
-    sendMessage,
-    deleteMessage,
-    loadMore
-  } = useChatMessages({ user: patient, receiver: doctorWithSocket });
+  useChatMessages({ user: patient, receiver: selectedDoctor });
+
+  const messages = useSelector(state => state.chat.messages);
+  const isLoading = useSelector(state => state.chat.isLoading);
+
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const [showNotification, setShowNotification] = React.useState(false);
   const [previewImg, setPreviewImg] = React.useState(null);
+
+  const { sendMessage, deleteMessage, loadMore } = useChatMessages({ user: patient, receiver: selectedDoctor });
 
   const handleSendMessage = (msg, fileMeta) => {
     if (!isLoggedInPatient) {
       setShowNotification(true);
       return;
     }
-    // Nếu bác sĩ offline (không có socketId), cảnh báo
-    if (!doctorWithSocket?.socketId) {
+    if (!selectedDoctor?.socketId) {
       alert("Bác sĩ hiện không online, bạn không thể gửi tin nhắn realtime.");
       return;
     }
@@ -72,7 +72,7 @@ const PatientChatBox = ({ doctor, onClose }) => {
           <div>
             <div className="fw-bold" style={{ fontSize: 16 }}>{doctor?.firstName} {doctor?.lastName}</div>
             <div className="small text-light">{doctor?.positionData?.valueVi || 'Bác sĩ'}</div>
-            {doctorWithSocket?.socketId && (
+            {selectedDoctor?.socketId && (
               <span className="badge bg-success mt-1">Online</span>
             )}
           </div>

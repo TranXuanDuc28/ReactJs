@@ -1,23 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 import { getSocket } from "../socket";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setChatMessages,
+  addChatMessage,
+  deleteChatMessage,
+  setChatLoading,
+  setSelectedDoctor,
+} from "../store/actions/chatActions";
 
 const PATH = "http://localhost:8080";
 
 export default function useChatMessages({ user, receiver }) {
   const socketRef = useRef();
-  const [isConnected, setIsConnected] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const dispatch = useDispatch();
+  const messages = useSelector((state) => state.chat.messages);
+  const isLoading = useSelector((state) => state.chat.isLoading);
+  // selectedDoctor sẽ được quản lý ở component cha hoặc qua Redux nếu muốn đồng bộ toàn app
 
   // Kết nối socket (singleton)
   useEffect(() => {
     const socket = getSocket();
     socketRef.current = socket;
     if (!socket.connected) socket.connect();
-    socket.on("connect", () => setIsConnected(true));
-    socket.on("disconnect", () => setIsConnected(false));
+    // Không cần setIsConnected, chỉ cần biết socket đã connect
     return () => {
       // KHÔNG disconnect ở đây, chỉ disconnect khi logout toàn app
     };
@@ -26,14 +33,13 @@ export default function useChatMessages({ user, receiver }) {
   // Lắng nghe tin nhắn mới, luôn clear listener cũ trước khi gán mới
   useEffect(() => {
     const socket = socketRef.current;
-    if (isConnected && user) {
+    if (socket.connected && user) {
       socket.emit("ADD_USER", user);
       // Clear listener cũ trước khi gán mới
       socket.off("RECEIVED_MSG");
       socket.on("RECEIVED_MSG", (data) => {
         const msg = data.data ? data.data : data;
-
-        setMessages((prevState) => [...prevState, msg]);
+        dispatch(addChatMessage(msg));
       });
     }
     // Cleanup khi unmount
@@ -42,35 +48,38 @@ export default function useChatMessages({ user, receiver }) {
         socket.off("RECEIVED_MSG");
       }
     };
-  }, [isConnected, user, receiver]);
+  }, [user, receiver, dispatch]);
 
   // Load tin nhắn khi receiver/user thay đổi
   useEffect(() => {
     if (receiver && user) {
       loadMessages(receiver.id);
+    } else {
+      dispatch(setChatMessages([]));
     }
     // eslint-disable-next-line
-  }, [receiver, user]);
+  }, [receiver, user, dispatch]);
 
   const loadMessages = (receiverId, offsetVal = 0) => {
     if (!user) return;
-    setIsLoading(true);
+    dispatch(setChatLoading(true));
     axios
       .get(
-        `http://localhost:8080/api/get-msg/${receiverId}?userId=${user.id}&offset=${offsetVal}`
+        `${PATH}/api/get-msg/${receiverId}?userId=${user.id}&offset=${offsetVal}`
       )
       .then((res) => {
         if (offsetVal > 0) {
-          setMessages((prev) => [...res.data.data, ...prev]);
+          // prepend messages
+          dispatch(setChatMessages([...res.data.data, ...messages]));
         } else {
-          setMessages(res.data.data || []);
+          dispatch(setChatMessages(res.data.data || []));
         }
       })
       .catch(() => {})
-      .finally(() => setIsLoading(false));
+      .finally(() => dispatch(setChatLoading(false)));
   };
 
-  // Bổ sung optimistic update khi gửi tin nhắn
+  // Gửi tin nhắn
   const sendMessage = (messageInput, fileMeta) => {
     if (!receiver) return;
     const socket = socketRef.current;
@@ -82,33 +91,33 @@ export default function useChatMessages({ user, receiver }) {
         sender,
         ...fileMeta,
       };
-      console.log("123", data);
       socket.emit("SEND_MSG", data);
+      // Có thể optimistic update nếu muốn
+      // dispatch(addChatMessage({ ...data, id: Date.now(), createdAt: new Date() }));
     }
   };
 
-  const deleteMessage = (msgId) => {
+  const handleDeleteMessage = (msgId) => {
     axios
-      .post(`http://localhost:8080/api/del-msg/${msgId}`)
+      .post(`${PATH}/api/del-msg/${msgId}`)
       .then(() => {
-        setMessages((prev) => prev.filter((m) => m.id !== msgId));
+        dispatch(deleteChatMessage(msgId));
       })
       .catch(() => {});
   };
 
   const loadMore = () => {
     if (!receiver) return;
-    const newOffset = messages.length;
-    setOffset(newOffset);
-    loadMessages(receiver.id, newOffset);
+    const offset = messages.length;
+    loadMessages(receiver.id, offset);
   };
 
   return {
     messages,
     isLoading,
     sendMessage,
-    deleteMessage,
+    deleteMessage: handleDeleteMessage,
     loadMore,
-    setMessages,
+    setMessages: (msgs) => dispatch(setChatMessages(msgs)),
   };
 }

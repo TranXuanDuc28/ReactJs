@@ -6,6 +6,7 @@ import userReducer from "./userReducer";
 import adminReducer from './adminReducer';
 import patientReducer from './patientReducer';
 import onlineDoctorsReducer from './onlineDoctorsReducer';
+import chatReducer from './chatReducer';
 
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
@@ -42,5 +43,6 @@ export default (history) => combineReducers({
     // user: userReducer,
     admin: adminReducer,
     onlineDoctors: onlineDoctorsReducer,
+    chat: chatReducer,
     // app: appReducer
 })

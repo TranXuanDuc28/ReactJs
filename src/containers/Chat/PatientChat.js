@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LoginModal from "../Auth/LoginModal";
 import ChatNotification from "./ChatNotification";
@@ -8,10 +8,9 @@ import Footer from "./mainchat/Footer";
 import { patientLogout } from "../../store/actions/patientActions";
 import HomeHeader from "../HomePage/HomeHeader";
 import "./PatientChat.scss";
-// import { getSocket } from "../../socket";
+import { setSelectedDoctor } from "../../store/actions/chatActions";
 
 const PatientChat = () => {
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [allDoctors, setAllDoctors] = useState([]);
@@ -20,6 +19,9 @@ const PatientChat = () => {
   const language = useSelector((state) => state.app.language);
   const dispatch = useDispatch();
   const onlineDoctors = useSelector(state => state.onlineDoctors);
+  const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
+
+  useChatMessages({ user: patient, receiver: selectedDoctor });
 
   useEffect(() => {
     fetch("http://localhost:8080/api/get_all_doctor")
@@ -33,47 +35,42 @@ const PatientChat = () => {
     if (!selectedDoctor) return;
     const onlineDoctor = onlineDoctors.find(d => d.id === selectedDoctor.id);
     if (onlineDoctor && onlineDoctor.socketId !== selectedDoctor.socketId) {
-      setSelectedDoctor({ ...selectedDoctor, socketId: onlineDoctor.socketId });
+      dispatch(setSelectedDoctor({ ...selectedDoctor, socketId: onlineDoctor.socketId }));
     }
-  }, [onlineDoctors, selectedDoctor]);
+  }, [onlineDoctors, selectedDoctor, dispatch]);
 
-  const {
-    messages,
-    isLoading,
-    sendMessage,
-    deleteMessage,
-    loadMore
-  } = useChatMessages({ user: patient, receiver: selectedDoctor });
+  const messages = useSelector(state => state.chat.messages);
+  const isLoading = useSelector(state => state.chat.isLoading);
 
   const handleDoctorSelect = (doctor) => {
     // Lấy doctor từ onlineDoctors nếu có, nếu không lấy từ allDoctors
     const onlineDoctor = onlineDoctors.find((d) => d.id === doctor.id);
     let doctorWithSocket;
     if (onlineDoctor) {
-      // Dùng object onlineDoctor để đảm bảo đồng bộ id, socketId và các trường khác
       doctorWithSocket = { ...onlineDoctor };
     } else {
       doctorWithSocket = { ...doctor };
     }
-    setSelectedDoctor(doctorWithSocket);
+    dispatch(setSelectedDoctor(doctorWithSocket));
   };
+
+  const { sendMessage, deleteMessage, loadMore } = useChatMessages({ user: patient, receiver: selectedDoctor });
 
   const handleSendMessage = (msg, fileMeta) => {
     if (!isLoggedInPatient) {
       setShowNotification(true);
       return;
     }
-    // Nếu bác sĩ offline (không có socketId), cảnh báo
     if (!selectedDoctor?.socketId) {
       alert("Bác sĩ hiện không online, bạn không thể gửi tin nhắn realtime.");
       return;
     }
-    sendMessage(msg);
+    sendMessage(msg, fileMeta);
   };
 
   const handleLogout = () => {
     dispatch(patientLogout());
-    setSelectedDoctor(null);
+    dispatch(setSelectedDoctor(null));
     setShowLoginModal(false);
     setShowNotification(false);
   };

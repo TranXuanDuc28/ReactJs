@@ -4,23 +4,47 @@
     display: flex;
     margin: 0;
     padding: 0;
+    
+    @include respond-to(sm) {
+        flex-direction: column;
+        width: 100%;
+    }
+    
     &.list-unstyled,
     .list-unstyled {
         list-style-type: none;
     }
+    
     .menu-group {
         &:hover {
             cursor: pointer;
             background-color: darken($colormain, 5);
         }
+        
+        @include respond-to(sm) {
+            border-bottom: 1px solid $border;
+        }
+        
         .menu-group-name {
             line-height: 40px;
             padding: 0 15px;
             border-right: 1px solid $border;
+            
+            @include respond-to(sm) {
+                border-right: none;
+                border-bottom: 1px solid $border;
+                line-height: 50px;
+            }
+            
             &:first-child {
                 border-left: 1px solid $border;
+                
+                @include respond-to(sm) {
+                    border-left: none;
+                }
             }
         }
+        
         .menu-list {
             display: none;
             background-color: $bg-menu-color;
@@ -29,16 +53,33 @@
             color: $text-in-light;
             position: absolute;
             padding: 0;
+            
+            @include respond-to(sm) {
+                position: static;
+                box-shadow: none;
+                -webkit-box-shadow: none;
+                border-top: 1px solid $border;
+            }
+            
             .menu {
                 width: 220px;
                 padding: 0 15px;
                 height: 35px;
                 line-height: 35px;
                 text-transform: none;
+                
+                @include respond-to(sm) {
+                    width: 100%;
+                    height: 40px;
+                    line-height: 40px;
+                    border-bottom: 1px solid lighten($border, 10%);
+                }
+                
                 .menu-link {
                     text-decoration: none;
                     color: $text-in-light;
                 }
+                
                 .sub-menu-list {
                     display: none;
                     background-color: $bg-menu-color;
@@ -48,49 +89,155 @@
                     top: 0;
                     left: 205px;
                     padding: 0;
+                    
+                    @include respond-to(sm) {
+                        position: static;
+                        box-shadow: none;
+                        -webkit-box-shadow: none;
+                        background-color: lighten($bg-menu-color, 5%);
+                        border-top: 1px solid lighten($border, 15%);
+                    }
+                    
                     .sub-menu {
                         padding: 0 15px;
                         height: 35px;
                         line-height: 35px;
                         white-space: nowrap;
+                        
+                        @include respond-to(sm) {
+                            height: 35px;
+                            line-height: 35px;
+                            padding-left: 30px;
+                            border-bottom: 1px solid lighten($border, 20%);
+                        }
+                        
                         &:hover {
                             background-color: darken($bg-menu-color, 5);
                         }
+                        
                         .sub-menu-link {
                             text-decoration: none;
                             color: $text-in-light;
                         }
+                        
                         a {
                             display: block;
                         }
+                        
                         &.active a {
                             font-weight: 500;
                             color: $colormain;
                         }
                     }
                 }
+                
                 &.active span {
                     font-weight: 500;
                     color: $colormain;
                 }
+                
                 &:hover {
                     background-color: darken($bg-menu-color, 3);
+                    
+                    @include respond-to(sm) {
+                        background-color: lighten($colormain, 10%);
+                    }
+                    
                     .sub-menu-list {
                         display: block;
                     }
                 }
+                
                 .icon-right {
                     display: block;
                     position: absolute;
                     top: 0;
                     right: 10px;
+                    
+                    @include respond-to(sm) {
+                        position: static;
+                        float: right;
+                        margin-top: 10px;
+                    }
                 }
             }
         }
+        
         &:hover {
             .menu-list {
                 display: block;
             }
+        }
+    }
+}
+
+// Mobile menu toggle
+.mobile-menu-toggle {
+    display: none;
+    
+    @include respond-to(sm) {
+        display: block;
+        background: none;
+        border: none;
+        color: $text-in-light;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        text-align: left;
+        background-color: $colormain;
+        
+        &:hover {
+            background-color: darken($colormain, 5);
+        }
+    }
+}
+
+// Responsive adjustments
+@include respond-to(sm) {
+    .navigator-menu {
+        .menu-group {
+            .menu-list {
+                display: none;
+                
+                &.show {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+// Mobile menu overlay
+@include respond-to(sm) {
+    .navigator-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: $bg-menu-color;
+        transition: left 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+        
+        &.show {
+            left: 0;
+        }
+    }
+    
+    .navigator-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+        
+        &.show {
+            display: block;
         }
     }
 }

@@ -3,14 +3,34 @@
     background-color: white !important;
     padding: 15px;
     margin: 15px 0;
+    
+    @include respond-to(sm) {
+      padding: 12px;
+      margin: 10px 0;
+    }
+    
+    @include respond-to(xs) {
+      padding: 10px;
+      margin: 8px 0;
+    }
+    
     h1,
     h2,
     h3 {
       font-size: 25px;
       font-weight: 600;
       color: #45c3d2;
+      
+      @include respond-to(sm) {
+        font-size: 22px;
+      }
+      
+      @include respond-to(xs) {
+        font-size: 20px;
+      }
     }
   }
+  
   .search-sp-doctor {
     .search-sp-doctor-select {
       height: 40px;
@@ -20,46 +40,146 @@
       outline: none;
       font-size: 16px;
       color: #d49f00;
+      
+      @include respond-to(sm) {
+        height: 38px;
+        padding: 0 8px;
+        font-size: 15px;
+      }
+      
+      @include respond-to(xs) {
+        height: 35px;
+        padding: 0 6px;
+        font-size: 14px;
+        width: 100%;
+      }
     }
   }
+  
   .detail-specialty-body {
     padding: 0 100px;
     background: #eee;
     display: flex;
     flex-direction: column;
+    
+    @include respond-to(sm) {
+      padding: 0 30px;
+    }
+    
+    @include respond-to(xs) {
+      padding: 0 15px;
+    }
   }
+  
   .each-doctor {
     display: flex;
     width: 100%;
     min-height: 300px;
     margin: 15px 0;
     padding: 10px;
-
     background-color: #fff;
     box-shadow: 0 1px 6px #20212447;
     border-radius: 8px;
+    
+    @include respond-to(sm) {
+      flex-direction: column;
+      min-height: auto;
+      margin: 10px 0;
+      padding: 15px;
+    }
+    
+    @include respond-to(xs) {
+      margin: 8px 0;
+      padding: 10px;
+    }
+    
     .dt-content-left {
       width: 50%;
       border-right: 1px solid #ddd;
       padding: 10px 15px;
+      
+      @include respond-to(sm) {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        padding: 15px 10px;
+        text-align: center;
+      }
+      
+      @include respond-to(xs) {
+        padding: 10px 8px;
+      }
     }
+    
     .dt-content-right {
       width: 50%;
       padding: 10px;
+      
+      @include respond-to(sm) {
+        width: 100%;
+        padding: 15px 10px;
+      }
+      
+      @include respond-to(xs) {
+        padding: 10px 8px;
+      }
 
       .doctor-schedule {
         .doctor-schedule-container {
           border-right: unset !important;
         }
       }
+      
       .doctor-extra-infor {
         border-top: 1px solid #ddd;
         margin-top: 10px;
         padding-top: 10px;
+        
+        @include respond-to(sm) {
+          margin-top: 15px;
+          padding-top: 15px;
+        }
+        
         .doctor-extra-infor-container {
           padding-left: 0 !important;
         }
       }
+    }
+  }
+}
+
+// Additional responsive styles
+@include respond-to(sm) {
+  .detail-specialty-container {
+    .search-sp-doctor {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .each-doctor {
+      .dt-content-left,
+      .dt-content-right {
+        .doctor-schedule,
+        .doctor-extra-infor {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+@include respond-to(xs) {
+  .detail-specialty-container {
+    .description-specialty {
+      margin-bottom: 20px;
+    }
+    
+    .detail-specialty-body {
+      margin-top: 20px;
+    }
+    
+    .each-doctor {
+      margin-bottom: 20px;
     }
   }
 }

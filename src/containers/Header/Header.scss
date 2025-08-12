@@ -8,40 +8,128 @@
     color: $common-text-color;
     height: 40px;
     position: relative;
+    
+    @include respond-to(sm) {
+        height: 50px;
+        padding: 0 10px;
+    }
+    
+    @include respond-to(xs) {
+        height: 45px;
+        padding: 0 5px;
+    }
+    
     .btn-logout {
         color: $common-text-color;
         line-height: 40px;
         height: 40px;
         padding: 0 10px;
+        
+        @include respond-to(sm) {
+            line-height: 50px;
+            height: 50px;
+            padding: 0 8px;
+        }
+        
+        @include respond-to(xs) {
+            line-height: 45px;
+            height: 45px;
+            padding: 0 5px;
+            font-size: 14px;
+        }
+        
         &:hover {
             background-color: darken($colormain, 5);
         }
         i {
             font-size: $base-size + 1px;
+            
+            @include respond-to(xs) {
+                font-size: $base-size;
+            }
         }
     }
 }
+
 .header-content-right{
     display: flex;
     align-items: center;
+    
+    @include respond-to(sm) {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
     .nameuser{
         margin-right: 10px;
         font-weight: 600;
         color: #dcff00;
+        
+        @include respond-to(sm) {
+            margin-right: 0;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        @include respond-to(xs) {
+            font-size: 12px;
+        }
     }
+    
     .language{
         display: flex;
         padding: 10px 7px;
         gap:15px;
-                cursor: pointer;
+        cursor: pointer;
+        
+        @include respond-to(sm) {
+            padding: 5px 3px;
+            gap: 10px;
+        }
+        
+        @include respond-to(xs) {
+            padding: 3px 2px;
+            gap: 8px;
+        }
+        
         .subs-title2{
-         }       
+        }       
         .active-vi{
             color: rgb(166, 1, 1);
-           
         }
         .active-en{
             color: rgb(218, 192, 24);
         }
+    }
+}
+
+// Mobile menu toggle for small screens
+.mobile-menu-toggle {
+    display: none;
+    
+    @include respond-to(sm) {
+        display: block;
+        background: none;
+        border: none;
+        color: $common-text-color;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px;
+    }
+}
+
+// Responsive adjustments
+@include respond-to(sm) {
+    .header-container {
+        flex-wrap: wrap;
+        min-height: 50px;
+        height: auto;
+    }
+}
+
+@include respond-to(xs) {
+    .header-container {
+        min-height: 45px;
+        height: auto;
     }
 }

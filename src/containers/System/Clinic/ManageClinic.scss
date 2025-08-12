@@ -1,12 +1,32 @@
 .manage-specialty-container {
   padding: 0 15px;
+  
+  @include respond-to(sm) {
+    padding: 0 10px;
+  }
+  
+  @include respond-to(xs) {
+    padding: 0 8px;
+  }
+  
   .ms-title {
     text-align: center;
     margin: 10px 0;
     text-transform: uppercase;
     font-size: 17px;
     font-weight: 600;
+    
+    @include respond-to(sm) {
+      font-size: 16px;
+      margin: 8px 0;
+    }
+    
+    @include respond-to(xs) {
+      font-size: 15px;
+      margin: 6px 0;
+    }
   }
+  
   .add-new-specialty {
     .btn-edit-specialty {
       background-color: rgb(219, 125, 10);
@@ -17,10 +37,25 @@
       display: flex;
       margin: auto;
       margin-bottom: 20px;
+      
+      @include respond-to(sm) {
+        padding: 10px 8px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+      
+      @include respond-to(xs) {
+        padding: 8px 6px;
+        margin-bottom: 10px;
+        font-size: 13px;
+        width: 100%;
+      }
+      
       &:hover {
         opacity: 0.9;
       }
     }
+    
     .btn-save-specialty {
       background-color: rgb(45, 31, 230);
       border: none;
@@ -30,11 +65,54 @@
       display: flex;
       margin: auto;
       margin-bottom: 20px;
+      
+      @include respond-to(sm) {
+        padding: 10px 8px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+      
+      @include respond-to(xs) {
+        padding: 8px 6px;
+        margin-bottom: 10px;
+        font-size: 13px;
+        width: 100%;
+      }
+      
       &:hover {
         opacity: 0.9;
       }
     }
   }
+  
   .all-specialty {
+    @include respond-to(sm) {
+      margin-top: 20px;
+    }
+    
+    @include respond-to(xs) {
+      margin-top: 15px;
+    }
+  }
+}
+
+// Additional responsive styles
+@include respond-to(sm) {
+  .manage-specialty-container {
+    .add-new-specialty {
+      text-align: center;
+    }
+  }
+}
+
+@include respond-to(xs) {
+  .manage-specialty-container {
+    .ms-title {
+      margin-bottom: 20px;
+    }
+    
+    .add-new-specialty {
+      margin-bottom: 25px;
+    }
   }
 }

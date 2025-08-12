@@ -1,0 +1,163 @@
+// Responsive breakpoints
+$breakpoints: (
+  xs: 576px,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px,
+  xl: 1400px
+);
+
+// Mixin for responsive
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// Mixin for min-width responsive
+@mixin respond-from($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// Common responsive utilities
+.hidden-xs {
+  @include respond-to(xs) {
+    display: none !important;
+  }
+}
+
+.hidden-sm {
+  @include respond-to(sm) {
+    display: none !important;
+  }
+}
+
+.hidden-md {
+  @include respond-to(md) {
+    display: none !important;
+  }
+}
+
+.hidden-lg {
+  @include respond-to(lg) {
+    display: none !important;
+  }
+}
+
+.visible-xs {
+  display: none !important;
+  @include respond-to(xs) {
+    display: block !important;
+  }
+}
+
+.visible-sm {
+  display: none !important;
+  @include respond-to(sm) {
+    display: block !important;
+  }
+}
+
+.visible-md {
+  display: none !important;
+  @include respond-to(md) {
+    display: block !important;
+  }
+}
+
+.visible-lg {
+  display: none !important;
+  @include respond-to(lg) {
+    display: block !important;
+  }
+}
+
+// Flexbox responsive utilities
+.flex-responsive {
+  display: flex;
+  
+  @include respond-to(sm) {
+    flex-direction: column;
+  }
+}
+
+.flex-wrap-responsive {
+  flex-wrap: wrap;
+  
+  @include respond-to(sm) {
+    flex-wrap: nowrap;
+    flex-direction: column;
+  }
+}
+
+// Grid responsive utilities
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+// Spacing responsive utilities
+.p-responsive {
+  padding: 20px;
+  
+  @include respond-to(sm) {
+    padding: 15px;
+  }
+  
+  @include respond-to(xs) {
+    padding: 10px;
+  }
+}
+
+.m-responsive {
+  margin: 20px;
+  
+  @include respond-to(sm) {
+    margin: 15px;
+  }
+  
+  @include respond-to(xs) {
+    margin: 10px;
+  }
+}
+
+// Text responsive utilities
+.text-responsive {
+  font-size: 16px;
+  
+  @include respond-to(sm) {
+    font-size: 14px;
+  }
+  
+  @include respond-to(xs) {
+    font-size: 12px;
+  }
+}
+
+.title-responsive {
+  font-size: 24px;
+  
+  @include respond-to(sm) {
+    font-size: 20px;
+  }
+  
+  @include respond-to(xs) {
+    font-size: 18px;
+  }
+}

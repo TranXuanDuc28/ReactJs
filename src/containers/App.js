@@ -25,14 +25,18 @@ import VerifyEmail from "./Patient/VerifyEmail";
 import DetailSpecialty from "./Patient/Specialty/DetailSpecialty";
 import DetailClinic from "./Patient/Clinic/DetailClinic";
 import PatientChat from "./Chat/PatientChat";
+import SpecialtyPage from "./Patient/Specialty/SpecialtyPage";
+import GeneralExamPage from "./Patient/GeneralExam/GeneralExamPage";
 import { useSelector } from "react-redux";
 import { getSocket } from "../socket";
 import { setOnlineDoctors } from "../store/actions/onlineDoctorsActions";
 import useChatMessages from "../hooks/useChatMessages";
+import HandBookDetail from "./HomePage/Section/HandBookDetail";
+import AppointmentHistory from "./Patient/AppointmentHistory";
 
 // Hook emit ADD_USER khi patient login thành công
 function useRegisterPatientSocket() {
-  const patient = useSelector(state => state.patient.patientInfo);
+  const patient = useSelector((state) => state.patient.patientInfo);
   React.useEffect(() => {
     const socket = getSocket();
     if (!socket.connected) socket.connect();
@@ -43,9 +47,9 @@ function useRegisterPatientSocket() {
     };
     socket.on("connect", handleConnect);
     // Nếu đã connect sẵn thì emit luôn
-    if (socket.connected && patient) {
-      socket.emit("ADD_USER", patient);
-    }
+    // if (socket.connected && patient) {
+    //   socket.emit("ADD_USER", patient);
+    // }
     return () => {
       socket.off("connect", handleConnect);
     };
@@ -58,7 +62,7 @@ function useListenOnlineDoctors() {
   React.useEffect(() => {
     const socket = getSocket();
     const handleUserAdded = (users) => {
-      dispatch(setOnlineDoctors(users.filter(u => u.roleId === "R2")));
+      dispatch(setOnlineDoctors(users.filter((u) => u.roleId === "R2")));
     };
     socket.on("USER_ADDED", handleUserAdded);
     return () => {
@@ -69,8 +73,8 @@ function useListenOnlineDoctors() {
 
 // Hook lắng nghe và quản lý chat socket toàn cục
 function useGlobalChatSocket() {
-  const patient = useSelector(state => state.patient.patientInfo);
-  const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
+  const patient = useSelector((state) => state.patient.patientInfo);
+  const selectedDoctor = useSelector((state) => state.chat.selectedDoctor);
   useChatMessages({ user: patient, receiver: selectedDoctor });
 }
 
@@ -123,6 +127,11 @@ class App extends Component {
                     component={userIsAuthenticated(Doctor)}
                   />
                   <Route path={path.HOMEPAGE} component={HomePage} />
+                  <Route path={path.SPECIALTY_PAGE} component={SpecialtyPage} />
+                  <Route
+                    path={path.GENERAL_EXAM_PAGE}
+                    component={GeneralExamPage}
+                  />
                   <Route path={path.DETAIL_DOCTOR} component={DetailDoctors} />
                   <Route
                     path={path.DETAIL_SPECIALTY}
@@ -133,10 +142,9 @@ class App extends Component {
                     path={path.VERIFY_EMAIL_BOOKING}
                     component={VerifyEmail}
                   />
-                  <Route
-                    path={path.CHAT_PATIENT}
-                    component={PatientChat}
-                  />
+                  <Route path={path.CHAT_PATIENT} component={PatientChat} />
+                  <Route path="/handbook/:id" component={HandBookDetail} />
+                  <Route path="/lich-hen" component={AppointmentHistory} />
                 </Switch>
               </CustomScrollbars>
             </span>
@@ -148,7 +156,7 @@ class App extends Component {
                             closeButton={<CustomToastCloseButton />}
                         /> */}
             <ToastContainer
-              position="top-right"
+              position="bottom-right"
               autoClose={5000}
               hideProgressBar={false}
               newestOnTop={false}
@@ -157,7 +165,6 @@ class App extends Component {
               pauseOnFocusLoss
               draggable
               pauseOnHover
-              theme="light"
             />
           </div>
         </Router>

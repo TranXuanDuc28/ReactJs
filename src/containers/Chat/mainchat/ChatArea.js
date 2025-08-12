@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
-import "../sidebar/index.scss"
+import "../sidebar/index.scss";
 const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
   const bottomRef = useRef(null);
   const [previewImg, setPreviewImg] = useState(null);
@@ -11,7 +11,7 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
   }, [allMsg]);
   return (
     <div
-      className="flex-grow-1 overflow-auto bg-light p-3"
+      className="flex-grow-1 overflow-auto bg-light"
       style={{ minHeight: 0 }}
     >
       {/* <div className="sticky-top bg-light pb-2" style={{ zIndex: 2 }}>
@@ -28,8 +28,7 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
         </li>
 
         {allMsg.map((item) => {
-          console.log("item", user);
-          const isSent = item.sender.id === user.id;
+          const isSent = item.sender.id == user.id;
 
           return (
             <li
@@ -37,7 +36,7 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
                 isSent ? "flex-row-reverse" : ""
               }`}
               key={item.id}
-              style={{ position: 'relative' }}
+              style={{ position: "relative" }}
             >
               <div
                 className={`d-flex align-items-start ${
@@ -45,7 +44,7 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
                 }`}
                 style={{ width: "100%" }}
               >
-                <div className="mr-2 ml-2">
+                <div className={`${isSent ? "ms-2" : "me-2"}`}>
                   <div
                     className="d-flex align-items-center justify-content-center overflow-hidden"
                     style={{
@@ -80,33 +79,50 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
                 </div>
 
                 <div
-                  className={`card ${item.file_url ? 'bg-light-custom ' : (isSent ? "bg-primary text-white" : " bg-light-custom")}`}
+                  className={`card ${
+                    item.file_url
+                      ? "bg-light-custom "
+                      : isSent
+                      ? "bg-primary text-white"
+                      : " bg-light-custom"
+                  }`}
                   style={{
                     padding: "12px",
                     border: "1px solid #ccc",
                     borderRadius: "12px",
                     maxWidth: "75%",
                     wordBreak: "break-word",
-                    background: item.file_url ? 'transparent' : undefined,
-                    boxShadow: item.file_url ? 'none' : undefined
+                    background: item.file_url ? "transparent" : undefined,
+                    boxShadow: item.file_url ? "none" : undefined,
                   }}
                 >
                   <div style={{ fontSize: 13 }}>
-                    {item.msg && <div style={{ marginBottom: item.file_url ? 8 : 0 }}>{item.msg}</div>}
+                    {item.msg && (
+                      <div style={{ marginBottom: item.file_url ? 8 : 0 }}>
+                        {item.msg}
+                      </div>
+                    )}
                     {item.file_url && (
-                      <div style={{ marginTop: 4, display: 'flex', justifyContent: 'center' }}>
-                        {item.file_type && item.file_type.startsWith('image') ? (
+                      <div
+                        style={{
+                          marginTop: 4,
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {item.file_type &&
+                        item.file_type.startsWith("image") ? (
                           <img
                             src={item.file_url}
-                            alt={item.file_name || 'image'}
+                            alt={item.file_name || "image"}
                             style={{
                               maxWidth: 220,
                               maxHeight: 180,
                               borderRadius: 10,
-                              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                              border: '1px solid #eee',
-                              background: '#fff',
-                              cursor: 'pointer'
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                              border: "1px solid #eee",
+                              background: "#fff",
+                              cursor: "pointer",
                             }}
                             onClick={() => setPreviewImg(item.file_url)}
                             className="chat-img-thumb"
@@ -119,18 +135,21 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              padding: '8px 12px',
-                              
+                              display: "inline-flex",
+                              alignItems: "center",
+                              padding: "8px 12px",
+
                               borderRadius: 8,
-                            
-                              color: '#007bff',
-                              fontWeight: 500
+
+                              color: "#007bff",
+                              fontWeight: 500,
                             }}
                           >
-                            <i className="fa fa-file" style={{ marginRight: 8, fontSize: 18 }} />
-                            {item.file_name || 'Tải file'}
+                            <i
+                              className="fa fa-file"
+                              style={{ marginRight: 8, fontSize: 18 }}
+                            />
+                            {item.file_name || "Tải file"}
                           </a>
                         )}
                       </div>
@@ -147,7 +166,7 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
                         className="btn btn-link btn-sm p-0 text-danger ml-3"
                         onClick={() => handleDelete(item.id)}
                         title="Xóa"
-                        style={{ alignSelf: 'center', marginLeft: 8 }}
+                        style={{ alignSelf: "center", marginLeft: 8 }}
                       >
                         <i className="fa fa-trash" />
                       </button>
@@ -166,26 +185,47 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
         <div
           className="chat-img-modal"
           style={{
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-            background: 'rgba(0,0,0,0.7)', zIndex: 9999,
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.7)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           onClick={() => setPreviewImg(null)}
         >
           <img
             src={previewImg}
             alt="preview"
-            style={{ maxWidth: '90vw', maxHeight: '90vh', borderRadius: 8, boxShadow: '0 2px 16px #0008' }}
-            onClick={e => e.stopPropagation()}
+            style={{
+              maxWidth: "90vw",
+              maxHeight: "90vh",
+              borderRadius: 8,
+              boxShadow: "0 2px 16px #0008",
+            }}
+            onClick={(e) => e.stopPropagation()}
           />
           <button
             style={{
-              position: 'fixed', top: 24, right: 32, fontSize: 32, color: '#fff',
-              background: 'none', border: 'none', cursor: 'pointer', zIndex: 10000
+              position: "fixed",
+              top: 24,
+              right: 32,
+              fontSize: 32,
+              color: "#fff",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 10000,
             }}
             onClick={() => setPreviewImg(null)}
             title="Đóng"
-          >×</button>
+          >
+            ×
+          </button>
         </div>
       )}
     </div>

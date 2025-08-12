@@ -10,19 +10,23 @@ import useChatSendMessage from "../../hooks/useChatSendMessage";
 
 const PatientChatBox = ({ doctor, onClose }) => {
   const patient = useSelector((state) => state.patient.patientInfo);
-  const isLoggedInPatient = useSelector((state) => state.patient.isLoggedInPatient);
-  const onlineDoctors = useSelector(state => state.onlineDoctors);
+  const isLoggedInPatient = useSelector(
+    (state) => state.patient.isLoggedInPatient
+  );
+  const onlineDoctors = useSelector((state) => state.onlineDoctors);
   const dispatch = useDispatch();
-  const selectedDoctor = useSelector(state => state.chat.selectedDoctor);
-  const messages = useSelector(state => state.chat.messages);
-  const isLoading = useSelector(state => state.chat.isLoading);
+  const selectedDoctor = useSelector((state) => state.chat.selectedDoctor);
+  const messages = useSelector((state) => state.chat.messages);
+  const isLoading = useSelector((state) => state.chat.isLoading);
   const sendMessage = useChatSendMessage();
 
   useEffect(() => {
     if (doctor) {
       const onlineDoctor = onlineDoctors.find((d) => d.id === doctor.id);
       if (onlineDoctor) {
-        dispatch(setSelectedDoctor({ ...doctor, socketId: onlineDoctor.socketId }));
+        dispatch(
+          setSelectedDoctor({ ...doctor, socketId: onlineDoctor.socketId })
+        );
       } else {
         dispatch(setSelectedDoctor(doctor));
       }
@@ -54,29 +58,69 @@ const PatientChatBox = ({ doctor, onClose }) => {
   };
 
   return (
-    <div className="card shadow-lg position-fixed" style={{ bottom: 24, right: 24, width: 370, maxWidth: '95vw', zIndex: 9999, borderRadius: 16, minHeight: 480, maxHeight: '80vh', overflow: 'hidden' }}>
+    <div
+      className="card shadow-lg position-fixed"
+      style={{
+        bottom: 24,
+        right: 24,
+        width: 350,
+        maxWidth: "95vw",
+        zIndex: 9999,
+        borderRadius: 16,
+        minHeight: 480,
+        maxHeight: "80vh",
+        overflow: "hidden",
+      }}
+    >
       {/* Header */}
-      <div className="card-header bg-primary text-white d-flex align-items-center justify-content-between p-3">
+      <div className="card-header bg-primary text-white d-flex align-items-center justify-content-between p-2">
         <div className="d-flex align-items-center gap-2">
           {doctor?.image ? (
-            <img src={doctor.image} alt={doctor.firstName} className="rounded-circle" style={{ width: 40, height: 40, objectFit: 'cover', border: '2px solid #fff' }} />
+            <img
+              src={doctor.image}
+              alt={doctor.firstName}
+              className="rounded-circle"
+              style={{
+                width: 40,
+                height: 40,
+                objectFit: "cover",
+                border: "2px solid #fff",
+              }}
+            />
           ) : (
-            <div className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style={{ width: 40, height: 40, fontWeight: 700, fontSize: 20 }}>
-              {doctor?.firstName?.charAt(0) || '?'}
+            <div
+              className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+              style={{ width: 40, height: 40, fontWeight: 700, fontSize: 20 }}
+            >
+              {doctor?.firstName?.charAt(0) || "?"}
             </div>
           )}
           <div>
-            <div className="fw-bold" style={{ fontSize: 16 }}>{doctor?.firstName} {doctor?.lastName}</div>
-            <div className="small text-light">{doctor?.positionData?.valueVi || 'Bác sĩ'}</div>
+            <div className="fw-bold" style={{ fontSize: 14 }}>
+              {doctor?.positionData?.valueVi || "Bác sĩ"}
+              {" - "}
+              {doctor?.firstName} {doctor?.lastName}
+            </div>
+
+            {/* <div className="small text-light"></div> */}
             {selectedDoctor?.socketId && (
               <span className="badge bg-success mt-1">Online</span>
             )}
           </div>
         </div>
-        <button onClick={onClose} className="btn btn-light btn-sm ms-2" title="Đóng"><i className="fa fa-times"></i></button>
+        <button
+          onClick={onClose}
+          className="btn btn-light btn-sm ms-2"
+          title="Đóng"
+        >
+          <i className="fa fa-times"></i>
+        </button>
       </div>
       {/* Chat messages */}
-      <div className="card-body d-flex flex-column p-0 bg-light" style={{ minHeight: 300, maxHeight: 400, overflowY: 'auto' }}>
+      <div
+        className="card-body d-flex flex-column p-0 bg-light"
+        style={{ minHeight: 300, maxHeight: 400, overflowY: "auto" }}
+      >
         <ChatArea
           allMsg={messages}
           user={patient}
@@ -84,7 +128,7 @@ const PatientChatBox = ({ doctor, onClose }) => {
         />
       </div>
       {/* Footer nhập tin nhắn */}
-      <div className="card-footer bg-white p-2">
+      <div className=" bg-white p-2">
         <Footer handleSendMsg={handleSendMessage} />
       </div>
       {/* Modal login và thông báo */}

@@ -41,7 +41,7 @@ class MedicalFacility extends Component {
               </span>
               <button className="btn-section">
                 {" "}
-                <span className="title-section">
+                <span className="title-more-infor">
                   <FormattedMessage id="homepage.more-infor" />
                 </span>
               </button>

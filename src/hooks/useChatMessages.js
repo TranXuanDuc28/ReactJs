@@ -30,33 +30,67 @@ export default function useChatMessages({ user, receiver }) {
   // Lắng nghe tin nhắn mới, chỉ gán listener 1 lần khi user login
   useEffect(() => {
     const socket = socketRef.current;
-    if (socket.connected && user) {
-      socket.emit("ADD_USER", user);
+    const handleReceivedMsg = (data) => {
+      const msg = data.data ? data.data : data;
+      // Kiểm tra nếu tin nhắn liên quan đến receiver hiện tại thì mới add
+      // (1) Nếu mình là sender hoặc receiver
+      // (2) Hoặc receiver là null (chưa chọn ai)
+      if (
+        (receiver &&
+          ((msg.sender?.id === user.id && msg.receiver?.id === receiver.id) ||
+            (msg.sender?.id === receiver.id &&
+              msg.receiver?.id === user.id))) ||
+        !receiver
+      ) {
+        dispatch(addChatMessage(msg));
+      }
+    };
+    const handleDeletedMsg = (data) => {
+      console.log("Nhận được DELETED_MSG:", data);
+      dispatch(deleteChatMessage(data.msgId));
+    };
+    const setupListeners = () => {
+      console.log("Socket connected:", socket.id);
       // Clear listener cũ trước khi gán mới
-      socket.off("RECEIVED_MSG");
-      socket.on("RECEIVED_MSG", (data) => {
-        const msg = data.data ? data.data : data;
-        // Kiểm tra nếu tin nhắn liên quan đến receiver hiện tại thì mới add
-        // (1) Nếu mình là sender hoặc receiver
-        // (2) Hoặc receiver là null (chưa chọn ai)
-        if (
-          (receiver &&
-            ((msg.sender?.id === user.id && msg.receiver?.id === receiver.id) ||
-              (msg.sender?.id === receiver.id && msg.receiver?.id === user.id))) ||
-          !receiver
-        ) {
-          dispatch(addChatMessage(msg));
-        }
-      });
+      socket.off("RECEIVED_MSG").on("RECEIVED_MSG", handleReceivedMsg);
+      socket.off("DELETED_MSG").on("DELETED_MSG", handleDeletedMsg);
+    };
+
+    if (socket.connected && user) {
+      setupListeners();
     }
     // Cleanup khi unmount
     return () => {
       if (socket) {
         socket.off("RECEIVED_MSG");
+        socket.off("DELETED_MSG");
       }
     };
     // eslint-disable-next-line
   }, [user, receiver, dispatch]); // Thêm receiver vào dependency
+
+  // Lắng nghe sự kiện tin nhắn bị xóa
+  // useEffect(() => {
+  //   const socket = socketRef.current;
+  //   console.log("Kết nối socket để lắng nghe DELETED_MSG", socket.id);
+  //   if (socket && socket.connected) {
+  //     const handleDeletedMsg = (data) => {
+  //       console.log("Nhận được DELETED_MSG:", data);
+  //       // Nếu dùng Redux:
+  //       dispatch(deleteChatMessage(data.msgId));
+  //       // Nếu dùng state cục bộ:
+  //       // setAllMsg((prev) => prev.filter((item) => item.id !== data.msgId));
+  //     };
+  //     socket.on("DELETED_MSG", (data) => {
+  //       console.log("Doctor nhận được DELETED_MSG:", data); // Thêm dòng này
+  //       handleDeletedMsg(data);
+  //     });
+
+  //     return () => {
+  //       socket.off("DELETED_MSG", handleDeletedMsg);
+  //     };
+  //   }
+  // }, [dispatch]);
 
   // Load tin nhắn khi receiver/user thay đổi
   useEffect(() => {
@@ -88,14 +122,25 @@ export default function useChatMessages({ user, receiver }) {
   };
 
   // Gửi tin nhắn: đã tách ra hook riêng
-
   const handleDeleteMessage = (msgId) => {
     axios
       .post(`${PATH}/api/del-msg/${msgId}`)
-      .then(() => {
+      .then((res) => {
         dispatch(deleteChatMessage(msgId));
+        // Emit socket để các client khác cũng xóa
+        const socket = socketRef.current;
+        if (socket?.connected) {
+          const data = {
+            msgId,
+            receiver,
+          };
+          console.log("Emit DELETE_MSG to server:", data);
+          socket.emit("DELETE_MSG", data);
+        }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const loadMore = () => {

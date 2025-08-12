@@ -3,12 +3,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  background: rgb(229, 229, 229);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  min-width: 300px;
-  max-width: 400px;
+  min-width: 400px;
+  max-width: 600px;
   animation: notificationSlideIn 0.3s ease-out;
 
   .notification-content {
@@ -17,7 +17,7 @@
 
     .notification-icon {
       margin-bottom: 15px;
-      
+
       i {
         font-size: 48px;
         color: #007bff;
@@ -67,6 +67,8 @@
         &.btn-close {
           background: #6c757d;
           color: white;
+          width: 60px;
+          height: auto;
 
           &:hover {
             background: #545b62;
@@ -108,4 +110,4 @@
       }
     }
   }
-} 
+}

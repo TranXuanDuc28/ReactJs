@@ -1,12 +1,13 @@
 import axios from "../axios";
-
+const registerUser = (data) => {
+  return axios.post("/api/register", data);
+};
 const handleLoginApi = (email, password) => {
   return axios.post("/api/login", { email, password });
 };
 
-
 const handlePatientChatLogin = (email, password) => {
-  return axios.post('/api/login-patient-chat', { email, password });
+  return axios.post("/api/login-patient-chat", { email, password });
 };
 
 const handleGetAllUsers = (id) => {
@@ -53,6 +54,20 @@ const getAllClinic = () => {
 const getAllDetailClinicById = (data) => {
   return axios.get(`/api/get-detail-clinic-by-id?id=${data.id}`);
 };
+// HandBook related services
+const createNewHandBook = (data) => {
+  return axios.post("/api/create-new-handbook", data);
+};
+const getAllHandBook = () => {
+  return axios.get(`/api/get-handbook`);
+};
+const getAllDetailHandBookById = (data) => {
+  return axios.get(`/api/get-detail-handbook-by-id?id=${data.id}`);
+};
+
+const getRelatedHandBooks = (data) => {
+  return axios.get(`/api/get-related-handbooks?id=${data.id}&limit=${data.limit || 4}`);
+};
 
 const getAllPatientForDoctor = (data) => {
   return axios.get(
@@ -72,8 +87,12 @@ const postMedicalAppointmentStatus = (data) => {
 const postSendPayment = (data) => {
   return axios.post("/api/send-payment", data);
 };
+const getPatientAppointments = (patientId) => {
+  return axios.get(`/api/get-patient-appointments?patientId=${patientId}`);
+};
 
 export {
+  registerUser,
   handleLoginApi,
   handleGetAllUsers,
   createNewUsersServices,
@@ -87,10 +106,15 @@ export {
   createNewClinic,
   getAllClinic,
   getAllDetailClinicById,
+  createNewHandBook,
+  getAllHandBook,
+  getAllDetailHandBookById,
+  getRelatedHandBooks,
   getAllPatientForDoctor,
   postSendRemedy,
   getAllMedicines,
   postMedicalAppointmentStatus,
   postSendPayment,
-  handlePatientChatLogin
+  handlePatientChatLogin,
+  getPatientAppointments,
 };

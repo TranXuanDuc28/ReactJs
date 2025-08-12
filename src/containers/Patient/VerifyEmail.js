@@ -46,7 +46,7 @@ class VerifyEmail extends Component {
 
     return (
       <>
-        <HomeHeader />
+        <HomeHeader isShowBanner={false} />
         <div className="veriy-email-container">
           {statusVerify === false ? (
             <div>Loading data...</div>

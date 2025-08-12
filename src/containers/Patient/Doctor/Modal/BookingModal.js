@@ -31,6 +31,15 @@ class BookingModal extends Component {
   }
   async componentDidMount() {
     this.props.getGenders();
+    const { patientInfo } = this.props;
+    if (patientInfo) {
+      this.setState({
+        email: patientInfo.email || "",
+        fullName: `${patientInfo.firstName || ""} ${
+          patientInfo.lastName || ""
+        }`,
+      });
+    }
   }
   buildDataGender = (data) => {
     let result = [];
@@ -65,6 +74,15 @@ class BookingModal extends Component {
           timeType: timeType,
         });
       }
+    }
+    if (this.props.patientInfo !== prevProps.patientInfo) {
+      const { patientInfo } = this.props;
+      this.setState({
+        email: patientInfo?.email || "",
+        fullName: `${patientInfo?.firstName || ""} ${
+          patientInfo?.lastName || ""
+        }`,
+      });
     }
   }
   handleOnchangeInput = (event, id) => {
@@ -282,6 +300,7 @@ const mapStateToProps = (state) => {
   return {
     language: state.app.language,
     genders: state.admin.genders,
+    patientInfo: state.patient.patientInfo,
   };
 };
 

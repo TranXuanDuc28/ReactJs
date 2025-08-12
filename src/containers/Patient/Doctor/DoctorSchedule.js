@@ -20,6 +20,8 @@ class DoctorSchedule extends Component {
       allAvailableTime: [],
       isOpenModalBooking: false,
       dataTime: {},
+      showBookingForm: false,
+      email: "",
     };
   }
   async componentDidMount() {
@@ -94,11 +96,18 @@ class DoctorSchedule extends Component {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
   handleClickScheduleTime = (time) => {
+    const { patientInfo } = this.props;
+    if (!patientInfo) {
+      toast.warn("Bạn cần đăng nhập để tiếp tục đặt lịch!");
+      // Hoặc mở modal đăng nhập nếu muốn
+      return;
+    }
+    // Nếu đã đăng nhập, mở form đặt lịch với email đã có
     this.setState({
       isOpenModalBooking: true,
       dataTime: time,
+      email: patientInfo.email || "",
     });
-    console.log("time", time);
   };
   closeBookingModal = () => {
     this.setState({
@@ -192,6 +201,7 @@ class DoctorSchedule extends Component {
 const mapStateToProps = (state) => {
   return {
     language: state.app.language,
+    patientInfo: state.patient.patientInfo,
   };
 };
 

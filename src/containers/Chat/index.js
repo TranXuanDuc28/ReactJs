@@ -11,16 +11,17 @@ const Chat = () => {
   const socketRef = useRef();
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  console.log("onlineUsers", onlineUsers);
   const [roomData, setRoomData] = useState({
     room: null,
     receiver: null,
   });
   const [allMsg, setAllMsg] = useState([]);
   const history = useHistory();
-  const user = useSelector(state => state.user.userInfo);
-  
+  const user = useSelector((state) => state.user.userInfo);
+
   console.log("user from redux:", user);
- 
+
   useEffect(() => {
     const socket = io.connect(PATH);
     socketRef.current = socket;
@@ -41,8 +42,9 @@ const Chat = () => {
         setAllMsg((prevState) => [...prevState, msg]);
       });
       socketRef.current.on("DELETED_MSG", (data) => {
+        console.log("Doctor nhận được DELETED_MSG:", data); // Thêm dòng này
         setAllMsg((prevState) =>
-          prevState.filter((item) => item.id != data.msg.id)
+          prevState.filter((item) => item.id != data.msgId)
         );
       });
 
@@ -57,9 +59,9 @@ const Chat = () => {
         msg,
         receiver: roomData.receiver,
         sender,
-        ...fileMeta
+        ...fileMeta,
       };
-      console.log("data msg", data)
+      console.log("data msg", data);
       socketRef.current.emit("SEND_MSG", data);
     }
   };
@@ -70,10 +72,10 @@ const Chat = () => {
       .then((res) => {
         if (socketRef.current.connected) {
           const data = {
-            msg: res.data.data,
+            msgId: res.data.data.id,
             receiver: roomData.receiver,
           };
-          console.log("data haha", data)
+          console.log("data haha", data);
           socketRef.current.emit("DELETE_MSG", data);
           setAllMsg((prevState) =>
             prevState.filter((data) => data.id != res.data.data.id)
@@ -89,15 +91,17 @@ const Chat = () => {
     if (!roomData.receiver) return;
     const receiverId = roomData.receiver.id;
     const currentUserId = user.id;
-    
+
     axios
-      .get(`http://localhost:8080/api/get-msg/${receiverId}?userId=${currentUserId}&offset=${allMsg.length}`)
+      .get(
+        `http://localhost:8080/api/get-msg/${receiverId}?userId=${currentUserId}&offset=${allMsg.length}`
+      )
       .then((res) => {
-        console.log("res res",res)
+        console.log("res res", res);
         // Nối tin nhắn cũ vào đầu mảng
         setAllMsg((prev) => [...res.data.data, ...prev]);
       })
-    
+
       .catch((err) => {
         console.log(err);
       });
@@ -108,7 +112,10 @@ const Chat = () => {
   return (
     <div className="container-fluid mt-2" style={{ height: "93vh" }}>
       <div className="row h-100">
-        <div className="col-3 h-100 p-0" style={{ borderRight: '1px solid #eee', overflow: 'auto' }}>
+        <div
+          className="col-3 h-100 p-0"
+          style={{ borderRight: "1px solid #eee", overflow: "auto" }}
+        >
           <SideBar
             user={user}
             onlineUsers={onlineUsers}
@@ -127,7 +134,10 @@ const Chat = () => {
             loadMoreMsg={loadMoreMsg}
           />
         </div>
-        <div className="col-3 h-100 p-0" style={{ borderLeft: '1px solid #eee', overflow: 'auto' }}>
+        <div
+          className="col-3 h-100 p-0"
+          style={{ borderLeft: "1px solid #eee", overflow: "auto" }}
+        >
           <Profile user={user} />
         </div>
       </div>

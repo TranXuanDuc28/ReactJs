@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import "./Specialty.scss";
 import { FormattedMessage } from "react-intl";
 import Slider from "react-slick";
 import { NextArrow, PrevArrow } from "../CustomArrows";
@@ -31,7 +30,7 @@ class Specialty extends Component {
   render() {
     let { dataSpecialty } = this.state;
     return (
-      <div className="section-share section-specialty ">
+      <div className="section-share section-specialty section-background">
         <div className="section-content">
           <div className="section-header">
             <span className="title-section">
@@ -39,7 +38,7 @@ class Specialty extends Component {
             </span>
             <button className="btn-section">
               {" "}
-              <span className="title-section">
+              <span className="title-more-infor">
                 <FormattedMessage id="homepage.more-infor" />
               </span>
             </button>
@@ -55,7 +54,7 @@ class Specialty extends Component {
                 dataSpecialty.map((item, index) => {
                   return (
                     <div
-                      className="section-customize specialty-child  customize-specialty"
+                      className="section-customize customize-specialty"
                       key={index}
                       onClick={() => this.handleViewDetailSpecialty(item)}
                     >

@@ -91,6 +91,7 @@ class DetailSpecialty extends Component {
         id: id,
         location: location,
       });
+
       if (res && res.errCode === 0) {
         let data = res.data;
         let arrDoctorId = [];
@@ -112,13 +113,22 @@ class DetailSpecialty extends Component {
   };
   render() {
     let { arrDoctorId, dataDetailSpecialty, listProvince } = this.state;
-    console.log("nho check state:", this.state);
+    console.log("dataDetailSpecialty", dataDetailSpecialty);
     let { language } = this.props;
     return (
       <div className="detail-specialty-container">
-        <HomeHeader />
+        <HomeHeader isShowBanner={false} />
         <div className="detail-specialty-body">
           <div className="description-specialty">
+            <div className="title-detail-specialty">
+              {dataDetailSpecialty && !_.isEmpty(dataDetailSpecialty) && (
+                <h3>
+                  {language === LANGUAGES.VI
+                    ? dataDetailSpecialty.name
+                    : dataDetailSpecialty.name}
+                </h3>
+              )}
+            </div>
             {dataDetailSpecialty && !_.isEmpty(dataDetailSpecialty) && (
               <div
                 dangerouslySetInnerHTML={{
@@ -128,7 +138,10 @@ class DetailSpecialty extends Component {
             )}
           </div>
           <div className="search-sp-doctor">
-            <select onChange={(event) => this.handleOnchangeSelect(event)}>
+            <select
+              onChange={(event) => this.handleOnchangeSelect(event)}
+              className="search-sp-doctor-select"
+            >
               {listProvince &&
                 listProvince.length > 0 &&
                 listProvince.map((item, index) => {

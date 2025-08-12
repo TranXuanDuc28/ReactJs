@@ -24,7 +24,7 @@
   background-color: white;
 }
 .slick-slide {
-  padding: 0px 15px;
+  padding: 0px 15px 30px 15px;
 }
 .slick-disable {
   display: none !important;
@@ -42,7 +42,7 @@
     width: auto;
 
     .section-customize {
-      height: 400px;
+      height: 300px;
       // margin: 100px 0px;
       padding: 20px 0px;
 
@@ -56,6 +56,7 @@
       &.customize-specialty {
         border: 1px solid #cae3e6;
         border-radius: 20px;
+        background-color: #fffefc !important;
       }
       &.customize-medical-facility {
         border: 1px solid #cae3e6;
@@ -64,26 +65,27 @@
       .bg-image {
         background-position: center center !important;
         background-repeat: no-repeat !important;
-        background-size: cover !important;
+        background-size: contain !important;
 
         &.section-specialty {
           background: url("../../assets/images/101713-tim-mach.png");
-          height: 250px;
+          height: 137px;
+          border-radius: 25px;
         }
         &.section-medical-facility {
           background: url("../../assets/images/152704logo-bvcr-moi.jpg");
-          height: 250px;
+          height: 180px;
         }
         &.section-outstanding-doctor {
-          width: 200px;
-          height: 180px;
+          width: 168px;
+          height: 168px;
           background: url("../../assets/images/103447-bs-hong-anh.jpg");
           border-radius: 50%;
         }
         &.section-handlebook {
           background: url("../../assets/images/HandBook/144434-dia-chi-kham-chua-benh-cong-veo-cot-song-tre-em.png");
           width: 278px;
-          height: 250px;
+          height: 180px;
           background-size: contain !important;
         }
       }
@@ -113,11 +115,12 @@
       .title-section {
         font-size: 22px;
         font-weight: 550;
+        text-align: center;
       }
       .btn-section {
         padding: 10px 15px;
         background-color: #daf3f6;
-        font-size: 20px;
+        font-size: 17px;
         font-weight: 550;
         border-radius: 15px;
         border: none;
@@ -183,11 +186,12 @@
     padding: 0 2%;
   }
   .section-share .section-body .section-customize {
-    height: 300px;
+    height: 220px;
   }
   .section-about .section-about-content .section-body {
     flex-direction: column;
-    .content-left, .content-right {
+    .content-left,
+    .content-right {
       width: 100%;
       padding: 0;
     }
@@ -199,32 +203,30 @@
 }
 
 @media (max-width: 576px) {
-  .slick-prev{
+  .slick-prev {
     margin-left: -5px !important;
   }
-  .slick-next{
+  .slick-next {
     margin-right: 8px !important;
   }
-  .section-share, .section-specialty, .section-content{
-    
-    
-    .section-header{
-      .title-section{
+  .section-share,
+  .section-specialty,
+  .section-content {
+    .section-header {
+      .title-section {
         font-size: 15px !important;
       }
-
     }
     .section-body {
       .section-customize {
         height: 200px;
         padding: 10px 0;
-        
       }
       .customize-specialty {
         min-width: 70px;
         height: 150px;
         padding: 6px 0 10px 0;
-        .section-specialty{
+        .section-specialty {
           width: 105px !important;
           height: 70px;
         }
@@ -235,7 +237,6 @@
     }
   }
 }
-
 
 @media (max-width: 768px) {
   .section-share .section-body .section-customize.customize-specialty {

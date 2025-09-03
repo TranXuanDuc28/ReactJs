@@ -16,6 +16,7 @@ class DoctorInfo extends Component {
     };
   }
   async componentDidMount() {
+    console.log("123123");
     let data = await this.getDoctorInforById(this.props.doctorId);
     this.setState({
       dataProfile: data,
@@ -23,9 +24,10 @@ class DoctorInfo extends Component {
   }
 
   getDoctorInforById = async (doctorId) => {
+    console.log("check language", this.props.language);
     let results = {};
     if (doctorId) {
-      let res = await getProfileDoctorById(doctorId);
+      let res = await getProfileDoctorById(doctorId, this.props.language);
       if (res && res.errCode === 0) {
         results = res.data;
       }
@@ -62,11 +64,13 @@ class DoctorInfo extends Component {
   };
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.language !== this.props.language) {
+      let data = await this.getDoctorInforById(this.props.doctorId);
+      this.setState({ dataProfile: data });
     }
   }
   render() {
     let { dataProfile } = this.state;
-    // console.log("dataProfile", dataProfile);
+    console.log("dataProfile", dataProfile);
     let {
       language,
       isShowDescriptionDoctor,
@@ -121,7 +125,9 @@ class DoctorInfo extends Component {
         </div>
         {isShowLinkDetail == true && (
           <div className="view-detail-doctor">
-            <Link to={`/detail-doctor/${doctorId}`}> Xem thêm </Link>
+            <Link to={`/detail-doctor/${doctorId}`}>
+              <FormattedMessage id="homepage.more-infor" />
+            </Link>
           </div>
         )}
         {isShowPrice === true && (

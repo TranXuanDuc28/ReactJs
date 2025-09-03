@@ -1,49 +1,50 @@
+@import "../../../styles/common.scss";
 .detail-clinic-container {
   .description-clinic {
     background-color: white !important;
     padding: 50px;
     margin: 15px 0;
-    
+
     @include respond-to(sm) {
       padding: 30px 20px;
       margin: 10px 0;
     }
-    
+
     @include respond-to(xs) {
       padding: 20px 15px;
       margin: 8px 0;
     }
-    
+
     h1,
     h2,
     h3 {
       font-size: 16px;
       font-weight: 600;
-      
+
       @include respond-to(xs) {
         font-size: 14px;
       }
     }
   }
-  
+
   .search-sp-doctor {
   }
-  
+
   .detail-clinic-body {
     padding: 0 100px;
     background: #eee;
     display: flex;
     flex-direction: column;
-    
+
     @include respond-to(sm) {
       padding: 0 30px;
     }
-    
+
     @include respond-to(xs) {
       padding: 0 15px;
     }
   }
-  
+
   .each-doctor {
     display: flex;
     width: 100%;
@@ -53,24 +54,24 @@
     background-color: #fff;
     box-shadow: 0 1px 6px #20212447;
     border-radius: 8px;
-    
+
     @include respond-to(sm) {
       flex-direction: column;
       min-height: auto;
       margin: 10px 0;
       padding: 15px;
     }
-    
+
     @include respond-to(xs) {
       margin: 8px 0;
       padding: 10px;
     }
-    
+
     .dt-content-left {
       padding: 25px;
       width: 50%;
       border-right: 1px solid #ddd;
-      
+
       @include respond-to(sm) {
         width: 100%;
         border-right: none;
@@ -78,21 +79,21 @@
         padding: 20px 15px;
         text-align: center;
       }
-      
+
       @include respond-to(xs) {
         padding: 15px 10px;
       }
     }
-    
+
     .dt-content-right {
       width: 50%;
       padding: 10px;
-      
+
       @include respond-to(sm) {
         width: 100%;
         padding: 15px 10px;
       }
-      
+
       @include respond-to(xs) {
         padding: 10px 5px;
       }
@@ -102,17 +103,17 @@
           border-right: unset !important;
         }
       }
-      
+
       .doctor-extra-infor {
         border-top: 1px solid #ddd;
         margin-top: 10px;
         padding-top: 10px;
-        
+
         @include respond-to(sm) {
           margin-top: 15px;
           padding-top: 15px;
         }
-        
+
         .doctor-extra-infor-container {
           padding-left: 0 !important;
         }
@@ -141,11 +142,11 @@
     .description-clinic {
       margin-bottom: 20px;
     }
-    
+
     .detail-clinic-body {
       margin-top: 20px;
     }
-    
+
     .each-doctor {
       margin-bottom: 20px;
     }

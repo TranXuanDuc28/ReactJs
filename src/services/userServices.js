@@ -33,45 +33,55 @@ const getAllCodeServices = (inputType) => {
 const postVerifyBookAppointment = (data) => {
   return axios.post("/api/verify-book-appointment", data);
 };
+// Specialty Services
 const createNewSpecialty = (data) => {
   return axios.post("/api/create-new-specialty", data);
 };
-const getAllSpecialty = () => {
-  return axios.get(`/api/get-specialty`);
+const getAllSpecialty = (data) => {
+  return axios.get(`/api/get-specialty?lang=${data.lang}`);
 };
 const getAllDetailSpecialtyById = (data) => {
   return axios.get(
-    `/api/get-detail-specialty-by-id?id=${data.id}&location=${data.location}`
+    `/api/get-detail-specialty-by-id?id=${data.id}&location=${data.location}&lang=${data.lang}`
   );
 };
 // Clinic related services
 const createNewClinic = (data) => {
   return axios.post("/api/create-new-clinic", data);
 };
-const getAllClinic = () => {
-  return axios.get(`/api/get-clinic`);
+const getAllClinic = (data) => {
+  return axios.get(`/api/get-clinic?lang=${data.lang}`);
 };
 const getAllDetailClinicById = (data) => {
-  return axios.get(`/api/get-detail-clinic-by-id?id=${data.id}`);
+  console.log("check data service", data);
+  return axios.get(
+    `/api/get-detail-clinic-by-id?id=${data.id}&lang=${data.lang}`
+  );
 };
 // HandBook related services
 const createNewHandBook = (data) => {
   return axios.post("/api/create-new-handbook", data);
 };
-const getAllHandBook = () => {
-  return axios.get(`/api/get-handbook`);
+const getAllHandBook = (data) => {
+  return axios.get(`/api/get-handbook?lang=${data.lang}`);
 };
 const getAllDetailHandBookById = (data) => {
-  return axios.get(`/api/get-detail-handbook-by-id?id=${data.id}`);
+  return axios.get(
+    `/api/get-detail-handbook-by-id?id=${data.id}&lang=${data.lang}`
+  );
 };
-
 const getRelatedHandBooks = (data) => {
-  return axios.get(`/api/get-related-handbooks?id=${data.id}&limit=${data.limit || 4}`);
+  return axios.get(
+    `/api/get-related-handbooks?id=${data.id}&limit=${data.limit || 4}&lang=${
+      data.lang
+    }`
+  );
 };
 
 const getAllPatientForDoctor = (data) => {
+  console.log("data", data);
   return axios.get(
-    `/api/get-list-patient-for-doctor?doctorId=${data.doctorId}&roleId=${data.roleId}&date=${data.date}`
+    `/api/get-list-patient-for-doctor?doctorId=${data.doctorId}&roleId=${data.roleId}&date=${data.date}&lang=${data.lang}`
   );
 };
 const postSendRemedy = (data) => {

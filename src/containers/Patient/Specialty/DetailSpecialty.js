@@ -13,6 +13,7 @@ import {
 } from "../../../services/userServices";
 import _ from "lodash";
 import { LANGUAGES } from "../../../utils";
+import { lang } from "moment";
 class DetailSpecialty extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +25,10 @@ class DetailSpecialty extends Component {
   }
 
   async componentDidMount() {
+    this.fetchSpecialtyDetail();
+  }
+
+  async fetchSpecialtyDetail() {
     if (
       this.props.match &&
       this.props.match.params &&
@@ -34,6 +39,7 @@ class DetailSpecialty extends Component {
       let res = await getAllDetailSpecialtyById({
         id: id,
         location: "ALL",
+        lang: this.props.language,
       });
 
       let resProvince = await getAllCodeServices("PROVINCE");
@@ -49,11 +55,13 @@ class DetailSpecialty extends Component {
         if (data && !_.isEmpty(res.data)) {
           let arr = data.doctorSpecialty;
           if (arr && arr.length > 0) {
+            arr.sort((a, b) => a.doctorId - b.doctorId);
             arr.map((item) => {
               arrDoctorId.push(item.doctorId);
             });
           }
         }
+        console.log("arrDoctorId 1", arrDoctorId);
         let dataProvince = resProvince.data;
 
         if (dataProvince && dataProvince.length > 0) {
@@ -73,9 +81,9 @@ class DetailSpecialty extends Component {
       }
     }
   }
-
   async componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.language !== prevProps.language) {
+    if (prevProps.language !== this.props.language) {
+      this.fetchSpecialtyDetail();
     }
   }
 
@@ -90,7 +98,9 @@ class DetailSpecialty extends Component {
       let res = await getAllDetailSpecialtyById({
         id: id,
         location: location,
+        lang: this.props.language,
       });
+      console.log("res", res);
 
       if (res && res.errCode === 0) {
         let data = res.data;
@@ -98,11 +108,13 @@ class DetailSpecialty extends Component {
         if (data && !_.isEmpty(res.data)) {
           let arr = data.doctorSpecialty;
           if (arr && arr.length > 0) {
+            arr.sort((a, b) => a.doctorId - b.doctorId);
             arr.map((item) => {
               arrDoctorId.push(item.doctorId);
             });
           }
         }
+        console.log("arrDoctorId 2", arrDoctorId);
 
         this.setState({
           dataDetailSpecialty: res.data,
@@ -124,15 +136,15 @@ class DetailSpecialty extends Component {
               {dataDetailSpecialty && !_.isEmpty(dataDetailSpecialty) && (
                 <h3>
                   {language === LANGUAGES.VI
-                    ? dataDetailSpecialty.name
-                    : dataDetailSpecialty.name}
+                    ? dataDetailSpecialty.specialtyData[0].name
+                    : dataDetailSpecialty.specialtyData[0].name}
                 </h3>
               )}
             </div>
             {dataDetailSpecialty && !_.isEmpty(dataDetailSpecialty) && (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: dataDetailSpecialty.descriptionHTML,
+                  __html: dataDetailSpecialty.specialtyMarkdown[0].contentHTML,
                 }}
               ></div>
             )}

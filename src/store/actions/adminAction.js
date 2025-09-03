@@ -178,11 +178,11 @@ export const editUserSuccess = () => ({
 export const editUserFailed = () => ({
   type: actionTypes.EDIT_USER_FAILED,
 });
-export const getTopDoctorHome = () => {
+export const getTopDoctorHome = (data) => {
   // console.log(data);
   return async (dispatch, getState) => {
     try {
-      let res = await getTopDoctorServices("");
+      let res = await getTopDoctorServices("", data.lang);
 
       // console.log("123",res);
       if (res && res.errCode === 0) {
@@ -251,11 +251,11 @@ export const getInforDoctorSuccess = () => ({
 export const getInforDoctorFailed = () => ({
   type: actionTypes.SAVE_INFOR_DOCTOR_FAILED,
 });
-export const getDetailDoctorById = (inputId) => {
+export const getDetailDoctorById = (inputId, lang) => {
   // console.log(data);
   return async (dispatch, getState) => {
     try {
-      let res = await getDetailDoctorByIdServices(inputId);
+      let res = await getDetailDoctorByIdServices(inputId, lang);
       if (res && res.errCode === 0) {
         dispatch(getInforDoctorByIdSuccess(res.data));
       } else {
@@ -295,7 +295,7 @@ export const getAllScheduleTimeSuccess = (data) => ({
 export const getAllScheduleTimeFailed = () => ({
   type: actionTypes.GET_ALL_SCHEDULE_TIME_FAILED,
 });
-export const fetchAllRequireDoctorInforStart = () => {
+export const fetchAllRequireDoctorInforStart = (data) => {
   return async (dispatch, getState) => {
     try {
       dispatch({
@@ -304,8 +304,8 @@ export const fetchAllRequireDoctorInforStart = () => {
       let resPrice = await getAllCodeServices("PRICE");
       let resPayment = await getAllCodeServices("PAYMENT");
       let resProvince = await getAllCodeServices("PROVINCE");
-      let resSpecialty = await getAllSpecialty();
-      let resClinic = await getAllClinic();
+      let resSpecialty = await getAllSpecialty(data);
+      let resClinic = await getAllClinic(data);
       if (
         resPrice &&
         resPayment &&

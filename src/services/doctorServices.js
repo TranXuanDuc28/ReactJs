@@ -1,6 +1,6 @@
 import axios from "../axios";
-const getTopDoctorServices = (limit) => {
-  return axios.get(`/api/top-doctor-home?limit=${limit}`);
+const getTopDoctorServices = (limit, lang) => {
+  return axios.get(`/api/top-doctor-home?limit=${limit}&lang=${lang}`);
 };
 const getAllDoctorServices = () => {
   return axios.get(`/api/get_all_doctor`);
@@ -8,8 +8,9 @@ const getAllDoctorServices = () => {
 const saveDetailInforDoctorServices = (data) => {
   return axios.post("/api/save_detail_doctor", data);
 };
-const getDetailDoctorByIdServices = (inputId) => {
-  return axios.get(`/api/get_detail_doctor_by_id?id=${inputId}`);
+const getDetailDoctorByIdServices = (inputId, lang) => {
+  const langParam = lang ? `&lang=${lang}` : "";
+  return axios.get(`/api/get_detail_doctor_by_id?id=${inputId}${langParam}`);
 };
 const saveBulkScheduleDoctor = (data) => {
   return axios.post("/api/bulk_create_schedule", data);
@@ -19,11 +20,17 @@ const getScheduleDoctorByDate = (doctorId, date) => {
     `/api/get_schedule_doctor_by_date?doctorId=${doctorId}&date=${date}`
   );
 };
-const getExtraDoctorInforByIdServices = (inputId) => {
-  return axios.get(`/api/get-extra-doctor-by-id?doctorId=${inputId}`);
+const getExtraDoctorInforByIdServices = (inputId, lang) => {
+  const langParam = lang ? `&lang=${lang}` : "";
+  return axios.get(
+    `/api/get-extra-doctor-by-id?doctorId=${inputId}${langParam}`
+  );
 };
-const getProfileDoctorById = (inputId) => {
-  return axios.get(`/api/get-profile-doctor-by-id?doctorId=${inputId}`);
+const getProfileDoctorById = (inputId, lang) => {
+  const langParam = lang ? `&lang=${lang}` : "";
+  return axios.get(
+    `/api/get-profile-doctor-by-id?doctorId=${inputId}${langParam}`
+  );
 };
 const postPatientBookAppointment = (data) => {
   return axios.post("/api/patient-book-appointment", data);

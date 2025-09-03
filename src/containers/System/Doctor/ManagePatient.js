@@ -39,6 +39,7 @@ class ManagePatient extends Component {
       doctorId: user.id,
       roleId: user.roleId,
       date: formattedDate,
+      lang: this.props.language,
     });
     console.log("check res", res);
     if (res && res.errCode === 0) {
@@ -49,6 +50,7 @@ class ManagePatient extends Component {
   };
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.language !== this.props.language) {
+      this.getDataPatient();
     }
   }
 
@@ -69,7 +71,7 @@ class ManagePatient extends Component {
       timeType: item.timeType,
       date: item.date,
       email: item.patientData.email,
-      patientName: item.patientData.firstName,
+      patientName: item.patientData.firstName + " " + item.patientData.lastName,
     };
     this.setState({
       isOpenModalRemedy: true,
@@ -83,7 +85,7 @@ class ManagePatient extends Component {
       timeType: item.timeType,
       date: item.date,
       email: item.patientData.email,
-      patientName: item.patientData.firstName,
+      patientName: item.patientData.firstName + " " + item.patientData.lastName,
     };
     try {
       let res = await postMedicalAppointmentStatus({
@@ -122,12 +124,12 @@ class ManagePatient extends Component {
         patientId: dataModal.patientId,
         timeType: dataModal.timeType,
 
-        email: dataChild.email,
-        imagebase64: dataChild.imageBase64,
         language: this.props.language,
-        patientName: dataModal.patientName,
-        selectedMedicines: dataChild.selectedMedicines,
+        // patientName: dataModal.patientName,
+        prescription: dataChild.prescription,
         totalPrice: dataChild.totalPrice,
+        patientInfo: dataChild.patientInfo, // Thêm thông tin bệnh nhân
+        examInfo: dataChild.examInfo, // Thêm thông tin khám
       });
       console.log("check res send remedy", res);
 
@@ -184,6 +186,7 @@ class ManagePatient extends Component {
                     <th>Thời gian</th>
                     <th>Họ tên bệnh nhân</th>
                     <th>Giới tính</th>
+                    <th>Số điện thoại liên hệ</th>
                     <th>Địa chỉ</th>
                     <th>Action</th>
                   </tr>
@@ -197,13 +200,18 @@ class ManagePatient extends Component {
                               ? item.timeTypeDataPatient.valueVi
                               : item.timeTypeDataPatient.valueEn}
                           </td>
-                          <td>{item.patientData.firstName}</td>
+                          <td>
+                            {item.patientData.firstName +
+                              " " +
+                              item.patientData.lastName}
+                          </td>
 
                           <td>
                             {language === LANGUAGE.VI
                               ? item.patientData.genderData.valueVi
                               : item.patientData.genderData.valueEn}
                           </td>
+                          <td>{item.patientData.phoneNumber}</td>
                           <td>{item.patientData.address}</td>
                           <td>
                             {item.statusId === "S2" ? (

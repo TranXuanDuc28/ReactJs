@@ -14,13 +14,42 @@ import "./HomePage.scss";
 class HomePage extends Component {
   render() {
     const { isLoggedIn } = this.props;
-    let linkToRedirect = isLoggedIn ? "/system/user-manage" : "/home";
+    //let linkToRedirect = isLoggedIn ? "/system/user-manage" : "/home";
     let settings = {
-      // dots: true,
       infinite: false,
       speed: 500,
       slidesToShow: 4,
       slidesToScroll: 1,
+      responsive: [
+        {
+          breakpoint: 1200, // Dưới 1200px
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 992, // Dưới 992px
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 768, // Dưới 768px
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 576, // Dưới 576px
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+      ],
     };
     return (
       <div>

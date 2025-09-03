@@ -1,7 +1,16 @@
+@import "../../../styles/common.scss";
 .schedule-container {
   border-right: 1px solid #ddd;
 
-  height: 200px;
+  height: auto;
+
+  @include respond-to(sm) {
+    border-right: none;
+  }
+
+  @include respond-to(xs) {
+    border-right: none;
+  }
   .all-schedule {
     select {
       border-bottom: 1px solid #ddd;
@@ -38,6 +47,7 @@
     .time-content {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 15px;
       button {
         padding: 8px 8px;
@@ -58,6 +68,11 @@
       }
       .btn-vie {
         min-width: 132px;
+      }
+      .btn-disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: not-allowed;
       }
     }
   }

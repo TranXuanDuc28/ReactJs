@@ -6,6 +6,7 @@ import Slider from "react-slick";
 import { NextArrow, PrevArrow } from "../CustomArrows";
 import axios from "axios";
 import { getAllHandBook } from "../../../services/userServices";
+import { FormattedMessage } from "react-intl";
 
 class HandBook extends Component {
   state = {
@@ -14,13 +15,21 @@ class HandBook extends Component {
   };
 
   async componentDidMount() {
+    this.getAllHandBook();
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.language !== this.props.language) {
+      this.getAllHandBook();
+    }
+  }
+  getAllHandBook = async () => {
     try {
-      const res = await getAllHandBook();
+      const res = await getAllHandBook({ lang: this.props.language });
       this.setState({ handbooks: res.data || [], loading: false });
     } catch (e) {
       this.setState({ loading: false });
     }
-  }
+  };
 
   handleClickHandBook = (id) => {
     this.props.history.push(`/handbook/${id}`);
@@ -28,15 +37,21 @@ class HandBook extends Component {
 
   render() {
     const { handbooks, loading } = this.state;
+    console.log("state handbook", this.state);
 
     return (
       <React.Fragment>
         <div className="section-share section-handlebook">
           <div className="section-content">
             <div className="section-header">
-              <div className="title-section"> Cẩm nang</div>
+              <div className="title-section">
+                <FormattedMessage id="homepage.handbook" />
+              </div>
               <div>
-                <button className="btn-section">Xem thêm</button>
+                <button className="btn-section">
+                  {" "}
+                  <FormattedMessage id="homepage.more-infor" />
+                </button>
               </div>
             </div>
             <div className="section-body">
@@ -65,7 +80,9 @@ class HandBook extends Component {
                           borderRadius: 12,
                         }}
                       ></div>
-                      <div className="title-section">{item.title}</div>
+                      <div className="title-section">
+                        {item.handbookData[0].title}
+                      </div>
                     </div>
                   ))}
                 </Slider>
@@ -77,8 +94,16 @@ class HandBook extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    language: state.app.language,
+  };
+};
 
-export default connect(
-  (state) => ({ isLoggedIn: state.user.isLoggedIn }),
-  null
-)(withRouter(HandBook));
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(HandBook)
+);

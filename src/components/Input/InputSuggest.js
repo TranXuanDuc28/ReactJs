@@ -17,7 +17,7 @@ class InputSuggestion extends React.Component {
             textInput: '',
             suggestions: []
         };
-        document.addEventListener('keydown', this.freeTyping.bind(this), false);
+        this.boundFreeTyping = this.freeTyping.bind(this);
     }
 
     freeTyping(e) {
@@ -27,6 +27,14 @@ class InputSuggestion extends React.Component {
         if (e.target.value === undefined) {
             this.inputSearch.focus();
         }
+    }
+
+    componentDidMount() {
+        document.addEventListener('keydown', this.boundFreeTyping, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.boundFreeTyping, false);
     }
 
     getSuggestions = textInput => {
@@ -63,7 +71,7 @@ class InputSuggestion extends React.Component {
         this.props.onSelected(suggestion);
         return suggestion.displayName;
     }
-    
+
     renderSuggestion = suggestion => {
         return (
             <div className="suggest-item">
@@ -79,7 +87,7 @@ class InputSuggestion extends React.Component {
     };
 
     sortSuggestions(suggestions, value) {
-        var results =  _.sortBy(suggestions, (element) => {
+        var results = _.sortBy(suggestions, (element) => {
             return element.displayName
         })
         return results;

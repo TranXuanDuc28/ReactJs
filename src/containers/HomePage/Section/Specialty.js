@@ -14,12 +14,21 @@ class Specialty extends Component {
   }
 
   async componentDidMount() {
-    let res = await getAllSpecialty();
+    this.getAllSpecialty();
+  }
 
+  getAllSpecialty = async () => {
+    let res = await getAllSpecialty({ lang: this.props.language });
+    console.log("res Specialty", res);
     if (res && res.errCode === 0) {
       this.setState({
         dataSpecialty: res.data ? res.data : [],
       });
+    }
+  };
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.language !== this.props.language) {
+      this.getAllSpecialty();
     }
   }
   handleViewDetailSpecialty = (item) => {
@@ -64,9 +73,7 @@ class Specialty extends Component {
                           backgroundImage: `url(${item.image})`,
                         }}
                       />
-                      <div className="specialty-name title-section">
-                        {item.name}
-                      </div>
+                      <div className="title-section">{item.name}</div>
                     </div>
                   );
                 })}

@@ -1,69 +1,132 @@
+@import "../../../styles/common.scss";
 .manage-specialty-container {
-  padding: 0 15px;
-  
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+
   @include respond-to(sm) {
-    padding: 0 10px;
+    padding: 0 10px !important;
   }
-  
+
   @include respond-to(xs) {
     padding: 0 8px;
   }
-  
+
   .ms-title {
     text-align: center;
     margin: 10px 0;
     text-transform: uppercase;
     font-size: 17px;
     font-weight: 600;
-    
+
     @include respond-to(sm) {
       font-size: 16px;
       margin: 8px 0;
     }
-    
+
     @include respond-to(xs) {
       font-size: 15px;
       margin: 6px 0;
     }
   }
-  
-  .add-new-specialty {
-    .btn-save-specialty {
-      border: none;
-      background: orange;
-      padding: 8px 5px;
-      min-width: 75px;
-      border-radius: 3px;
-      margin: 15px 0;
-      
+
+  .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15) !important;
+    }
+    .card-body {
+      padding: 2rem;
       @include respond-to(sm) {
-        padding: 10px 8px;
-        min-width: 80px;
-        margin: 12px 0;
-        font-size: 14px;
+        padding: 1.5rem;
       }
-      
       @include respond-to(xs) {
-        padding: 8px 6px;
-        min-width: 70px;
-        margin: 10px 0;
-        font-size: 13px;
-        width: 100%;
+        padding: 1rem;
       }
-      
-      &:hover {
-        opacity: 0.9;
+      .previewImage {
+        width: 200px;
+        height: 200px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        border: 1px solid #dee2e6;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
       }
-    }
-  }
-  
-  .all-specialty {
-    @include respond-to(sm) {
-      margin-top: 20px;
-    }
-    
-    @include respond-to(xs) {
-      margin-top: 15px;
+      // File input styling
+      input[type="file"] {
+        &::-webkit-file-upload-button {
+          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+          border: none;
+          border-radius: 6px;
+          color: white;
+          padding: 0.5rem 1rem;
+          margin-right: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+          }
+        }
+
+        &::-moz-file-upload-button {
+          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+          border: none;
+          border-radius: 6px;
+          color: white;
+          padding: 0.5rem 1rem;
+          margin-right: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+          }
+        }
+      }
+
+      .btn-save-specialty {
+        border: none;
+        background: orange !important;
+        padding: 8px 12px;
+        min-width: 75px;
+        border-radius: 3px;
+
+        i {
+          font-size: 15px;
+        }
+
+        @include respond-to(sm) {
+          padding: 10px 8px;
+          min-width: 80px;
+          margin: 12px 0;
+          font-size: 14px;
+        }
+
+        @include respond-to(xs) {
+          padding: 8px 6px;
+          min-width: 70px;
+          margin: 10px 0;
+          font-size: 13px;
+          width: 100%;
+        }
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
     }
   }
 }
@@ -82,7 +145,7 @@
     .ms-title {
       margin-bottom: 20px;
     }
-    
+
     .add-new-specialty {
       margin-bottom: 25px;
     }

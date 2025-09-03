@@ -13,7 +13,9 @@ import {
 import { toast } from "react-toastify";
 import CreatableSelect from "react-select/creatable";
 import { CRUD_ACTION } from "../../../utils";
-import { get } from "lodash";
+import Lightbox from "react-image-lightbox";
+import Select from "react-select";
+
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 class ManageClinic extends Component {
   constructor(props) {
@@ -27,6 +29,10 @@ class ManageClinic extends Component {
       hasOldData: false,
       arrAllClinic: [],
       selectedOption: "",
+      isSubmitting: false,
+      previewImageUrl: "",
+      isOpen: false,
+      lang: "",
     };
   }
 
@@ -40,9 +46,11 @@ class ManageClinic extends Component {
     }
   }
   getAllClinic = async () => {
-    let res = await getAllClinic();
+    let res = await getAllClinic({ lang: "vi" });
     if (res && res.errCode === 0) {
+      console.log("check res", res);
       let dataSelect = this.buildDataInputSelect(res.data, "CLINICS");
+
       this.setState({
         arrAllClinic: dataSelect,
       });
@@ -86,32 +94,75 @@ class ManageClinic extends Component {
       let base64 = await CommonUtils.getBase64(file);
       this.setState({
         imageBase64: base64,
+        previewImageUrl: URL.createObjectURL(file), // Tạo URL tạm thời để hiển thị ảnh
       });
-      console.log("imageBase", this.state.imageBase64);
     }
   };
-  handleSaveNewClinic = async () => {
-    let { hasOldData } = this.state;
-    let res = await createNewClinic({
-      clinicId: this.state.selectedOption.value,
-      name: this.state.name,
-      address: this.state.address,
-      imageBase64: this.state.imageBase64,
-      contentHTML: this.state.contentHTML,
-      contentMarkdown: this.state.contentMarkdown,
-      action: hasOldData === true ? CRUD_ACTION.UPDATE : CRUD_ACTION.CREATE,
+  openPreviewImage = () => {
+    if (!this.state.previewImageUrl) return;
+    this.setState({
+      isOpen: true,
     });
-    if (res && res.errCode === 0) {
-      toast.success(res.errMessage);
-      this.setState({
-        name: "",
-        address: "",
-        imageBase64: "",
-        contentHTML: "",
-        contentMarkdown: "",
-      });
-    } else {
-      toast.error("Something wrongs...");
+  };
+  validateForm = () => {
+    const { name, address, contentMarkdown } = this.state;
+    // if (!name) {
+    //   toast.error("Vui lòng nhập tên phòng khám");
+    //   return false;
+    // }
+    if (!address) {
+      toast.error("Vui lòng nhập địa chỉ phòng khám");
+      return false;
+    }
+    if (!contentMarkdown) {
+      toast.error("Vui lòng nhập mô tả phòng khám");
+      return false;
+    }
+    return true;
+  };
+  handleSaveNewClinic = async () => {
+    if (!this.validateForm()) return;
+    this.setState({ isSubmitting: true });
+    let { hasOldData } = this.state;
+    try {
+      const clinicData = {
+        clinicId: this.state.selectedOption.value,
+        name: this.state.name,
+        address: this.state.address,
+        imageBase64: this.state.imageBase64,
+        contentHTML: this.state.contentHTML,
+        contentMarkdown: this.state.contentMarkdown,
+        action: hasOldData === true ? CRUD_ACTION.UPDATE : CRUD_ACTION.CREATE,
+        lang: this.props.language,
+      };
+      let res = await createNewClinic(clinicData);
+      if (res && res.errCode === 0) {
+        toast.success("Thêm phòng khám mới thành công!");
+        this.resetForm();
+      } else {
+        toast.error(res?.errMessage || "Có lỗi xảy ra khi thêm phòng khám");
+      }
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi thêm phòng khám");
+    } finally {
+      this.setState({ isSubmitting: false });
+    }
+  };
+  resetForm = () => {
+    this.setState({
+      name: "",
+      address: "",
+      imageBase64: "",
+      contentHTML: "",
+      contentMarkdown: "",
+      selectedOption: null, // reset option
+      previewImageUrl: "", // reset ảnh
+      hasOldData: false, // reset về trạng thái thêm mới
+    });
+
+    // Nếu muốn xoá cả file input (tên file ảnh hiển thị), bạn cần clear thủ công:
+    if (this.fileInputRef) {
+      this.fileInputRef.value = ""; // reset tên file chọn
     }
   };
   handleChangeSelect = async (selectedOption) => {
@@ -119,18 +170,19 @@ class ManageClinic extends Component {
     if (selectedOption) {
       console.log("selectedOption", selectedOption);
       let id = selectedOption.value;
-      let res = await getAllDetailClinicById({ id });
+      let res = await getAllDetailClinicById({ id, lang: this.props.language });
       console.log("check res ...", res);
       if (res && res.errCode === 0 && res.data) {
         this.setState({
           name: res.data.name,
           address: res.data.address,
           imageBase64: res.data.image,
-          contentHTML: res.data.clinicMarkdown[0].contentHTML,
-          contentMarkdown: res.data.clinicMarkdown[0].contentMarkdown,
+          contentHTML: res.data.clinicMarkdown.contentHTML,
+          contentMarkdown: res.data.clinicMarkdown.contentMarkdown,
+          previewImageUrl: res.data.image,
           hasOldData: true,
         });
-        console.log("check data", res.data.clinicMarkdown[0]);
+        console.log("check data", res.data.clinicMarkdown);
       } else {
         // Nếu không có dữ liệu, reset form về trạng thái tạo mới
         this.setState({
@@ -140,73 +192,176 @@ class ManageClinic extends Component {
           contentHTML: "",
           contentMarkdown: "",
           hasOldData: false,
+          previewImageUrl: "",
         });
       }
     }
   };
-  render() {
-    let { hasOldData } = this.state;
-    return (
-      <div className="manage-specialty-container">
-        <div className="ms-title">Quản lý \phòng khám</div>
 
-        <div className="add-new-specialty row">
-          <div className="col-6 form-group">
-            <label>Tên phòng khám</label>
-            <CreatableSelect
-              value={this.state.selectedOption}
-              onChange={this.handleChangeSelect}
-              options={this.state.arrAllClinic}
-              placeholder="Chọn hoặc nhập tên phòng khám..."
-              onCreateOption={(inputValue) => {
-                // Khi nhập tên mới
-                const newOption = { value: null, label: inputValue };
-                this.setState({
-                  selectedOption: newOption,
-                  name: inputValue, // Gán vào state name để khi lưu sẽ dùng
-                  hasOldData: false, // Chế độ tạo mới
-                });
-              }}
-            />
+  render() {
+    let { hasOldData, isSubmitting } = this.state;
+    return (
+      <div className="manage-clinic-container">
+        <div className="container-fluid">
+          <div className="text-center mb-4">
+            <h3 className="fw-bold">Quản lý phòng khám</h3>
+            <p className="text-muted">Thêm phòng khám mới vào hệ thống</p>
           </div>
-          <div className="col-6 form-group">
-            <label>Ảnh phòng khám</label>
-            <input
-              className="form-control-file"
-              type="file"
-              onChange={(event) => this.handleOnchangeImage(event)}
-            />
-          </div>
-          <div className="col-6 form-group">
-            <label>Địa chỉ phòng phám</label>
-            <input
-              className="form-control"
-              type="text"
-              value={this.state.address}
-              onChange={(event) => this.handleOnchangeInput(event, "address")}
-            />
-          </div>
-          <div className="col-12">
-            <MdEditor
-              style={{ height: "300px" }}
-              renderHTML={(text) => mdParser.render(text)}
-              onChange={this.handleEditorChange}
-              value={this.state.contentMarkdown}
-            />
-          </div>
-          <div className="col-12">
-            <button
-              onClick={() => this.handleSaveNewClinic()}
-              className={
-                hasOldData === true
-                  ? "btn-edit-specialty"
-                  : "btn-save-specialty"
-              }
-            >
-              {hasOldData === true ? "Lưu thông tin" : "Tạo thông tin"}
-            </button>
+          <div className="row">
+            <div className="col-12">
+              <div className="card">
+                <div className="card-body">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      this.handleSaveNewClinic();
+                    }}
+                  >
+                    {/* Tên phòng khám */}
+                    <div className="form-group mb-3">
+                      <label className="form-label fw-bold">
+                        <i className="fas fa-hospital me-2"></i>
+                        Tên phòng khám <span className="text-danger">*</span>
+                      </label>
+
+                      {/* Select clinic có sẵn */}
+                      <Select
+                        value={this.state.selectedOption}
+                        onChange={this.handleChangeSelect}
+                        options={this.state.arrAllClinic}
+                        placeholder="Chọn phòng khám có sẵn..."
+                      />
+
+                      {/* Hoặc nhập tên phòng khám mới */}
+                      <input
+                        type="text"
+                        className="form-control mt-2"
+                        placeholder="Hoặc nhập tên phòng khám mới..."
+                        value={this.state.name}
+                        onChange={(e) => {
+                          this.setState({
+                            name: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+
+                    {/* Địa chỉ */}
+                    <div className="form-group mb-3">
+                      <label className="form-label fw-bold">
+                        <i className="fas fa-map-marker-alt me-2"></i>
+                        Địa chỉ <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Nhập địa chỉ phòng khám..."
+                        value={this.state.address}
+                        onChange={(event) =>
+                          this.handleOnchangeInput(event, "address")
+                        }
+                      />
+                    </div>
+                    {/* Ảnh đại diện */}
+                    <div className="form-group mb-3">
+                      <label className="form-label fw-bold">
+                        <i className="fas fa-image me-2"></i>
+                        Ảnh đại diện
+                      </label>
+                      <input
+                        className="form-control"
+                        type="file"
+                        accept="image/*"
+                        ref={(ref) => (this.fileInputRef = ref)} // thêm dòng này
+                        onChange={this.handleOnchangeImage}
+                      />
+
+                      <small className="form-text text-muted">
+                        Chọn ảnh đại diện cho phòng khám (JPG, PNG, GIF)
+                      </small>
+                      {this.state.imageBase64 && (
+                        <div
+                          className="previewImage"
+                          style={{
+                            backgroundImage: `url(${this.state.previewImageUrl})`,
+                          }}
+                          onClick={() => {
+                            this.openPreviewImage();
+                          }}
+                        ></div>
+                      )}
+                    </div>
+                    {/* Mô tả phòng khám */}
+                    <div className="form-group mb-3">
+                      <label className="form-label fw-bold">
+                        <i className="fas fa-edit me-2"></i>
+                        Mô tả phòng khám <span className="text-danger">*</span>
+                      </label>
+                      <MdEditor
+                        style={{ height: "300px" }}
+                        renderHTML={(text) => mdParser.render(text)}
+                        onChange={this.handleEditorChange}
+                        value={this.state.contentMarkdown}
+                        placeholder="Nhập mô tả phòng khám..."
+                      />
+                      <small className="form-text text-muted">
+                        Sử dụng Markdown để định dạng nội dung.
+                      </small>
+                    </div>
+                    {/* Action Buttons */}
+                    <div className="d-flex justify-content-end gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={this.resetForm}
+                        disabled={isSubmitting}
+                      >
+                        <i className="fas fa-undo me-2"></i>
+                        Làm mới
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <span
+                              className="spinner-border spinner-border-sm me-2"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Đang lưu...
+                          </>
+                        ) : hasOldData ? (
+                          <>
+                            <i className="fas fa-edit me-2"></i>
+                            Cập nhật phòng khám
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-save me-2"></i>
+                            Lưu phòng khám
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        {this.state.isOpen === true && (
+          <Lightbox
+            mainSrc={this.state.previewImageUrl}
+            onCloseRequest={() =>
+              this.setState({
+                isOpen: false,
+              })
+            }
+          />
+        )}
       </div>
     );
   }

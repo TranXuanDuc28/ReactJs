@@ -1,171 +1,191 @@
-.manage-doctor-container{
-    padding: 0 5%;
-    
+@import "../../../styles/common.scss";
+.manage-doctor-container {
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding: 30px 0;
+
+  @include respond-to(sm) {
+    padding: 0 3%;
+  }
+
+  @include respond-to(xs) {
+    padding: 0 2%;
+  }
+
+  .manage-doctor-title {
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    padding: 20px;
+
     @include respond-to(sm) {
-        padding: 0 3%;
+      font-size: 20px;
+      padding: 15px;
     }
-    
+
     @include respond-to(xs) {
-        padding: 0 2%;
+      font-size: 18px;
+      padding: 10px;
     }
-    
-    .manage-doctor-title{
-        font-size: 22px;
-        font-weight: 600;
-        text-align: center;
-        padding: 20px;
-        
-        @include respond-to(sm) {
-            font-size: 20px;
-            padding: 15px;
-        }
-        
-        @include respond-to(xs) {
-            font-size: 18px;
-            padding: 10px;
-        }
+  }
+
+  .more-infor {
+    width: 100%;
+    display: flex;
+
+    @include respond-to(sm) {
+      flex-direction: column;
+      gap: 20px;
     }
-    
-    .more-infor{
+
+    @include respond-to(xs) {
+      gap: 15px;
+    }
+
+    .content-left {
+      width: 50%;
+      padding-right: 30px;
+
+      @include respond-to(sm) {
         width: 100%;
-        display: flex;
-        
-        @include respond-to(sm) {
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        @include respond-to(xs) {
-            gap: 15px;
-        }
-       
-        .content-left{
-            width: 50%;
-            padding-right: 30px;
-            
-            @include respond-to(sm) {
-                width: 100%;
-                padding-right: 0;
-            }
-        }
-        
-        .content-right{
-            width: 50%;
-            
-            @include respond-to(sm) {
-                width: 100%;
-            }
-        }
+        padding-right: 0;
+      }
     }
-    
-    .manage-doctor-editor{
-        margin: 30px 0px;
-        
-        @include respond-to(sm) {
-            margin: 20px 0;
-        }
-        
-        @include respond-to(xs) {
-            margin: 15px 0;
-        }
+
+    .content-right {
+      width: 50%;
+
+      @include respond-to(sm) {
+        width: 100%;
+      }
     }
-    
-    .btn-edit-doctor{
-        background-color: rgb(219, 125, 10);
-        border: none;
-        color: white;
-        font-weight: 600;
-        padding: 8px;
-        display: flex;
-        margin: auto;
-        margin-bottom: 20px;
-        
-        @include respond-to(sm) {
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        
-        @include respond-to(xs) {
-            padding: 8px 12px;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-        
-        &:hover{
-            opacity: 0.9;
-        }
+  }
+
+  .manage-doctor-editor {
+    margin: 30px 0px;
+
+    @include respond-to(sm) {
+      margin: 20px 0;
     }
-    
-    .btn-save-doctor{
-        background-color: rgb(45, 31, 230);
-        border: none;
-        color: white;
-        font-weight: 600;
-        padding: 8px;
-        display: flex;
-        margin: auto;
-        margin-bottom: 20px;
-        
-        @include respond-to(sm) {
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        
-        @include respond-to(xs) {
-            padding: 8px 12px;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-        
-        &:hover{
-            opacity: 0.9;
-        }
+
+    @include respond-to(xs) {
+      margin: 15px 0;
     }
-    
-    .more-infor-detail{
-        display: flex;
-        padding: 2px;
-        flex-wrap: wrap;
-        
-        @include respond-to(sm) {
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        @include respond-to(xs) {
-            gap: 8px;
-        }
+  }
+
+  .btn-edit-doctor {
+    background: #ffb300;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 0;
+
+    margin: auto;
+    margin-bottom: 20px;
+    min-width: 160px;
+    font-size: 16px;
+    height: auto;
+    border-radius: 6px;
+
+    @include respond-to(sm) {
+      margin-bottom: 15px;
+      font-size: 14px;
     }
+
+    @include respond-to(xs) {
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .btn-save-doctor {
+    background: #2d1fe6;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 0;
+
+    margin: auto;
+    margin-bottom: 20px;
+    min-width: 160px;
+    height: auto;
+    font-size: 16px;
+    border-radius: 6px;
+
+    @include respond-to(sm) {
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    @include respond-to(xs) {
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .more-infor-detail {
+    display: flex;
+    padding: 2px;
+    flex-wrap: wrap;
+
+    @include respond-to(sm) {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @include respond-to(xs) {
+      gap: 8px;
+    }
+  }
+
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+    border: none;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #333;
+  }
 }
 
 // Additional responsive styles
 @include respond-to(sm) {
-    .manage-doctor-container {
-        .more-infor {
-            .content-left,
-            .content-right {
-                text-align: center;
-            }
-        }
-        
-        .btn-edit-doctor,
-        .btn-save-doctor {
-            width: 100%;
-            justify-content: center;
-        }
+  .manage-doctor-container {
+    .more-infor {
+      .content-left,
+      .content-right {
+        text-align: center;
+      }
     }
+
+    .btn-edit-doctor,
+    .btn-save-doctor {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 }
 
 @include respond-to(xs) {
-    .manage-doctor-container {
-        .manage-doctor-title {
-            margin-bottom: 20px;
-        }
-        
-        .more-infor {
-            margin-bottom: 25px;
-        }
+  .manage-doctor-container {
+    .manage-doctor-title {
+      margin-bottom: 20px;
     }
+
+    .more-infor {
+      margin-bottom: 25px;
+    }
+  }
 }

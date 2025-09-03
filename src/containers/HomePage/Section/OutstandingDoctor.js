@@ -7,6 +7,7 @@ import { LANGUAGE } from "../../../utils";
 import { withRouter } from "react-router-dom";
 import Slider from "react-slick";
 import { NextArrow, PrevArrow } from "../CustomArrows";
+import { FormattedMessage } from "react-intl";
 class OutstandingDoctor extends Component {
   constructor(props) {
     super(props);
@@ -15,9 +16,12 @@ class OutstandingDoctor extends Component {
     };
   }
   componentDidMount() {
-    this.props.getTopDoctorHomeRedux();
+    this.props.getTopDoctorHomeRedux({ lang: this.props.language });
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.language !== this.props.language) {
+      this.props.getTopDoctorHomeRedux({ lang: this.props.language });
+    }
     if (prevProps.listDoctorRedux !== this.props.listDoctorRedux) {
       this.setState({
         arrDoctors: this.props.listDoctorRedux,
@@ -38,10 +42,14 @@ class OutstandingDoctor extends Component {
         <div className="section-share section-background">
           <div className="section-content">
             <div className="section-header">
-              <div className="title-section"> Chuyên khoa</div>
+              <div className="title-section">
+                <FormattedMessage id="homepage.doctor" />{" "}
+              </div>
               <div>
                 {" "}
-                <button className="btn-section">Xem thêm</button>
+                <button className="btn-section">
+                  <FormattedMessage id="homepage.more-infor" />
+                </button>
               </div>
             </div>
             <div className="section-body">
@@ -73,8 +81,11 @@ class OutstandingDoctor extends Component {
                           <span
                             style={{ color: "#0014ff", fontFamily: "initial" }}
                           >
-                            Chuyên khoa -{" "}
-                            {item.Doctor_Infor.doctorSpecialty.name}
+                            <FormattedMessage id="homepage.specialty" /> -{" "}
+                            {
+                              item.Doctor_Infor.doctorSpecialty.specialtyData[0]
+                                .name
+                            }
                           </span>
                         </div>
                       </div>
@@ -125,7 +136,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getTopDoctorHomeRedux: () => dispatch(actions.getTopDoctorHome()),
+    getTopDoctorHomeRedux: (data) => dispatch(actions.getTopDoctorHome(data)),
   };
 };
 

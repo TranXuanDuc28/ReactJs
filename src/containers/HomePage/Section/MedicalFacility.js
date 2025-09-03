@@ -16,12 +16,21 @@ class MedicalFacility extends Component {
   }
 
   async componentDidMount() {
-    let res = await getAllClinic();
-
+    let res = await getAllClinic({ lang: this.props.language });
     if (res && res.errCode === 0) {
       this.setState({
         dataClinic: res.data ? res.data : [],
       });
+    }
+  }
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.language !== this.props.language) {
+      let res = await getAllClinic({ lang: this.props.language });
+      if (res && res.errCode === 0) {
+        this.setState({
+          dataClinic: res.data ? res.data : [],
+        });
+      }
     }
   }
   handleViewDetailClinic = (item) => {

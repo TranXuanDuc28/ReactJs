@@ -30,7 +30,6 @@ const LoginModal = ({ onClose, onLoginSuccess, patientLoginSuccess }) => {
     setIsLoading(true);
 
     try {
-      console.log("formData", formData);
       const data = await handlePatientChatLogin(
         formData.username,
         formData.password
@@ -42,7 +41,7 @@ const LoginModal = ({ onClose, onLoginSuccess, patientLoginSuccess }) => {
         patientLoginSuccess(data.users);
         // this.props.patientLoginSuccess(data.users);
         onLoginSuccess();
-        console.log("Đăng nhập thành công!");
+        //console.log("Đăng nhập thành công!");
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -78,13 +77,13 @@ const LoginModal = ({ onClose, onLoginSuccess, patientLoginSuccess }) => {
         avatar: decoded.picture,
         isGoogle: true,
       });
-      console.log("Đăng nhập Google thành công:", decoded);
+      //console.log("Đăng nhập Google thành công:", decoded);
       onLoginSuccess();
     }
   };
 
   const handleFacebookResponse = (response) => {
-    console.log("Facebook response:", response);
+    //console.log("Facebook response:", response);
     if (response && !response.error) {
       patientLoginSuccess({
         id: response.id,

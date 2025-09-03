@@ -1,141 +1,174 @@
-.detail-doctor-container{
-    
-    height: auto;
-    
+@import "../../../styles/common.scss";
+.detail-doctor-container {
+  height: auto;
+
+  @include respond-to(sm) {
+    padding: 0 5%;
+  }
+
+  @include respond-to(xs) {
+    padding: 0 3%;
+  }
+
+  .intro-doctor {
+    margin: 50px 10%;
+    height: 160px;
+    display: flex;
+
     @include respond-to(sm) {
-        padding: 0 5%;
+      margin: 20px 5%;
+      height: auto;
+      flex-direction: column;
+      gap: 20px;
+
+      align-items: center;
     }
-    
+
     @include respond-to(xs) {
-        padding: 0 3%;
+      margin: 15px 3%;
+      gap: 15px;
     }
-    
-    .intro-doctor{
-        margin: 20px 10%;
-        height: 160px;
-        display: flex;
-        
+
+    .content-left {
+      width: 20%;
+      height: 160px;
+
+      @include respond-to(sm) {
+        width: 100%;
+        height: auto;
+        text-align: center;
+      }
+    }
+
+    .content-right {
+      margin-left: 20px;
+      width: 80%;
+
+      @include respond-to(sm) {
+        padding-right: 0;
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .up {
+        font-size: 22px;
+        font-weight: 600;
+
         @include respond-to(sm) {
-            margin: 20px 5%;
-            height: auto;
+          font-size: 20px;
+        }
+
+        @include respond-to(xs) {
+          font-size: 18px;
+        }
+      }
+      .down {
+        width: 100%;
+        .like-share-plugin {
+          margin-top: 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          @include respond-to(sm) {
             flex-direction: column;
-            gap: 20px;
-        }
-        
-        @include respond-to(xs) {
-            margin: 15px 3%;
-            gap: 15px;
-        }
-        
-        .content-left{
-            width: 20%;
-            height: 160px;
-            
-            @include respond-to(sm) {
-                width: 100%;
-                height: auto;
-                text-align: center;
-            }
-        }
-        
-        .content-right{
-            padding-right: 300px;
-            margin-left: 20px;
-            width: 80%;
-            
-            @include respond-to(sm) {
-                padding-right: 0;
-                margin-left: 0;
-                width: 100%;
-            }
-            
-            .up{
-                font-size: 22px;
-                font-weight: 600;
-                
-                @include respond-to(sm) {
-                    font-size: 20px;
-                }
-                
-                @include respond-to(xs) {
-                    font-size: 18px;
-                }
-            }
-        }
-    }
-    
-    .schedule-doctor{
-        margin: 20px 10%;
-        display: flex;
-        
-        @include respond-to(sm) {
-            margin: 20px 5%;
+            align-items: center;
+          }
+
+          @include respond-to(xs) {
             flex-direction: column;
-            gap: 20px;
+            align-items: center;
+          }
         }
-        
-        @include respond-to(xs) {
-            margin: 15px 3%;
-            gap: 15px;
-        }
-        
-        .content-left{
-            width: 50%;
-            
-            @include respond-to(sm) {
-                width: 100%;
-            }
-        }
-        
-        .content-right{
-            width: 50%;
-            
-            @include respond-to(sm) {
-                width: 100%;
-            }
-        }
+      }
     }
-    
-    .detail-infor-doctor{
-        padding: 0 10%;
-        padding-top: 20px;
-        border-top: 1px solid rgb(199, 199, 199);
-        
-        @include respond-to(sm) {
-            padding: 0 5%;
-            padding-top: 20px;
-        }
-        
-        @include respond-to(xs) {
-            padding: 0 3%;
-            padding-top: 15px;
-        }
+  }
+
+  .schedule-doctor {
+    margin: 20px 10%;
+    display: flex;
+
+    @include respond-to(sm) {
+      margin: 20px 5%;
+      flex-direction: column;
+      gap: 20px;
     }
+
+    @include respond-to(xs) {
+      margin: 15px 3%;
+      gap: 15px;
+    }
+
+    .content-left {
+      width: 50%;
+
+      @include respond-to(sm) {
+        width: 100%;
+
+        height: auto;
+      }
+    }
+
+    .content-right {
+      width: 50%;
+
+      @include respond-to(sm) {
+        width: 100%;
+      }
+    }
+  }
+
+  .detail-infor-doctor {
+    padding: 0 10%;
+    padding-top: 20px;
+    border-top: 1px solid rgb(199, 199, 199);
+
+    @include respond-to(sm) {
+      padding: 0 5%;
+      padding-top: 20px;
+    }
+
+    @include respond-to(xs) {
+      padding: 0 3%;
+      padding-top: 15px;
+    }
+  }
+  .comment-doctor {
+    margin: 20px 10%;
+
+    @include respond-to(sm) {
+      margin: 20px 5%;
+    }
+
+    @include respond-to(xs) {
+      margin: 15px 3%;
+    }
+  }
 }
 
 // Additional responsive styles
 @include respond-to(sm) {
-    .detail-doctor-container {
-        .intro-doctor,
-        .schedule-doctor,
-        .detail-infor-doctor {
-            .content-left,
-            .content-right {
-                text-align: center;
-            }
-        }
+  .detail-doctor-container {
+    .intro-doctor,
+    .schedule-doctor,
+    .detail-infor-doctor {
+      .content-left,
+      .content-right {
+        text-align: center;
+      }
     }
+  }
 }
 
 @include respond-to(xs) {
-    .detail-doctor-container {
-        .intro-doctor,
-        .schedule-doctor {
-            margin-bottom: 30px;
-        }
-        
-        .detail-infor-doctor {
-            margin-top: 30px;
-        }
+  .detail-doctor-container {
+    .intro-doctor,
+    .schedule-doctor {
+      margin-bottom: 30px;
     }
+
+    .detail-infor-doctor {
+      margin-top: 30px;
+    }
+  }
 }

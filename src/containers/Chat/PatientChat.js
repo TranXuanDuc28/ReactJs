@@ -80,14 +80,6 @@ const PatientChat = () => {
   // Gửi, xóa, loadMore sẽ được thực hiện qua App (hook useChatMessages ở App), chỉ cần dispatch action hoặc gọi API nếu cần
   // Nếu muốn, có thể tạo các action gửi/xóa tin nhắn riêng biệt
 
-  const quickQuestions = [
-    "Khám tổng quát bao nhiêu tiền?",
-    "Đau đầu nên uống thuốc gì?",
-    "Địa chỉ bệnh viện Bạch Mai?",
-    "Triệu chứng của bệnh tiểu đường?",
-    "Khám phụ khoa ở đâu?",
-  ];
-
   const handleSendMessage = async (msg, fileMeta) => {
     if (!isLoggedInPatient) {
       setShowNotification(true);

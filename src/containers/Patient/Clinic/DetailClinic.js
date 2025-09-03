@@ -31,11 +31,11 @@ class DetailClinic extends Component {
   async fetchClinicDetail() {
     if (this.props.match?.params?.id) {
       let id = this.props.match.params.id;
-      let res = await getAllDetailClinicById({ id });
+      let res = await getAllDetailClinicById({ id, lang: this.props.language });
 
       if (res && res.errCode === 0) {
         const processed = this.processDescriptionHTML(
-          res.data?.clinicMarkdown[0].contentHTML
+          res.data?.clinicMarkdown.contentHTML
         );
 
         let arrDoctorId = [];
@@ -55,6 +55,11 @@ class DetailClinic extends Component {
           () => this.observeHeadings()
         );
       }
+    }
+  }
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.language !== this.props.language) {
+      this.fetchClinicDetail();
     }
   }
 

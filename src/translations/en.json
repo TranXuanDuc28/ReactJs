@@ -9,7 +9,17 @@
     "fee": "Checkup package",
     "check-health": "General health check",
     "support": "Support",
-    "welcome": "Welcome, "
+    "welcome": "Welcome, ",
+    "schedule": "Schedule",
+    "chat": "Chat ",
+     "guest": "Guest",
+    "logout": "Logout",
+
+    "all": "All",
+    "at-home": "At home",
+    "at-hospital": "At hospital",
+    "healthy-living": "Healthy living",
+    "search-package": "Search check-up package"
   },
   "banner": {
     "title1": "MEDICAL PLATFORM",
@@ -33,7 +43,8 @@
       "specialty": "Specialties",
       "manage-specialty": "Mangage specilties",
       "handbook": "Handbook",
-      "manage-handbook": "Manage handbook"
+      "manage-handbook": "Manage handbook",
+      "manage-question": "Health questions"
     },
     "doctor": {
       "manage-schedule": "Manage Doctor's schedule",
@@ -42,6 +53,7 @@
     }
   },
   "manage-user": {
+    "title": "Redux User Management",
     "add": "Add a new user",
     "email": "Email",
     "password": "Password",
@@ -54,12 +66,31 @@
     "role": "Role",
     "image": "Avatar",
     "save": "Save user",
-    "edit": "Edit user"
+    "edit": "Edit user",
+    "action": "Action"
   },
   "homepage": {
     "outstanding-doctor": "Last week's featured doctor",
     "more-infor": "More Infor",
-    "specialty-popular": "Popular specialties"
+    "specialty-popular": "Popular specialties",
+    "medical-facility": "Hospital",
+    "doctor": "Doctor",
+    "handbook": "Handbook",
+    "about": "What the media says about Booking Care",
+    "specialty": "Specialty",
+      
+    "comprehensive": "Comprehensive services",
+    "specialist-examination": "Specialist examination",
+    "remote-examination": "Remote consultation",
+    "general-examination": "General check-up",
+    "medical-test": "Medical test",
+    "mental-health": "Mental health",
+    "dental-examination": "Dental examination",
+    "surgical-package": "Surgical package",
+    "healthy-living-diabetes": "Healthy living with diabetes",
+    "health-test": "Health test",
+    "medical-near-you": "Healthcare near you"
+
   },
   "manage-schedule": {
     "title": "Manage doctor's examination plan",
@@ -72,7 +103,8 @@
       "schedule": "Schedule",
       "no-schedule": "The doctor does not have appointments during this time, please choose a time other",
       "choose": "Choose ",
-      "book-free": " and book(free)"
+      "book-free": " and book(free)",
+      "contact": "Contact"
     },
     "extra-infor-doctor": {
       "text-address": "Address of examination",

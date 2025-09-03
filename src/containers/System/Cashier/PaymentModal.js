@@ -66,8 +66,8 @@ class PaymentModal extends Component {
 
     return (
       <Modal
-      show={isOpenModal}
-      onHide={closePaymentModal}
+        show={isOpenModal}
+        onHide={closePaymentModal}
         className={"modal-booking-container"}
         size="lg"
         centered

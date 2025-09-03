@@ -11,11 +11,13 @@ import "../../../utils/constant";
 import { getScheduleDoctorByDate } from "../../../services/doctorServices";
 import { FormattedMessage } from "react-intl";
 import BookingModal from "./Modal/BookingModal";
+import { getSocket } from "../../../socket";
+const socket = getSocket();
 class DoctorSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: "",
+      selectedDay: "",
       allDays: [],
       allAvailableTime: [],
       isOpenModalBooking: false,
@@ -25,22 +27,85 @@ class DoctorSchedule extends Component {
     };
   }
   async componentDidMount() {
-    let { language } = this.props;
+    let { language, patientInfo } = this.props;
+    console.log("patientInfo", patientInfo);
     let allDay = this.getArrays(language);
-    if (this.props.doctorIdFromParent) {
-      let res = await getScheduleDoctorByDate(
-        this.props.doctorIdFromParent,
-        allDay[0].value
-      );
-      if (res && res.errCode === 0) {
-        this.setState({
-          allAvailableTime: res.data ? res.data : [],
-        });
-      }
+    // if (this.props.doctorIdFromParent) {
+    //   let res = await getScheduleDoctorByDate(
+    //     this.props.doctorIdFromParent,
+    //     allDay[0].value
+    //   );
+    //   if (res && res.errCode === 0) {
+    //     this.setState({
+    //       allAvailableTime: res.data ? res.data : [],
+    //     });
+    //   }
+    // }
+    // Connect user to Socket.IO
+    if (patientInfo) {
+      socket.emit("ADD_USER", patientInfo);
     }
+
+    // Fetch initial slots for the first day
+    if (this.props.doctorIdFromParent) {
+      socket.emit("GET_SLOTS", {
+        doctorId: this.props.doctorIdFromParent,
+        date: String(allDay[0].value),
+      });
+    }
+
+    // Listen for available slots
+    socket.on("SLOTS_RECEIVED", (data) => {
+      this.setState({
+        allAvailableTime: data.data || [],
+      });
+    });
+
+    // Listen for slot updates (e.g., when a slot is booked)
+    socket.on("SLOT_UPDATED", ({ doctorId, date, timeType }) => {
+      // console.log("doctorId", doctorId, typeof doctorId);
+      // console.log(
+      //   "doctorIdFromParent",
+      //   this.props.doctorIdFromParent,
+      //   typeof this.props.doctorIdFromParent
+      // );
+      // console.log("date", date, typeof date);
+      // console.log(
+      //   "selectedDay",
+      //   this.state.selectedDay,
+      //   typeof this.state.selectedDay
+      // );
+      // console.log("selectedOption", this.state.selectedDay);
+      if (
+        +doctorId === +this.props.doctorIdFromParent &&
+        +date === +this.state.selectedDay
+      ) {
+        console.log("Da nhan 2");
+        this.setState((prevState) => ({
+          allAvailableTime: prevState.allAvailableTime.map((slot) =>
+            slot.timeType === timeType
+              ? { ...slot, status: "booked" } // đánh dấu đã đặt
+              : slot
+          ),
+        }));
+      }
+    });
+
+    // Handle errors
+    socket.on("ERROR", ({ message }) => {
+      toast.error(message);
+    });
+
     this.setState({
       allDays: allDay,
+      selectedDay: allDay[0].value,
     });
+  }
+  componentWillUnmount() {
+    // Cleanup Socket.IO listeners
+    socket.off("SLOTS_RECEIVED");
+    socket.off("SLOT_UPDATED");
+    socket.off("ERROR");
   }
 
   getArrays = (language) => {
@@ -82,14 +147,29 @@ class DoctorSchedule extends Component {
   handleChangeSelect = async (event) => {
     if (this.props.doctorIdFromParent && this.props.doctorIdFromParent != -1) {
       let doctorId = this.props.doctorIdFromParent;
+      console.log(
+        "this.props.doctorIdFromParent 2",
+        this.props.doctorIdFromParent
+      );
       let date = event.target.value;
-      let res = await getScheduleDoctorByDate(doctorId, date);
-      // console.log("res",res)
-      if (res && res.errCode === 0) {
+      // let res = await getScheduleDoctorByDate(doctorId, date);
+      // // console.log("res",res)
+      // if (res && res.errCode === 0) {
+      //   this.setState({
+      //     allAvailableTime: res.data ? res.data : [],
+      //   });
+      // }
+      socket.emit("GET_SLOTS", {
+        doctorId,
+        date,
+      });
+      socket.off("SLOTS_RECEIVED"); // clear listener cũ
+      socket.on("SLOTS_RECEIVED", (data) => {
         this.setState({
-          allAvailableTime: res.data ? res.data : [],
+          allAvailableTime: data.data || [],
         });
-      }
+      });
+      this.setState({ selectedDay: date });
     }
   };
   capitalizeFirst(str) {
@@ -121,29 +201,60 @@ class DoctorSchedule extends Component {
         allDays: allDay,
       });
     }
-    if (prevProps.doctorIdFromParent !== this.props.doctorIdFromParent) {
-      let allDay = this.getArrays(this.props.language);
-      let res = await getScheduleDoctorByDate(
-        this.props.doctorIdFromParent,
-        allDay[0].value
+    if (
+      prevProps.doctorIdFromParent !== this.props.doctorIdFromParent &&
+      this.props.doctorIdFromParent !== -1
+    ) {
+      console.log(
+        "this.props.doctorIdFromParent 3",
+        this.props.doctorIdFromParent
       );
-      if (res && res.errCode === 0) {
+      let allDay = this.getArrays(this.props.language);
+      // let res = await getScheduleDoctorByDate(
+      //   this.props.doctorIdFromParent,
+      //   allDay[0].value
+      // );
+      console.log("Giá trị:", allDay[0].value);
+      console.log("Kiểu dữ liệu:", typeof String(allDay[0].value));
+
+      console.log("DoctorID:", +this.props.doctorIdFromParent);
+      console.log(
+        "Kiểu dữ liệu doctorid:",
+        typeof +this.props.doctorIdFromParent
+      );
+
+      socket.emit("GET_SLOTS", {
+        doctorId: +this.props.doctorIdFromParent,
+        date: String(allDay[0].value),
+      });
+      this.setState({ allDays: allDay, selectedDay: allDay[0].value });
+      // if (res && res.errCode === 0) {
+      //   this.setState({
+      //     allAvailableTime: res.data ? res.data : [],
+      //   });
+      // }
+      // Listen for available slots
+      socket.on("SLOTS_RECEIVED", (data) => {
+        console.log("cos roi 3", data);
         this.setState({
-          allAvailableTime: res.data ? res.data : [],
+          allAvailableTime: data.data || [],
         });
-      }
+      });
     }
   }
   render() {
     let { allDays, allAvailableTime, dataTime, isOpenModalBooking } =
       this.state;
     let { language } = this.props;
-    // console.log("allAvailableTime",allAvailableTime)
+    console.log("allAvailableTime", allAvailableTime);
     return (
       <>
         <div className="schedule-container">
           <div className="all-schedule">
-            <select onChange={(event) => this.handleChangeSelect(event)}>
+            <select
+              value={this.state.selectedDay}
+              onChange={(event) => this.handleChangeSelect(event)}
+            >
               {allDays &&
                 allDays.length > 0 &&
                 allDays.map((item, index) => {
@@ -170,20 +281,24 @@ class DoctorSchedule extends Component {
                     language === LANGUAGE.VI
                       ? item.timeTypeData.valueVi
                       : item.timeTypeData.valueEn;
+
                   return (
                     <button
                       key={index}
-                      className={
+                      className={`${
                         language === LANGUAGE.VI ? "btn-vie" : "btn-en"
-                      }
+                      } ${item.status === "booked" ? "btn-disabled" : ""}`}
                       onClick={() => this.handleClickScheduleTime(item)}
+                      disabled={item.status === "booked"} // disable nếu slot đã booked
                     >
                       {timeDisplay}
                     </button>
                   );
                 })
               ) : (
-                <div>Không có lịch hẹn trong thời gian này</div>
+                <div>
+                  <FormattedMessage id="patient.detail-doctor.no-schedule" />
+                </div>
               )}
             </div>
           </div>
@@ -192,6 +307,7 @@ class DoctorSchedule extends Component {
           dataTime={dataTime}
           isOpenModalBooking={isOpenModalBooking}
           closeBookingModal={this.closeBookingModal}
+          socket={socket}
         />
       </>
     );

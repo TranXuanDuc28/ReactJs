@@ -51,7 +51,7 @@ const AIAssistant = () => {
 
       if (response.ok) {
         setModelStatus("loaded");
-        console.log("✅ DeepSeek Model (Ollama) loaded successfully");
+        console.log("DeepSeek Model (Ollama) loaded successfully");
 
         const healthResponse = await fetch("http://localhost:5002/health");
         if (healthResponse.ok) {
@@ -69,11 +69,11 @@ const AIAssistant = () => {
         }
       } else {
         setModelStatus("error");
-        console.error("❌ Failed to load model:", data.error);
+        console.error("Failed to load model:", data.error);
       }
     } catch (error) {
       setModelStatus("error");
-      console.error("❌ Error loading model:", error);
+      console.error("Error loading model:", error);
     }
   };
 
@@ -136,12 +136,15 @@ const AIAssistant = () => {
     abortControllerRef.current = new AbortController();
 
     try {
-      const response = await fetch("http://localhost:5002/generate_stream", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: currentInputText }),
-        signal: abortControllerRef.current.signal,
-      });
+      const response = await fetch(
+        "http://localhost:5002/generate_stream_chatbox",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: currentInputText }),
+          signal: abortControllerRef.current.signal,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -189,10 +192,10 @@ const AIAssistant = () => {
                   prev.map((msg) =>
                     msg.id === botMessageId
                       ? {
-                          ...msg,
-                          text: parsed.content,
-                          isComplete: true,
-                        }
+                        ...msg,
+                        text: parsed.content,
+                        isComplete: true,
+                      }
                       : msg
                   )
                 );
@@ -231,60 +234,60 @@ const AIAssistant = () => {
     }
   };
 
-  // Fallback to non-streaming version
-  const handleSendMessage = async () => {
-    if (!inputText.trim()) return;
+  // // Fallback to non-streaming version
+  // const handleSendMessage = async () => {
+  //   if (!inputText.trim()) return;
 
-    const userMessage = {
-      id: Date.now(),
-      text: inputText,
-      isBot: false,
-      isComplete: true,
-    };
+  //   const userMessage = {
+  //     id: Date.now(),
+  //     text: inputText,
+  //     isBot: false,
+  //     isComplete: true,
+  //   };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInputText("");
-    setIsLoading(true);
-    setSuggestions([]);
+  //   setMessages((prev) => [...prev, userMessage]);
+  //   setInputText("");
+  //   setIsLoading(true);
+  //   setSuggestions([]);
 
-    try {
-      const response = await fetch("http://localhost:5002/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputText }),
-      });
+  //   try {
+  //     const response = await fetch("http://localhost:5002/generate", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ text: inputText }),
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (response.ok) {
-        const botMessage = {
-          id: Date.now() + 1,
-          text: data.answer,
-          isBot: true,
-          isComplete: true,
-        };
-        setMessages((prev) => [...prev, botMessage]);
-      } else {
-        const errorMessage = {
-          id: Date.now() + 1,
-          text: `Lỗi: ${data.error || "Không thể kết nối với AI"}`,
-          isBot: true,
-          isComplete: true,
-        };
-        setMessages((prev) => [...prev, errorMessage]);
-      }
-    } catch (error) {
-      const errorMessage = {
-        id: Date.now() + 1,
-        text: "Xin lỗi, tôi không thể kết nối được. Vui lòng thử lại sau.",
-        isBot: true,
-        isComplete: true,
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     if (response.ok) {
+  //       const botMessage = {
+  //         id: Date.now() + 1,
+  //         text: data.answer,
+  //         isBot: true,
+  //         isComplete: true,
+  //       };
+  //       setMessages((prev) => [...prev, botMessage]);
+  //     } else {
+  //       const errorMessage = {
+  //         id: Date.now() + 1,
+  //         text: `Lỗi: ${data.error || "Không thể kết nối với AI"}`,
+  //         isBot: true,
+  //         isComplete: true,
+  //       };
+  //       setMessages((prev) => [...prev, errorMessage]);
+  //     }
+  //   } catch (error) {
+  //     const errorMessage = {
+  //       id: Date.now() + 1,
+  //       text: "Xin lỗi, tôi không thể kết nối được. Vui lòng thử lại sau.",
+  //       isBot: true,
+  //       isComplete: true,
+  //     };
+  //     setMessages((prev) => [...prev, errorMessage]);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleSuggestionClick = (suggestion) => {
     setInputText(suggestion);
@@ -305,17 +308,55 @@ const AIAssistant = () => {
 
       if (response.ok) {
         setApiStatus("working");
-        console.log("✅ API test successful:", data.message);
+        console.log("API test successful:", data.message);
       } else if (response.status === 429) {
         setApiStatus("rate_limited");
-        console.log("⚠️ API rate limited:", data.message);
+        console.log("API rate limited:", data.message);
       } else {
         setApiStatus("error");
-        console.log("❌ API test failed:", data.message);
+        console.log("API test failed:", data.message);
       }
     } catch (error) {
       setApiStatus("error");
-      console.error("❌ API test error:", error);
+      console.error("API test error:", error);
+    }
+  };
+
+  const testWebData = async () => {
+    try {
+      const response = await fetch("http://localhost:5002/web_data");
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Web data test successful:", data.message);
+        console.log("Web data:", data.data);
+        alert(`Dữ liệu web: ${JSON.stringify(data.data, null, 2)}`);
+      } else {
+        console.log("Web data test failed:", data.message);
+        alert(`Lỗi: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Web data test error:", error);
+      alert(`Lỗi kết nối: ${error.message}`);
+    }
+  };
+
+  const testDoctorDetail = async () => {
+    try {
+      const response = await fetch("http://localhost:5002/test_doctor_detail");
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Doctor detail test successful:", data.message);
+        console.log("Doctor detail:", data.data);
+        alert(`Thông tin bác sĩ chi tiết: ${JSON.stringify(data.data, null, 2)}`);
+      } else {
+        console.log("Doctor detail test failed:", data.message);
+        alert(`Lỗi: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Doctor detail test error:", error);
+      alert(`Lỗi kết nối: ${error.message}`);
     }
   };
 
@@ -327,9 +368,9 @@ const AIAssistant = () => {
         </div>
         <div className="ai-text">Trợ lý AI</div>
         <div className={`model-status ${modelStatus}`}>
-          {modelStatus === "loaded" && "✅"}
-          {modelStatus === "loading" && "⏳"}
-          {modelStatus === "error" && "❌"}
+          {modelStatus === "loaded"}
+          {modelStatus === "loading"}
+          {modelStatus === "error"}
         </div>
       </div>
 
@@ -338,7 +379,7 @@ const AIAssistant = () => {
           <div className="chat-header">
             <div className="chat-title">
               <Bot className="chat-bot-icon" />
-              <span>Trợ lý AI DeepSeek (Ollama) - Streaming</span>
+              <span>Trợ lý AI</span>
             </div>
             <div className="header-actions">
               <button
@@ -347,6 +388,20 @@ const AIAssistant = () => {
                 title="Test API"
               >
                 🔧
+              </button>
+              <button
+                className="test-web-data-btn"
+                onClick={testWebData}
+                title="Test Web Data"
+              >
+                🌐
+              </button>
+              <button
+                className="test-doctor-detail-btn"
+                onClick={testDoctorDetail}
+                title="Test Doctor Detail"
+              >
+                👨‍⚕️
               </button>
               {modelStatus === "error" && (
                 <button
@@ -370,7 +425,7 @@ const AIAssistant = () => {
           )}
           {modelStatus === "error" && (
             <div className="model-status-message error">
-              <p>❌ Không thể kết nối AI. Vui lòng thử lại.</p>
+              <p>Không thể kết nối AI. Vui lòng thử lại.</p>
               <button onClick={loadModel} className="retry-model-btn">
                 Thử lại
               </button>
@@ -378,12 +433,12 @@ const AIAssistant = () => {
           )}
           {apiStatus === "rate_limited" && (
             <div className="model-status-message warning">
-              <p>⚠️ AI đang bận xử lý nhiều yêu cầu. Vui lòng thử lại sau.</p>
+              <p>AI đang bận xử lý nhiều yêu cầu. Vui lòng thử lại sau.</p>
             </div>
           )}
           {apiStatus === "error" && (
             <div className="model-status-message error">
-              <p>❌ Lỗi kết nối AI!</p>
+              <p> Lỗi kết nối AI!</p>
               <p>Vui lòng kiểm tra lại máy chủ.</p>
             </div>
           )}
@@ -392,9 +447,8 @@ const AIAssistant = () => {
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`message ${
-                  message.isBot ? "bot-message" : "user-message"
-                }`}
+                className={`message ${message.isBot ? "bot-message" : "user-message"
+                  }`}
               >
                 <div className="message-content">
                   {message.text}

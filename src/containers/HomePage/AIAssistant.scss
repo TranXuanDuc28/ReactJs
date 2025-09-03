@@ -133,6 +133,26 @@
         font-size: 16px;
         margin-right: 5px;
       }
+
+      .test-web-data-btn {
+        font-size: 16px;
+        margin-right: 5px;
+        background: #28a745;
+
+        &:hover {
+          background-color: #1e7e34;
+        }
+      }
+
+      .test-doctor-detail-btn {
+        font-size: 16px;
+        margin-right: 5px;
+        background: #17a2b8;
+
+        &:hover {
+          background-color: #138496;
+        }
+      }
     }
   }
 
@@ -241,9 +261,11 @@
         &:nth-child(1) {
           animation-delay: -0.32s;
         }
+
         &:nth-child(2) {
           animation-delay: -0.16s;
         }
+
         &:nth-child(3) {
           animation-delay: 0s;
         }
@@ -340,21 +362,25 @@
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
+
   100% {
     transform: scale(1);
   }
 }
 
 @keyframes typing {
+
   0%,
   80%,
   100% {
     transform: scale(0.8);
     opacity: 0.5;
   }
+
   40% {
     transform: scale(1);
     opacity: 1;
@@ -363,10 +389,12 @@
 
 // ✨ New streaming animations
 @keyframes blink {
+
   0%,
   50% {
     opacity: 1;
   }
+
   51%,
   100% {
     opacity: 0;
@@ -378,6 +406,7 @@
     opacity: 0;
     transform: translateY(2px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -389,6 +418,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

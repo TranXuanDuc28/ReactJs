@@ -10,6 +10,7 @@ import Header from "../containers/Header/Header";
 import ManageClinic from "../containers/System/Clinic/ManageClinic";
 import ManagePaymentPatient from "../containers/System/Cashier/ManagePaymentPatient";
 import ManageHandbook from "../containers/System/HandBook/ManageHandbook";
+import ManageQuestion from "../containers/System/Question/ManageQuestion";
 class System extends Component {
   render() {
     const { systemMenuPath, isLoggedIn } = this.props;
@@ -19,13 +20,9 @@ class System extends Component {
         <div className="system-container">
           <div className="system-list">
             <Switch>
-              <Route path="/system/user-manage" component={UserManage} />
+              {/* <Route path="/system/user-manage" component={UserManage} /> */}
               <Route path="/system/user-redux" component={UserRedux} />
               <Route path="/system/manage-doctor" component={ManageDoctor} />
-              {/* <Route
-                path="/system/doctor/manage-schedule"
-                component={ManageSchedule}
-              /> */}
               <Route
                 path="/system/manage-specialty"
                 component={ManageSpecialty}
@@ -38,6 +35,11 @@ class System extends Component {
               <Route
                 path="/system/manage-payment"
                 component={ManagePaymentPatient}
+              />
+
+              <Route
+                path="/system/manage-question"
+                component={ManageQuestion}
               />
 
               <Route

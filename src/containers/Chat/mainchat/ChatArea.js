@@ -32,16 +32,14 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
 
           return (
             <li
-              className={`list-group-item border-0 d-flex mb-2 ${
-                isSent ? "flex-row-reverse" : ""
-              }`}
+              className={`list-group-item border-0 d-flex mb-2 ${isSent ? "flex-row-reverse" : ""
+                }`}
               key={item.id}
               style={{ position: "relative" }}
             >
               <div
-                className={`d-flex align-items-start ${
-                  isSent ? "flex-row-reverse" : ""
-                }`}
+                className={`d-flex align-items-start ${isSent ? "flex-row-reverse" : ""
+                  }`}
                 style={{ width: "100%" }}
               >
                 <div className={`${isSent ? "ms-2" : "me-2"}`}>
@@ -79,13 +77,12 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
                 </div>
 
                 <div
-                  className={`card ${
-                    item.file_url
+                  className={`card ${item.file_url
                       ? "bg-light-custom "
                       : isSent
-                      ? "bg-primary text-white"
-                      : " bg-light-custom"
-                  }`}
+                        ? "bg-primary text-white"
+                        : " bg-light-custom"
+                    }`}
                   style={{
                     padding: "12px",
                     border: "1px solid #ccc",
@@ -111,7 +108,7 @@ const ChatArea = ({ allMsg, user, handleDelete, loadMoreMsg }) => {
                         }}
                       >
                         {item.file_type &&
-                        item.file_type.startsWith("image") ? (
+                          item.file_type.startsWith("image") ? (
                           <img
                             src={item.file_url}
                             alt={item.file_name || "image"}

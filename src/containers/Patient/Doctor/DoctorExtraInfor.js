@@ -24,7 +24,8 @@ class DoctorExtraInfor extends Component {
   async componentDidMount() {
     if (this.props.doctorIdFromParent) {
       let res = await getExtraDoctorInforByIdServices(
-        this.props.doctorIdFromParent
+        this.props.doctorIdFromParent,
+        this.props.language
       );
       if (res && res.errCode === 0) {
         this.setState({
@@ -35,11 +36,20 @@ class DoctorExtraInfor extends Component {
   }
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.language !== this.props.language) {
-      this.setState({});
+      let res = await getExtraDoctorInforByIdServices(
+        this.props.doctorIdFromParent,
+        this.props.language
+      );
+      if (res && res.errCode == 0) {
+        this.setState({
+          extraInfor: res.data,
+        });
+      }
     }
     if (prevProps.doctorIdFromParent !== this.props.doctorIdFromParent) {
       let res = await getExtraDoctorInforByIdServices(
-        this.props.doctorIdFromParent
+        this.props.doctorIdFromParent,
+        this.props.language
       );
       if (res && res.errCode == 0) {
         this.setState({

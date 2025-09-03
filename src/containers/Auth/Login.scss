@@ -1,237 +1,236 @@
-.login-background{
+@import "../../styles/common.scss";
+.login-background {
+  height: 100vh;
+  background: linear-gradient(135deg, #22c1c3 0%, #fdbb2b 100%);
+
+  @include respond-to(sm) {
     height: 100vh;
-    background: linear-gradient(135deg, #22c1c3 0%, #fdbb2b 100%);
-    
+    padding: 20px;
+  }
+
+  @include respond-to(xs) {
+    padding: 15px;
+  }
+
+  .login-container {
+    width: 400px;
+    height: 60%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 30px;
+
     @include respond-to(sm) {
-        height: 100vh;
-        padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      min-height: 500px;
+      position: relative;
+      margin: 50px auto;
     }
-    
+
     @include respond-to(xs) {
-        padding: 15px;
+      max-width: 100%;
+      min-height: 450px;
+      margin: 30px auto;
+      border-radius: 20px;
     }
 
-     .login-container{
-        width: 400px;
-        height: 60%;
-        margin: auto;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: white;
-        border-radius: 30px;
-        
+    .login-content {
+      padding: 20px;
+
+      @include respond-to(sm) {
+        padding: 25px 20px;
+      }
+
+      @include respond-to(xs) {
+        padding: 20px 15px;
+      }
+
+      .text-login {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+
         @include respond-to(sm) {
-            width: 100%;
-            max-width: 400px;
-            height: auto;
-            min-height: 500px;
-            position: relative;
-            margin: 50px auto;
+          font-size: 19px;
+          margin-bottom: 20px;
         }
-        
+
         @include respond-to(xs) {
-            max-width: 100%;
-            min-height: 450px;
-            margin: 30px auto;
-            border-radius: 20px;
+          font-size: 18px;
+          margin-bottom: 15px;
+        }
+      }
+
+      .login-input {
+        margin: 10px 0;
+
+        @include respond-to(sm) {
+          margin: 12px 0;
         }
 
-        .login-content{
-            padding: 20px;
-            
-            @include respond-to(sm) {
-                padding: 25px 20px;
-            }
-            
+        @include respond-to(xs) {
+          margin: 10px 0;
+        }
+
+        .custom-input-password {
+          position: relative;
+
+          i {
+            position: absolute;
+            right: 5px;
+            top: 10px;
+            cursor: pointer;
+
             @include respond-to(xs) {
-                padding: 20px 15px;
+              right: 8px;
+              top: 12px;
             }
-
-            .text-login{
-                text-align: center;
-                font-size: 20px;
-                font-weight: bold;
-                
-                @include respond-to(sm) {
-                    font-size: 19px;
-                    margin-bottom: 20px;
-                }
-                
-                @include respond-to(xs) {
-                    font-size: 18px;
-                    margin-bottom: 15px;
-                }
-            }
-            
-            .login-input{
-                margin: 10px 0;
-                
-                @include respond-to(sm) {
-                    margin: 12px 0;
-                }
-                
-                @include respond-to(xs) {
-                    margin: 10px 0;
-                }
-              
-                .custom-input-password{
-                    position: relative;
-
-                    i{
-                        position: absolute;
-                        right: 5px;
-                        top: 10px;
-                        cursor: pointer;
-                        
-                        @include respond-to(xs) {
-                            right: 8px;
-                            top: 12px;
-                        }
-                    }
-                }
-                
-            }
-          
-            .btn-login{
-                background-color: rgb(0, 191, 255);
-                width: 100%;
-                border: none;
-                outline: none;
-                padding: 7px;
-                color: white;
-                border-radius: 50px;
-                margin: 10px 0;
-                
-                @include respond-to(sm) {
-                    padding: 10px;
-                    margin: 15px 0;
-                    font-size: 16px;
-                }
-                
-                @include respond-to(xs) {
-                    padding: 8px;
-                    margin: 12px 0;
-                    font-size: 15px;
-                }
-                
-                &:hover {
-                    opacity: 0.9;
-                }
-            }
-            
-            .forget-password{
-                font-size: 12px;
-                text-align: center;
-                
-                @include respond-to(sm) {
-                    font-size: 13px;
-                    margin: 10px 0;
-                }
-                
-                @include respond-to(xs) {
-                    font-size: 12px;
-                    margin: 8px 0;
-                }
-            }
-            
-            .social-login{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-top: 20px;
-                
-                @include respond-to(sm) {
-                    margin-top: 25px;
-                }
-                
-                @include respond-to(xs) {
-                    margin-top: 20px;
-                }
-
-                .google{
-                    font-size: 18px;
-                    color: white;
-                    background: rgb(255, 42, 0);
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-right: 15px;
-                    cursor: pointer;
-                    transition: transform 0.2s;
-                    
-                    @include respond-to(sm) {
-                        width: 45px;
-                        height: 45px;
-                        font-size: 20px;
-                        margin-right: 20px;
-                    }
-                    
-                    @include respond-to(xs) {
-                        width: 40px;
-                        height: 40px;
-                        font-size: 18px;
-                        margin-right: 15px;
-                    }
-                    
-                    &:hover {
-                        transform: scale(1.1);
-                    }
-                }
-                
-                .facebook{
-                    font-size: 18px;
-                    color: white;
-                    background: rgb(0, 128, 255);
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    transition: transform 0.2s;
-                    
-                    @include respond-to(sm) {
-                        width: 45px;
-                        height: 45px;
-                        font-size: 20px;
-                    }
-                    
-                    @include respond-to(xs) {
-                        width: 40px;
-                        height: 40px;
-                        font-size: 18px;
-                    }
-                    
-                    &:hover {
-                        transform: scale(1.1);
-                    }
-                }
-                
-            }
+          }
         }
-     }
+      }
+
+      .btn-login {
+        background-color: rgb(0, 191, 255);
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 7px;
+        color: white;
+        border-radius: 50px;
+        margin: 10px 0;
+
+        @include respond-to(sm) {
+          padding: 10px;
+          margin: 15px 0;
+          font-size: 16px;
+        }
+
+        @include respond-to(xs) {
+          padding: 8px;
+          margin: 12px 0;
+          font-size: 15px;
+        }
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+
+      .forget-password {
+        font-size: 12px;
+        text-align: center;
+
+        @include respond-to(sm) {
+          font-size: 13px;
+          margin: 10px 0;
+        }
+
+        @include respond-to(xs) {
+          font-size: 12px;
+          margin: 8px 0;
+        }
+      }
+
+      .social-login {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+
+        @include respond-to(sm) {
+          margin-top: 25px;
+        }
+
+        @include respond-to(xs) {
+          margin-top: 20px;
+        }
+
+        .google {
+          font-size: 18px;
+          color: white;
+          background: rgb(255, 42, 0);
+          width: 40px;
+          height: 40px;
+          border-radius: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 15px;
+          cursor: pointer;
+          transition: transform 0.2s;
+
+          @include respond-to(sm) {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+            margin-right: 20px;
+          }
+
+          @include respond-to(xs) {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            margin-right: 15px;
+          }
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+
+        .facebook {
+          font-size: 18px;
+          color: white;
+          background: rgb(0, 128, 255);
+          width: 40px;
+          height: 40px;
+          border-radius: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: transform 0.2s;
+
+          @include respond-to(sm) {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+          }
+
+          @include respond-to(xs) {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+          }
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
 }
 
 // Additional responsive styles
 @include respond-to(sm) {
-    .login-background {
-        .login-container {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
+  .login-background {
+    .login-container {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
+  }
 }
 
 @include respond-to(xs) {
-    .login-background {
-        .login-container {
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
+  .login-background {
+    .login-container {
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     }
+  }
 }

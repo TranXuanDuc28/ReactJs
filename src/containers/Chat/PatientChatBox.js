@@ -124,7 +124,7 @@ const PatientChatBox = ({ doctor, onClose }) => {
         <ChatArea
           allMsg={messages}
           user={patient}
-          // handleDelete, loadMore sẽ được truyền từ App hoặc qua Redux nếu cần
+        // handleDelete, loadMore sẽ được truyền từ App hoặc qua Redux nếu cần
         />
       </div>
       {/* Footer nhập tin nhắn */}

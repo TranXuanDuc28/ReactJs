@@ -1,0 +1,21 @@
+[
+  {
+    "id": "beck",
+    "title": "Bài test đánh giá trầm cảm Beck",
+    "description": "Bài test mức độ trầm cảm BECK là một trong những phương pháp đánh giá về cảm xúc và mức độ trầm cảm tương đối phổ biến...",
+    "questions": [
+      {
+        "question": "Hãy chọn 1 ý đúng nhất với bản thân",
+        "options": [
+          "Tôi không cảm thấy buồn",
+          "Nhiều lúc tôi cảm thấy chán hoặc buồn",
+          "Lúc nào tôi cũng cảm thấy chán hoặc buồn và tôi không thể dừng lại được",
+          "Lúc nào cũng cảm thấy buồn và bất hạnh đến mức hoàn toàn đau khổ",
+          "Tôi rất buồn hoặc rất bất hạnh và khổ sở đến mức không thể chịu được"
+        ]
+      }
+
+    ]
+  }
+
+]

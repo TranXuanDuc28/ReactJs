@@ -6,7 +6,6 @@ export const NextArrow = (props) => {
         ...props.style,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
       }}
     >
       <i
@@ -25,7 +24,6 @@ export const PrevArrow = (props) => {
         ...props.style,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
       }}
     >
       <i

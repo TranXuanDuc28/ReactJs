@@ -40,7 +40,25 @@ class BookingModal extends Component {
         }`,
       });
     }
+    // Listen for booking confirmation
+    this.props.socket.on("BOOKING_CONFIRMED", (appointment) => {
+      toast.success(
+        "Đặt lịch thành công! Vui lòng kiểm tra email để xác nhận."
+      );
+      this.props.closeBookingModal();
+    });
+
+    // Handle errors
+    this.props.socket.on("ERROR", ({ message }) => {
+      toast.error(message);
+    });
   }
+  componentWillUnmount() {
+    // Cleanup Socket.IO listeners
+    this.props.socket.off("BOOKING_CONFIRMED");
+    this.props.socket.off("ERROR");
+  }
+
   buildDataGender = (data) => {
     let result = [];
     let language = this.props.language;
@@ -143,7 +161,30 @@ class BookingModal extends Component {
     let date = new Date(this.state.birthday).getTime();
     let timeString = this.buildTimeBooking(this.props.dataTime);
     let doctorName = this.buildDoctorName(this.props.dataTime);
-    let res = await postPatientBookAppointment({
+    const { patientInfo } = this.props;
+
+    // let res = await postPatientBookAppointment({
+    //   fullName: this.state.fullName,
+    //   phoneNumber: this.state.phoneNumber,
+    //   email: this.state.email,
+    //   address: this.state.address,
+    //   reason: this.state.reason,
+    //   birthday: date,
+    //   date: this.props.dataTime.date,
+    //   selectedGender: this.state.selectedGender.value,
+    //   doctorId: this.state.doctorId,
+    //   timeType: this.state.timeType,
+    //   language: this.props.language,
+    //   timeString: timeString,
+    //   doctorName: doctorName,
+    // });
+    // if (res && res.errCode === 0) {
+    //   toast.success("Booking a new appointment succeed!");
+    //   this.props.closeBookingModal();
+    // } else {
+    //   toast.error("Booking a new appointment error!");
+    // }
+    const bookingData = {
       fullName: this.state.fullName,
       phoneNumber: this.state.phoneNumber,
       email: this.state.email,
@@ -157,13 +198,9 @@ class BookingModal extends Component {
       language: this.props.language,
       timeString: timeString,
       doctorName: doctorName,
-    });
-    if (res && res.errCode === 0) {
-      toast.success("Booking a new appointment succeed!");
-      this.props.closeBookingModal();
-    } else {
-      toast.error("Booking a new appointment error!");
-    }
+      patientId: patientInfo.id,
+    };
+    this.props.socket.emit("BOOK_SLOT", bookingData);
   };
   render() {
     let { isOpenModalBooking, closeBookingModal, dataTime } = this.props;

@@ -31,8 +31,13 @@ import { useSelector } from "react-redux";
 import { getSocket } from "../socket";
 import { setOnlineDoctors } from "../store/actions/onlineDoctorsActions";
 import useChatMessages from "../hooks/useChatMessages";
-import HandBookDetail from "./HomePage/Section/HandBookDetail";
+import HandBookDetail from "./Patient/Handbook/HandBookDetail";
 import AppointmentHistory from "./Patient/AppointmentHistory";
+import TestList from "./Patient/HealthTest/TestList";
+import TestDetail from "./Patient/HealthTest";
+import TestRunner from "./Patient/HealthTest/TestRunner";
+import TestResult from "./Patient/HealthTest/TestResult";
+import AppQuestion from "./Patient/HealthTest";
 
 // Hook emit ADD_USER khi patient login thành công
 function useRegisterPatientSocket() {
@@ -145,6 +150,8 @@ class App extends Component {
                   <Route path={path.CHAT_PATIENT} component={PatientChat} />
                   <Route path="/handbook/:id" component={HandBookDetail} />
                   <Route path="/lich-hen" component={AppointmentHistory} />
+
+                  <Route path="/health-test" component={AppQuestion} />
                 </Switch>
               </CustomScrollbars>
             </span>

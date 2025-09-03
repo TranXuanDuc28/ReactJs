@@ -9,7 +9,17 @@
     "fee": "Gói khám",
     "check-health": "Khám sức khỏe tổng quát",
     "support": "Hỗ trợ",
-    "welcome": "Xin chào,"
+    "welcome": "Xin chào,",
+    "schedule": "Lịch hẹn",
+    "chat": "Chat",
+     "guest": "Guest",
+    "logout": "Logout",
+
+    "all": "Tất cả",
+    "at-home": "Tại nhà",
+    "at-hospital": "Tại viện",
+    "healthy-living": "Sống khỏe",
+    "search-package": "Tìm gói khám tổng quát"
   },
   "banner": {
     "title1": "NỀN TẢNG Y TẾ",
@@ -33,16 +43,18 @@
       "specialty": "Chuyên khoa",
       "manage-specialty": "Quản lý chuyên khoa",
       "handbook": "Cẩm nang",
-      "manage-handbook": "Quản lý cẩm nang"
+      "manage-handbook": "Quản lý cẩm nang",
+      "question": "Câu hỏi sức khỏe",
+      "manage-question": "Quản lý câu hỏi sức khỏe"
     },
     "doctor": {
       "manage-schedule": "Quản lí kế hoạc khám bệnh",
       "manage-patient": "Quản lý bệnh nhân",
       "chat-patient": "Quản lý tin nhắn"
-
     }
   },
   "manage-user": {
+    "title": "Quản lý người dùng Redux",
     "add": "Thêm mới người dùng",
     "email": "Email",
     "password": "Mật khẩu",
@@ -55,15 +67,31 @@
     "role": "Vai trò",
     "image": "Ảnh đại diện",
     "save": "Lưu user",
-    "edit": "Lưu thay đổi"
+    "edit": "Lưu thay đổi",
+    "action": "Hành động"
   },
   "homepage": {
     "outstanding-doctor": "Bác sĩ nổi bật tuần qua",
     "more-infor": "Xem thêm",
     "specialty-popular": "Chuyên khoa phổ biến",
-    "medical-facility": "Cơ sở y tế"
-  },
+    "medical-facility": "Bệnh viện",
+    "doctor": "Bác sĩ",
+    "handbook": "Cẩm nang",
+    "about": "Truyền thông nói gì về Booking Care",
+    "specialty": "Chuyên khoa",
 
+    "comprehensive": "Dịch vụ toàn diện",
+    "specialist-examination": "Khám chuyên khoa",
+    "remote-examination": "Khám từ xa",
+    "general-examination": "Khám tổng quát",
+    "medical-test": "Xét nghiệm y học",
+    "mental-health": "Sức khỏe tinh thần",
+    "dental-examination": "Khám nha khoa",
+    "surgical-package": "Gói phẫu thuật",
+    "healthy-living-diabetes": "Sống khỏe tiểu đường",
+    "health-test": "Bài test sức khỏe",
+    "medical-near-you": "Y tế gần bạn"
+  },
   "manage-schedule": {
     "title": "Quản lý kế hoạc khám bệnh của bác sĩ",
     "choose-doctor": "Chọn bác sĩ",
@@ -75,11 +103,12 @@
       "schedule": "Lịch khám",
       "no-schedule": " Bác sĩ không có lịch hẹn trong thời gian này vui lòng chọn thời gian khác ",
       "choose": "Chọn ",
-      "book-free": " và đặt(miễn phí)"
+      "book-free": " và đặt(miễn phí)",
+      "contact": "Liên hệ"
     },
     "extra-infor-doctor": {
       "text-address": "Địa chỉ khám",
-      "price": "Gía khám: ",
+      "price": "Giá khám: ",
       "detail": "Xem chi tiết",
       "payment": " Người bệnh có thể thanh toán chi phí bằng hình thức:",
       "hide-price": "Ẩn bảng giá"
@@ -89,7 +118,7 @@
       "fullName": "Họ và tên",
       "phoneNumber": "Số điện thoại",
       "email": "Địa chỉ email",
-      "address": "Đại chỉ liên lạc",
+      "address": "Địa chỉ liên lạc",
       "reason": "Lý do khám",
       "birthday": "Ngày sinh",
       "gender": "Giới tính",

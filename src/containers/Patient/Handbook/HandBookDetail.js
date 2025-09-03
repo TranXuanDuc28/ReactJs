@@ -8,6 +8,7 @@ import {
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import _ from "lodash";
 import "./HandBookDetail.scss";
+import { connect } from "react-redux";
 
 class HandBookDetail extends Component {
   constructor(props) {
@@ -36,29 +37,41 @@ class HandBookDetail extends Component {
 
     try {
       // Fetch handbook detail
-      const res = await getAllDetailHandBookById({ id: id });
+      const res = await getAllDetailHandBookById({
+        id: id,
+        lang: this.props.language,
+      });
       if (res.data) {
         // Process content and get headings
-        const processed = this.processContentWithAnchors(res.data.contentHTML);
+        const processed = this.processContentWithAnchors(
+          res.data.handbookMarkdown.contentHTML
+        );
 
-        this.setState({
-          data: {
-            ...res.data,
-            contentHTML: processed.html
+        this.setState(
+          {
+            data: {
+              ...res.data,
+              contentHTML: processed.html,
+            },
+            headings: processed.headings,
+            loading: false,
+            contentProcessed: true,
           },
-          headings: processed.headings,
-          loading: false,
-          contentProcessed: true
-        }, () => {
-          // Observe headings sau khi component đã render
-          setTimeout(() => {
-            this.observeHeadings();
-          }, 100);
-        });
+          () => {
+            // Observe headings sau khi component đã render
+            setTimeout(() => {
+              this.observeHeadings();
+            }, 100);
+          }
+        );
 
         // Fetch related articles
         try {
-          const relatedRes = await getRelatedHandBooks({ id: id, limit: 4 });
+          const relatedRes = await getRelatedHandBooks({
+            id: id,
+            limit: 4,
+            lang: this.props.language,
+          });
           if (relatedRes.data) {
             this.setState({ relatedArticles: relatedRes.data });
           }
@@ -110,13 +123,13 @@ class HandBookDetail extends Component {
 
       const id = this.generateSlug(text) || `section-${index}`;
       h.setAttribute("id", id);
-      h.className = (h.className || '') + ' content-section';
+      h.className = (h.className || "") + " content-section";
 
       headingsData.push({
         id,
         text,
         level: parseInt(h.tagName.charAt(1)),
-        tagName: h.tagName.toLowerCase()
+        tagName: h.tagName.toLowerCase(),
       });
     });
 
@@ -132,7 +145,7 @@ class HandBookDetail extends Component {
     const options = {
       root: null,
       rootMargin: "-100px 0px -60% 0px",
-      threshold: 0.1
+      threshold: 0.1,
     };
 
     this.observer = new IntersectionObserver((entries) => {
@@ -150,7 +163,7 @@ class HandBookDetail extends Component {
   };
 
   scrollToSection = (sectionTitle, index, sectionId) => {
-    console.log('Scrolling to section:', { sectionTitle, index, sectionId });
+    console.log("Scrolling to section:", { sectionTitle, index, sectionId });
 
     const element = document.getElementById(sectionId);
     if (element) {
@@ -169,18 +182,18 @@ class HandBookDetail extends Component {
 
   highlightSection = (sectionId) => {
     // Remove highlight từ tất cả sections
-    document.querySelectorAll('.content-section').forEach(section => {
-      section.classList.remove('highlighted');
+    document.querySelectorAll(".content-section").forEach((section) => {
+      section.classList.remove("highlighted");
     });
 
     // Add highlight cho section được click
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
-      targetSection.classList.add('highlighted');
+      targetSection.classList.add("highlighted");
 
       // Remove highlight sau 3 giây
       setTimeout(() => {
-        targetSection.classList.remove('highlighted');
+        targetSection.classList.remove("highlighted");
       }, 3000);
     }
   };
@@ -194,7 +207,15 @@ class HandBookDetail extends Component {
   };
 
   handleShare = (platform) => {
-    const url = window.location.href;
+    // URL public từ ngrok (ví dụ bạn chạy ngrok http 3000)
+    const NGROK_URL = " https://3e2e662769e1.ngrok-free.app";
+
+    // Lấy đường dẫn hiện tại (phần sau domain)
+    const path = window.location.pathname;
+
+    // Tạo full URL bằng ngrok
+    const url = `${NGROK_URL}${path}`;
+    console.log("Sharing URL:", url);
     const title = this.state.data.title || "Bài viết y tế";
     const text = "Chia sẻ bài viết y tế hữu ích";
 
@@ -238,7 +259,8 @@ class HandBookDetail extends Component {
   };
 
   render() {
-    const { data, relatedArticles, loading, error, headings, activeHeadingId } = this.state;
+    const { data, relatedArticles, loading, error, headings, activeHeadingId } =
+      this.state;
 
     if (loading) {
       return (
@@ -343,7 +365,7 @@ class HandBookDetail extends Component {
                   </button>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
-                  {data.title}
+                  {data.handbookData.title}
                 </li>
               </ol>
             </nav>
@@ -366,7 +388,7 @@ class HandBookDetail extends Component {
           <div className="container">
             <div className="row">
               <div className="col-lg-8 col-md-10 mx-auto text-center">
-                <h1 className="banner-title">{data.title}</h1>
+                <h1 className="banner-title">{data.handbookData.title}</h1>
                 <div className="banner-meta">
                   <span className="meta-item">
                     <i className="fa fa-calendar me-1"></i>
@@ -416,14 +438,16 @@ class HandBookDetail extends Component {
 
                 {/* Article content */}
                 <div className="article-content">
-                  {data && !_.isEmpty(data) && data.contentHTML && (
-                    <div
-                      className="content-html"
-                      dangerouslySetInnerHTML={{
-                        __html: data.contentHTML,
-                      }}
-                    ></div>
-                  )}
+                  {data.handbookMarkdown &&
+                    !_.isEmpty(data.handbookMarkdown) &&
+                    data.handbookMarkdown.contentHTML && (
+                      <div
+                        className="content-html"
+                        dangerouslySetInnerHTML={{
+                          __html: data.handbookMarkdown.contentHTML,
+                        }}
+                      ></div>
+                    )}
                 </div>
 
                 {/* Social sharing */}
@@ -478,10 +502,17 @@ class HandBookDetail extends Component {
                     <div className="card-body">
                       <ul className="toc-list">
                         {headings.map((item, idx) => (
-                          <li key={item.id} className={`toc-item toc-level-${item.level}`}>
+                          <li
+                            key={item.id}
+                            className={`toc-item toc-level-${item.level}`}
+                          >
                             <button
-                              className={`toc-link ${activeHeadingId === item.id ? 'active' : ''}`}
-                              onClick={() => this.scrollToSection(item.text, idx, item.id)}
+                              className={`toc-link ${
+                                activeHeadingId === item.id ? "active" : ""
+                              }`}
+                              onClick={() =>
+                                this.scrollToSection(item.text, idx, item.id)
+                              }
                               title={`Cuộn đến: ${item.text}`}
                             >
                               {item.text}
@@ -557,13 +588,15 @@ class HandBookDetail extends Component {
                       <div className="article-image">
                         <img
                           src={item.image}
-                          alt={item.title}
+                          alt={item.handbookData.title}
                           className="img-fluid"
                         />
                       </div>
                       <div className="article-content">
                         <div className="article-category">Cẩm nang</div>
-                        <h5 className="article-title">{item.title}</h5>
+                        <h5 className="article-title">
+                          {item.handbookData.title}
+                        </h5>
                         <div className="article-meta">
                           <span>
                             <i className="fa fa-calendar me-1"></i>
@@ -583,4 +616,16 @@ class HandBookDetail extends Component {
   }
 }
 
-export default withRouter(HandBookDetail);
+const mapStateToProps = (state) => {
+  return {
+    language: state.app.language,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(HandBookDetail)
+);

@@ -8,6 +8,14 @@ import { LANGUAGE } from "../../utils";
 import { changeLanguage } from "../../store/actions/appActions";
 import LoginModal from "../../containers/Auth/LoginModal";
 import * as actions from "../../store/actions";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import banner1 from "../../assets/images/banner/141422-144204-dat-lich-kham-bookingcare-pharmacity.jpg";
+import banner2 from "../../assets/images/banner/112216-qt-city.png";
+import banner3 from "../../assets/images/banner/165707-mediplus.png";
+import banner4 from "../../assets/images/banner/142138-song-khoe-suot-doi-1.png";
+
 class HomeHeader extends Component {
   state = {
     showLoginModal: false,
@@ -61,6 +69,22 @@ class HomeHeader extends Component {
     const { patientInfo } = this.props;
     const { showLogoutMenu } = this.state;
     console.log("avatar:", patientInfo);
+
+    // Danh sách banner
+    const banners = [banner1, banner2, banner3, banner4];
+
+    // Cấu hình slider
+    const sliderSettings = {
+      dots: true,
+      infinite: true,
+      speed: 2000,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 4000, // 1 giây đổi ảnh
+      arrows: false,
+    };
+
     return (
       <React.Fragment>
         <div className="home-header-container">
@@ -76,22 +100,40 @@ class HomeHeader extends Component {
             </div>
             <div className="center-content">
               <div className="left-child-content">
-                <div className="subs-title1 subs-title1-yellow">Tất cả</div>
-                <div className="subs-title1">Tại nhà</div>
-                <div className="subs-title1">Tại viện</div>
-                <div className="subs-title1">Sống khỏe</div>
+                <div className="subs-title1 subs-title1-yellow">
+                  <FormattedMessage id="homeheader.all" />
+                </div>
+                <div className="subs-title1">
+                  <FormattedMessage id="homeheader.at-home" />
+                </div>
+                <div className="subs-title1">
+                  <FormattedMessage id="homeheader.at-hospital" />
+                </div>
+                <div className="subs-title1">
+                  <FormattedMessage id="homeheader.healthy-living" />
+                </div>
               </div>
               <div className="right-child-content">
                 <div className="search-input">
                   <i class="fa fa-search" aria-hidden="true"></i>
-                  <input type="text" placeholder="Tìm gói khám tổng quát" />
+                  <FormattedMessage id="homeheader.search-package">
+                    {(placeholder) => (
+                      <input
+                        className="placeHolderSearch"
+                        type="text"
+                        placeholder={placeholder}
+                      />
+                    )}
+                  </FormattedMessage>
                 </div>
               </div>
             </div>
             <div className="right-content">
               <div className="schedule" onClick={this.handleLichHenClick}>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
-                <div className="subs-title2">Lịch hẹn</div>
+                <div className="subs-title2">
+                  <FormattedMessage id="homeheader.schedule" />
+                </div>
               </div>
               <div className="chat">
                 <i class="fa fa-comments" aria-hidden="true"></i>
@@ -99,7 +141,7 @@ class HomeHeader extends Component {
                   className="subs-title2"
                   onClick={() => this.props.history.push("/chat-patient")}
                 >
-                  Chat với Bác sĩ
+                  <FormattedMessage id="homeheader.chat" />
                 </div>
               </div>
               <div className="support">
@@ -155,7 +197,7 @@ class HomeHeader extends Component {
                     }}
                     onClick={this.handleAvatarClick}
                   />
-                  <div className="d-flex flex-column">
+                  <div className="name-account">
                     <span className="fw-bold" style={{ fontSize: "14px" }}>
                       {patientInfo
                         ? `${patientInfo.firstName} ${patientInfo.lastName}`
@@ -182,7 +224,7 @@ class HomeHeader extends Component {
                         className="btn btn-outline-danger w-100"
                         onClick={this.handleLogout}
                       >
-                        Đăng xuất
+                        <FormattedMessage id="homeheader.logout" />
                       </button>
                     </div>
                   )}
@@ -210,7 +252,7 @@ class HomeHeader extends Component {
                   />
                   <div className="d-flex flex-column">
                     <span className="fw-bold" style={{ fontSize: "14px" }}>
-                      Khách
+                      <FormattedMessage id="homeheader.guest" />
                     </span>
                   </div>
                 </div>
@@ -218,7 +260,19 @@ class HomeHeader extends Component {
             </div>
           </div>
           {this.props.isShowBanner === true && (
-            <div className="home-banner-content"></div>
+            <div className="home-banner-slider">
+              <Slider {...sliderSettings}>
+                {banners.map((banner, index) => (
+                  <div key={index}>
+                    <img
+                      src={banner}
+                      alt={`banner-${index}`}
+                      className="banner-img"
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div>
           )}
         </div>
         {this.state.showLoginModal && (

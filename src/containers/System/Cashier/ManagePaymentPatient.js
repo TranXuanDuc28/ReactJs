@@ -16,8 +16,10 @@ import {
 } from "../../../services/userServices";
 import moment from "moment";
 import RemedyModal from "./PaymentModal";
-import { postSendRemedy } from "../../../services/userServices";
-// import LoadingOverlay from "react-loading-overlay";
+import { getSocket } from "../../../socket";
+import LoadingOverlay from "react-loading-overlay";
+
+const socket = getSocket();
 class ManagePaymentPatient extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +32,45 @@ class ManagePaymentPatient extends Component {
     };
   }
   async componentDidMount() {
-    this.getDataPatient();
+    const { user } = this.props;
+    // Connect user to Socket.IO
+    socket.emit("ADD_USER", {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      roleId: user.roleId, // R4 for cashier, R5 for pharmacist
+    });
+
+    // Listen for payment confirmation
+    socket.on("PAYMENT_CONFIRMED", (data) => {
+      console.log("Da co");
+      this.setState((prevState) => ({
+        dataPatient: prevState.dataPatient.map((item) =>
+          item.id === data.bookingId ? { ...item, statusId: "S5" } : item
+        ),
+      }));
+      console.log("dataPatient", this.state.dataPatient);
+      toast.success(
+        `Thanh toán xác nhận cho booking ${data.bookingId} bởi ${data.patientName} với số tiền ${data.amount} VNĐ`
+      );
+    });
+
+    socket.on("PAYMENT_SENT", () => {
+      this.setState({ isShowLoading: false });
+      toast.success("Thanh toán thành công!");
+    });
+
+    socket.on("ERROR", ({ message }) => {
+      this.setState({ isShowLoading: false });
+      toast.error(message);
+    });
+
+    await this.getDataPatient();
+  }
+  componentWillUnmount() {
+    socket.off("PAYMENT_CONFIRMED");
+    socket.off("PAYMENT_SENT");
+    socket.off("ERROR");
   }
   getDataPatient = async () => {
     let { user } = this.props;
@@ -40,6 +80,7 @@ class ManagePaymentPatient extends Component {
       doctorId: user.id,
       roleId: user.roleId,
       date: formattedDate,
+      lang: this.props.language,
     });
     console.log("check res", res);
     if (res && res.errCode === 0) {
@@ -50,6 +91,7 @@ class ManagePaymentPatient extends Component {
   };
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.language !== this.props.language) {
+      this.getDataPatient();
     }
   }
 
@@ -81,12 +123,35 @@ class ManagePaymentPatient extends Component {
     let { dataModal } = this.state;
     this.setState({ isShowLoading: true });
     try {
-      let res = await postSendPayment({
+      // let res = await postSendPayment({
+      //   doctorId: dataModal.doctorId,
+      //   patientId: dataModal.patientId,
+      //   timeType: dataModal.timeType,
+      //   patientName: dataModal.patientName,
+
+      //   email: dataChild.email,
+      //   cashier: dataChild.cashier,
+      //   date: dataChild.date,
+      //   language: this.props.language,
+      //   totalPrice: dataChild.totalPrice,
+      //   description: dataChild.description,
+      // });
+      // if (res && res.errCode === 0) {
+      //   toast.success("Thanh toán thành công!");
+      //   this.setState({
+      //     isShowLoading: false,
+      //   });
+      //   this.closeRemedyModal();
+      //   await this.getDataPatient();
+      // } else {
+      //   toast.error("Thanh toán thất bại!");
+      //   this.setState({ isShowLoading: false });
+      // }
+      socket.emit("SEND_PAYMENT", {
         doctorId: dataModal.doctorId,
         patientId: dataModal.patientId,
         timeType: dataModal.timeType,
         patientName: dataModal.patientName,
-
         email: dataChild.email,
         cashier: dataChild.cashier,
         date: dataChild.date,
@@ -94,17 +159,6 @@ class ManagePaymentPatient extends Component {
         totalPrice: dataChild.totalPrice,
         description: dataChild.description,
       });
-      if (res && res.errCode === 0) {
-        toast.success("Thanh toán thành công!");
-        this.setState({
-          isShowLoading: false,
-        });
-        this.closeRemedyModal();
-        await this.getDataPatient();
-      } else {
-        toast.error("Thanh toán thất bại!");
-        this.setState({ isShowLoading: false });
-      }
     } catch (error) {
       console.error("Error sending remedy:", error);
 
@@ -125,92 +179,107 @@ class ManagePaymentPatient extends Component {
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
     return (
       <>
-        {/* <LoadingOverlay
+        <LoadingOverlay
           active={this.state.isShowLoading}
           spinner
           text="Loading..."
-        > */}
-        <div className="manage-schedule-container">
-          <div className="manage-schedule-title">
-            Quản lí bệnh nhân khám bệnh
-          </div>
-          <div className="d-flex flex-column">
-            <div className="col-4 form-group">
-              <label>Chọn ngày</label>
-              <DatePicker
-                onChange={this.handleOnChangeDatePicker}
-                className="form-control"
-                value={this.state.currentDate}
-                minDate={yesterday}
-              />
+        >
+          <div className="manage-schedule-container">
+            <div className="manage-schedule-title">
+              Quản lí bệnh nhân khám bệnh
             </div>
-            <div className="col-12 form-group">
-              <table className="table">
-                <tbody>
-                  <tr>
-                    <th>STT</th>
-                    <th>Thời gian</th>
-                    <th>Họ tên bệnh nhân</th>
-                    <th>Giới tính</th>
-                    <th>Địa chỉ</th>
-                    <th>Action</th>
-                  </tr>
-                  {dataPatient && dataPatient.length > 0 ? (
-                    dataPatient.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>
-                            {language === LANGUAGE.VI
-                              ? item.timeTypeDataPatient.valueVi
-                              : item.timeTypeDataPatient.valueEn}
-                          </td>
-                          <td>{item.patientData.firstName}</td>
-
-                          <td>
-                            {language === LANGUAGE.VI
-                              ? item.patientData.genderData.valueVi
-                              : item.patientData.genderData.valueEn}
-                          </td>
-                          <td>{item.patientData.address}</td>
-                          <td>
-                            {item.statusId === "S5" ? (
-                              <button className="btn btn-primary">
-                                Đã thanh toán!
-                              </button>
-                            ) : item.statusId === "S6" ? (
-                              <button
-                                className="text--danger"
-                                onClick={() => this.handleBtnPayment(item)}
-                              >
-                                Thanh toán ngay!
-                              </button>
-                            ) : null}
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
+            <div className="d-flex flex-column">
+              <div className="col-4 form-group">
+                <label>Chọn ngày</label>
+                <DatePicker
+                  onChange={this.handleOnChangeDatePicker}
+                  className="form-control"
+                  value={this.state.currentDate}
+                  minDate={yesterday}
+                />
+              </div>
+              <div className="col-12 form-group">
+                <table className="table">
+                  <tbody>
                     <tr>
-                      <td colSpan="6" className="text-center">
-                        Không có bệnh nhân hôm nay
-                      </td>
+                      <th>STT</th>
+                      <th>Thời gian</th>
+                      <th>Bác sĩ khám</th>
+                      <th>Họ tên bệnh nhân</th>
+                      <th>Giới tính</th>
+                      <th>Số điện thoại</th>
+                      <th>Địa chỉ</th>
+                      <th>Action</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                    {dataPatient && dataPatient.length > 0 ? (
+                      dataPatient.map((item, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>
+                              {language === LANGUAGE.VI
+                                ? item.timeTypeDataPatient.valueVi
+                                : item.timeTypeDataPatient.valueEn}
+                            </td>
+                            <td>
+                              {item.doctorInforData
+                                ? item.doctorInforData.doctorData.firstName +
+                                  " " +
+                                  item.doctorInforData.doctorData.lastName
+                                : "Chưa cập nhật"}
+                            </td>
+
+                            <td>
+                              {item.patientData.firstName +
+                                " " +
+                                item.patientData.lastName}
+                            </td>
+
+                            <td>
+                              {language === LANGUAGE.VI
+                                ? item.patientData.genderData.valueVi
+                                : item.patientData.genderData.valueEn}
+                            </td>
+                            <td>{item.patientData.phoneNumber}</td>
+                            <td>{item.patientData.address}</td>
+                            <td>
+                              {item.statusId === "S5" ? (
+                                <button className="btn btn-primary">
+                                  Đã thanh toán!
+                                </button>
+                              ) : item.statusId === "S6" ? (
+                                <button
+                                  className="btn btn-warning text-white"
+                                  onClick={() => this.handleBtnPayment(item)}
+                                >
+                                  Thanh toán ngay!
+                                </button>
+                              ) : null}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="text-center">
+                          Không có bệnh nhân hôm nay
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        {isOpenModal && (
-          <RemedyModal
-            isOpenModal={isOpenModal}
-            dataModal={dataModal}
-            closePaymentModal={this.closeRemedyModal}
-            handleSendPayment={this.handleSendPayment}
-          />
-        )}
-        {/* </LoadingOverlay> */}
+          {isOpenModal && (
+            <RemedyModal
+              isOpenModal={isOpenModal}
+              dataModal={dataModal}
+              closePaymentModal={this.closeRemedyModal}
+              handleSendPayment={this.handleSendPayment}
+            />
+          )}
+        </LoadingOverlay>
       </>
     );
   }

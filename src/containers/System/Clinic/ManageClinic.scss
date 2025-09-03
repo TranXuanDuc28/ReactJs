@@ -1,118 +1,308 @@
-.manage-specialty-container {
-  padding: 0 15px;
-  
+@import "../../../styles/common.scss";
+.manage-clinic-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+
   @include respond-to(sm) {
-    padding: 0 10px;
+    padding: 15px;
   }
-  
-  @include respond-to(xs) {
-    padding: 0 8px;
-  }
-  
-  .ms-title {
-    text-align: center;
-    margin: 10px 0;
-    text-transform: uppercase;
-    font-size: 17px;
-    font-weight: 600;
-    
-    @include respond-to(sm) {
-      font-size: 16px;
-      margin: 8px 0;
-    }
-    
-    @include respond-to(xs) {
-      font-size: 15px;
-      margin: 6px 0;
-    }
-  }
-  
-  .add-new-specialty {
-    .btn-edit-specialty {
-      background-color: rgb(219, 125, 10);
-      border: none;
-      color: white;
-      font-weight: 600;
-      padding: 8px;
-      display: flex;
-      margin: auto;
-      margin-bottom: 20px;
-      
-      @include respond-to(sm) {
-        padding: 10px 8px;
-        margin-bottom: 15px;
-        font-size: 14px;
-      }
-      
-      @include respond-to(xs) {
-        padding: 8px 6px;
-        margin-bottom: 10px;
-        font-size: 13px;
-        width: 100%;
-      }
-      
-      &:hover {
-        opacity: 0.9;
-      }
-    }
-    
-    .btn-save-specialty {
-      background-color: rgb(45, 31, 230);
-      border: none;
-      color: white;
-      font-weight: 600;
-      padding: 8px;
-      display: flex;
-      margin: auto;
-      margin-bottom: 20px;
-      
-      @include respond-to(sm) {
-        padding: 10px 8px;
-        margin-bottom: 15px;
-        font-size: 14px;
-      }
-      
-      @include respond-to(xs) {
-        padding: 8px 6px;
-        margin-bottom: 10px;
-        font-size: 13px;
-        width: 100%;
-      }
-      
-      &:hover {
-        opacity: 0.9;
-      }
-    }
-  }
-  
-  .all-specialty {
-    @include respond-to(sm) {
-      margin-top: 20px;
-    }
-    
-    @include respond-to(xs) {
-      margin-top: 15px;
-    }
-  }
-}
+  .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
 
-// Additional responsive styles
-@include respond-to(sm) {
-  .manage-specialty-container {
-    .add-new-specialty {
-      text-align: center;
+    &:hover {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-body {
+      padding: 2rem;
+      @include respond-to(sm) {
+        padding: 1.5rem;
+      }
+      @include respond-to(xs) {
+        padding: 1rem;
+      }
+      .previewImage {
+        width: 200px;
+        height: 200px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        border: 1px solid #dee2e6;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+      .form-label {
+        color: #495057;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+
+        i {
+          color: #6c757d;
+        }
+      }
+      .form-control,
+      .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        @include respond-to(sm) {
+          padding: 0.6rem 0.8rem;
+          font-size: 0.9rem;
+        }
+
+        &:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        &::placeholder {
+          color: #adb5bd;
+        }
+      }
+      .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+      }
+
+      textarea.form-control {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .form-text {
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+      }
+
+      .btn {
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+        height: auto;
+        @include respond-to(sm) {
+          padding: 0.6rem 1.2rem;
+          font-size: 0.9rem;
+        }
+        @include respond-to(xs) {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        &.btn-primary {
+          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+          border: none;
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+          }
+
+          &:disabled {
+            background: #6c757d;
+            transform: none;
+            box-shadow: none;
+          }
+        }
+
+        &.btn-secondary {
+          background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+          border: none;
+
+          &:hover {
+            background: linear-gradient(135deg, #545b62 0%, #3d4449 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+          }
+
+          &:disabled {
+            background: #adb5bd;
+            transform: none;
+            box-shadow: none;
+          }
+        }
+      }
+
+      .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      // Markdown Editor Styling
+      .md-editor {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        overflow: hidden;
+
+        .md-toolbar {
+          background-color: #f8f9fa;
+          border-bottom: 1px solid #e9ecef;
+          padding: 0.5rem;
+
+          .md-toolbar-item {
+            margin-right: 0.5rem;
+
+            button {
+              border: 1px solid #dee2e6;
+              border-radius: 4px;
+              padding: 0.25rem 0.5rem;
+              background-color: white;
+              color: #495057;
+              transition: all 0.2s ease;
+
+              &:hover {
+                background-color: #e9ecef;
+                border-color: #adb5bd;
+              }
+
+              &.active {
+                background-color: #007bff;
+                border-color: #007bff;
+                color: white;
+              }
+            }
+          }
+        }
+
+        .md-content {
+          .md-preview {
+            padding: 1rem;
+            background-color: white;
+            min-height: 300px;
+            @include respond-to(sm) {
+              padding: 0.8rem;
+              min-height: 250px;
+            }
+          }
+
+          .md-textarea {
+            padding: 1rem;
+            border: none;
+            outline: none;
+            font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            resize: none;
+            min-height: 300px;
+            @include respond-to(sm) {
+              padding: 0.8rem;
+              min-height: 250px;
+            }
+          }
+        }
+      }
+
+      // File input styling
+      input[type="file"] {
+        &::-webkit-file-upload-button {
+          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+          border: none;
+          border-radius: 6px;
+          color: white;
+          padding: 0.5rem 1rem;
+          margin-right: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+          }
+        }
+
+        &::-moz-file-upload-button {
+          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+          border: none;
+          border-radius: 6px;
+          color: white;
+          padding: 0.5rem 1rem;
+          margin-right: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+          }
+        }
+      }
     }
   }
-}
 
-@include respond-to(xs) {
-  .manage-specialty-container {
-    .ms-title {
-      margin-bottom: 20px;
+  @media (max-width: 576px) {
+    .d-flex.justify-content-end {
+      flex-direction: column;
     }
-    
-    .add-new-specialty {
-      margin-bottom: 25px;
+
+    .gap-2 {
+      gap: 0.5rem !important;
+    }
+  }
+
+  // Animation for form elements
+  .form-group {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Loading state styling
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  // Success/Error message styling
+  .toast {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  // Custom scrollbar for textarea
+  textarea::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  textarea::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  textarea::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+
+    &:hover {
+      background: #a8a8a8;
     }
   }
 }

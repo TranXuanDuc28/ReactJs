@@ -9,6 +9,10 @@ import * as actions from "../../../store/actions";
 import { LANGUAGE } from "../../../utils";
 import DoctorExtraInfor from "./DoctorExtraInfor";
 import PatientChatBox from "../../Chat/PatientChatBox"; // sẽ tạo mới file này
+import LikeAndShare from "../SocialPlugin/LikeAndShare";
+import Comment from "../SocialPlugin/Comment";
+import { FormattedMessage } from "react-intl";
+
 class DetailDoctors extends Component {
   constructor(props) {
     super(props);
@@ -25,13 +29,22 @@ class DetailDoctors extends Component {
       this.props.match.params.id
     ) {
       let id = this.props.match.params.id;
-      this.props.getDetailDoctorById(id);
+      this.props.getDetailDoctorById(id, this.props.language);
       this.setState({
         currentDoctorId: this.props.match.params.id,
       });
     }
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
+    if (
+      prevProps.language !== this.props.language &&
+      this.state.currentDoctorId !== "-1"
+    ) {
+      this.props.getDetailDoctorById(
+        this.state.currentDoctorId,
+        this.props.language
+      );
+    }
     if (prevProps.detailDoctorRedux !== this.props.detailDoctorRedux) {
       this.setState({
         detailDoctorbyId: this.props.detailDoctorRedux,
@@ -41,7 +54,7 @@ class DetailDoctors extends Component {
 
   render() {
     let detailDoctorbyId = this.state.detailDoctorbyId;
-    // console.log("check2",this.state.detailDoctorbyId)
+    //console.log("check2",this.state.detailDoctorbyId)
     let language = this.props.language;
     let nameVi = "",
       nameEn = "";
@@ -49,6 +62,19 @@ class DetailDoctors extends Component {
       nameEn = `${detailDoctorbyId.positionData.valueEn}, ${detailDoctorbyId.lastName} ${detailDoctorbyId.firstName}`;
       nameVi = `${detailDoctorbyId.positionData.valueVi}, ${detailDoctorbyId.firstName} ${detailDoctorbyId.lastName} `;
     }
+    // URL public từ ngrok (ví dụ bạn chạy ngrok http 3000)
+    const NGROK_URL = "https://b2243b14e432.ngrok-free.app";
+
+    // Lấy đường dẫn hiện tại (phần sau domain)
+    const path = window.location.pathname;
+    console.log("path", path);
+
+    // Tạo full URL bằng ngrok
+    const url = `${NGROK_URL}${path}`;
+    let currentURL =
+      +process.env.REACT_APP_IS_LOCALHOST === 1 ? url : window.location.href;
+    console.log("href", window.location.href);
+
     return (
       <React.Fragment>
         <HomeHeader isShowBanner={false} />
@@ -80,6 +106,9 @@ class DetailDoctors extends Component {
                   detailDoctorbyId.Markdown.description && (
                     <span>{detailDoctorbyId.Markdown.description}</span>
                   )}
+                <div className="like-share-plugin">
+                  <LikeAndShare dataHref={currentURL} />
+                </div>
               </div>
               {/* Nút Liên hệ */}
               <button
@@ -87,7 +116,7 @@ class DetailDoctors extends Component {
                 onClick={() => this.setState({ showChatBox: true })}
                 style={{ minWidth: 120 }}
               >
-                Liên hệ
+                <FormattedMessage id="patient.detail-doctor.contact" />
               </button>
             </div>
           </div>
@@ -112,7 +141,9 @@ class DetailDoctors extends Component {
                 ></div>
               )}
           </div>
-          <div className="comment-doctor"></div>
+          <div className="comment-doctor">
+            <Comment dataHref={currentURL} width={"100%"} />
+          </div>
         </div>
         {/* Popup Chatbox */}
         {this.state.showChatBox && (
@@ -135,7 +166,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getDetailDoctorById: (id) => dispatch(actions.getDetailDoctorById(id)),
+    getDetailDoctorById: (id, lang) =>
+      dispatch(actions.getDetailDoctorById(id, lang)),
   };
 };
 

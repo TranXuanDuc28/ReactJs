@@ -11,7 +11,7 @@ const Chat = () => {
   const socketRef = useRef();
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  console.log("onlineUsers", onlineUsers);
+  //console.log("onlineUsers", onlineUsers);
   const [roomData, setRoomData] = useState({
     room: null,
     receiver: null,
@@ -20,7 +20,7 @@ const Chat = () => {
   const history = useHistory();
   const user = useSelector((state) => state.user.userInfo);
 
-  console.log("user from redux:", user);
+  //console.log("user from redux:", user);
 
   useEffect(() => {
     const socket = io.connect(PATH);
@@ -32,12 +32,12 @@ const Chat = () => {
   useEffect(() => {
     if (isConnected && user) {
       socketRef.current.emit("ADD_USER", user);
-      console.log("Doctor emit ADD_USER:", user); // Thêm dòng này
+      //console.log("Doctor emit ADD_USER:", user); // Thêm dòng này
       socketRef.current.on("USER_ADDED", (data) => {
         setOnlineUsers(data);
       });
       socketRef.current.on("RECEIVED_MSG", (data) => {
-        console.log("Doctor nhận được RECEIVED_MSG:", data); // Thêm dòng này
+        //console.log("Doctor nhận được RECEIVED_MSG:", data); // Thêm dòng này
         const msg = data.data ? data.data : data;
         setAllMsg((prevState) => [...prevState, msg]);
       });
@@ -61,30 +61,19 @@ const Chat = () => {
         sender,
         ...fileMeta,
       };
-      console.log("data msg", data);
+      //console.log("data msg", data);
       socketRef.current.emit("SEND_MSG", data);
     }
   };
 
-  const handleDelete = (id) => {
-    axios
-      .post(`http://localhost:8080/api/del-msg/${id}`)
-      .then((res) => {
-        if (socketRef.current.connected) {
-          const data = {
-            msgId: res.data.data.id,
-            receiver: roomData.receiver,
-          };
-          console.log("data haha", data);
-          socketRef.current.emit("DELETE_MSG", data);
-          setAllMsg((prevState) =>
-            prevState.filter((data) => data.id != res.data.data.id)
-          );
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleDelete = (msgId) => {
+    //console.log("data haha", data);
+    socketRef.current.emit("DELETE_MSG", {
+      msgId,
+      receiverId: roomData.receiver?.id,
+      userId: user?.id,
+    });
+    setAllMsg((prevState) => prevState.filter((data) => data.id != msgId));
   };
 
   const loadMoreMsg = () => {
@@ -97,7 +86,6 @@ const Chat = () => {
         `http://localhost:8080/api/get-msg/${receiverId}?userId=${currentUserId}&offset=${allMsg.length}`
       )
       .then((res) => {
-        console.log("res res", res);
         // Nối tin nhắn cũ vào đầu mảng
         setAllMsg((prev) => [...res.data.data, ...prev]);
       })

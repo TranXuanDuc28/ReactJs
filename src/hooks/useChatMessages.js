@@ -123,24 +123,16 @@ export default function useChatMessages({ user, receiver }) {
 
   // Gửi tin nhắn: đã tách ra hook riêng
   const handleDeleteMessage = (msgId) => {
-    axios
-      .post(`${PATH}/api/del-msg/${msgId}`)
-      .then((res) => {
-        dispatch(deleteChatMessage(msgId));
-        // Emit socket để các client khác cũng xóa
-        const socket = socketRef.current;
-        if (socket?.connected) {
-          const data = {
-            msgId,
-            receiver,
-          };
-          console.log("Emit DELETE_MSG to server:", data);
-          socket.emit("DELETE_MSG", data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    dispatch(deleteChatMessage(msgId));
+    // Emit socket để các client khác cũng xóa
+    const socket = socketRef.current;
+    if (socket?.connected) {
+      socket.emit("DELETE_MSG", {
+        msgId,
+        receiverId: receiver?.id,
+        userId: user?.id,
       });
+    }
   };
 
   const loadMore = () => {

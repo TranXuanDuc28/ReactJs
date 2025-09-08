@@ -215,6 +215,7 @@ class GeneralExamPage extends Component {
 
   renderSearchResults = () => {
     const { searchResults, searchMode } = this.state;
+    const PATH = process.env.REACT_APP_BACKEND_URL;
     console.log("Search results:", searchResults);
 
     if (!searchMode) return null;
@@ -260,7 +261,7 @@ class GeneralExamPage extends Component {
                     }}
                   >
                     <img
-                      src={"http://localhost:8080" + packageItem.image}
+                      src={PATH + packageItem.image}
                       className="card-img-top"
                       alt={packageItem.name}
                       style={{ height: "200px", objectFit: "cover" }}
@@ -324,7 +325,7 @@ class GeneralExamPage extends Component {
                     >
                       <div className="card-body p-3">
                         <img
-                          src={"http://localhost:8080" + facility.logo}
+                          src={PATH + facility.logo}
                           className="img-fluid mb-3"
                           alt={facility.name}
                           style={{
@@ -382,6 +383,7 @@ class GeneralExamPage extends Component {
       filterOptions,
       searchMode,
     } = this.state;
+    const PATH = process.env.REACT_APP_BACKEND_URL;
 
     if (loading) {
       return (
@@ -587,7 +589,7 @@ class GeneralExamPage extends Component {
                       }}
                     >
                       <img
-                        src={"http://localhost:8080" + packageItem.image}
+                        src={PATH + packageItem.image}
                         className="card-img-top"
                         alt={packageItem.name}
                         style={{ height: "200px", objectFit: "cover" }}
@@ -650,7 +652,7 @@ class GeneralExamPage extends Component {
                     >
                       <div className="card-body p-3">
                         <img
-                          src={"http://localhost:8080" + facility.logo}
+                          src={PATH + facility.logo}
                           className="img-fluid mb-3"
                           alt={facility.name}
                           style={{

@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const PATH = "http://localhost:8080";
+const PATH = process.env.REACT_APP_BACKEND_URL;
 const Chat = () => {
   const socketRef = useRef();
   const [isConnected, setIsConnected] = useState(false);
@@ -83,7 +83,7 @@ const Chat = () => {
 
     axios
       .get(
-        `http://localhost:8080/api/get-msg/${receiverId}?userId=${currentUserId}&offset=${allMsg.length}`
+        `${PATH}/api/get-msg/${receiverId}?userId=${currentUserId}&offset=${allMsg.length}`
       )
       .then((res) => {
         // Nối tin nhắn cũ vào đầu mảng

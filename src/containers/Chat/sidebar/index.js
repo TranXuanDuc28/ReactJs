@@ -4,6 +4,7 @@ import "./index.scss";
 
 const SideBar = ({ user, onlineUsers, roomData, setRoomData, setAllMsg }) => {
   const [value, setValue] = useState(0);
+  const PATH = process.env.REACT_APP_BACKEND_URL;
   const handleChange = (tabIdx) => {
     setValue(tabIdx);
   };
@@ -16,9 +17,7 @@ const SideBar = ({ user, onlineUsers, roomData, setRoomData, setAllMsg }) => {
     const receiverId = selectedUser.id;
     const currentUserId = user.id;
     axios
-      .get(
-        `http://localhost:8080/api/get-msg/${receiverId}?userId=${currentUserId}`
-      )
+      .get(`http://${PATH}/api/get-msg/${receiverId}?userId=${currentUserId}`)
       .then((res) => {
         console.log("res aa", res);
         setAllMsg(res.data.data);
@@ -31,7 +30,7 @@ const SideBar = ({ user, onlineUsers, roomData, setRoomData, setAllMsg }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/get_all_users?id=${"ALL"}`)
+      .get(`${PATH}/api/get_all_users?id=${"ALL"}`)
       .then((res) => setAllUsers(res.data.users))
       .catch((err) => console.log(err));
   }, []);

@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-const PATH = "http://localhost:8080";
+const PATH = process.env.REACT_APP_BACKEND_URL;
 let socket;
 
 export function getSocket() {
@@ -7,4 +7,4 @@ export function getSocket() {
     socket = io(PATH, { autoConnect: false });
   }
   return socket;
-} 
+}

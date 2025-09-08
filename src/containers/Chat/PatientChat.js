@@ -32,9 +32,9 @@ const PatientChat = () => {
     user: patient,
     receiver: selectedDoctor,
   });
-
+  const PATH = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
-    fetch("http://localhost:8080/api/get_all_doctor")
+    fetch(`${PATH}/api/get_all_doctor`)
       .then((res) => res.json())
       .then((res) => setAllDoctors(res.data || []))
       .catch(() => setAllDoctors([]));

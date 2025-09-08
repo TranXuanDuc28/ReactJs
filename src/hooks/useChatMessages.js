@@ -9,7 +9,7 @@ import {
   setChatLoading,
 } from "../store/actions/chatActions";
 
-const PATH = "http://localhost:8080";
+const PATH = process.env.REACT_APP_BACKEND_URL;
 
 export default function useChatMessages({ user, receiver }) {
   const socketRef = useRef();

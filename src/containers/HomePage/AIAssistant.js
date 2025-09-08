@@ -22,6 +22,7 @@ const AIAssistant = () => {
   // Ref để abort streaming request
   const abortControllerRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const PATH = process.env.REACT_APP_CHATBOT_URL;
 
   useEffect(() => {
     loadModel();
@@ -43,7 +44,7 @@ const AIAssistant = () => {
   const loadModel = async () => {
     setModelStatus("loading");
     try {
-      const response = await fetch("http://localhost:5002/load_model", {
+      const response = await fetch(`${PATH}/load_model`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
@@ -53,13 +54,13 @@ const AIAssistant = () => {
         setModelStatus("loaded");
         console.log("DeepSeek Model (Ollama) loaded successfully");
 
-        const healthResponse = await fetch("http://localhost:5002/health");
+        const healthResponse = await fetch(`${PATH}/health`);
         if (healthResponse.ok) {
           const healthData = await healthResponse.json();
           console.log("Health check:", healthData);
         }
 
-        const testResponse = await fetch("http://localhost:5002/test_api");
+        const testResponse = await fetch(`${PATH}/test_api`);
         if (testResponse.ok) {
           setApiStatus("working");
         } else if (testResponse.status === 429) {
@@ -79,7 +80,7 @@ const AIAssistant = () => {
 
   const getSuggestions = async () => {
     try {
-      const response = await fetch("http://localhost:5002/suggestions", {
+      const response = await fetch(`${PATH}/suggestions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: inputText }),
@@ -136,15 +137,12 @@ const AIAssistant = () => {
     abortControllerRef.current = new AbortController();
 
     try {
-      const response = await fetch(
-        "http://localhost:5002/generate_stream_chatbox",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: currentInputText }),
-          signal: abortControllerRef.current.signal,
-        }
-      );
+      const response = await fetch(`${PATH}/generate_stream_chatbox`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: currentInputText }),
+        signal: abortControllerRef.current.signal,
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -192,10 +190,10 @@ const AIAssistant = () => {
                   prev.map((msg) =>
                     msg.id === botMessageId
                       ? {
-                        ...msg,
-                        text: parsed.content,
-                        isComplete: true,
-                      }
+                          ...msg,
+                          text: parsed.content,
+                          isComplete: true,
+                        }
                       : msg
                   )
                 );
@@ -251,7 +249,7 @@ const AIAssistant = () => {
   //   setSuggestions([]);
 
   //   try {
-  //     const response = await fetch("http://localhost:5002/generate", {
+  //     const response = await fetch(`${PATH}/generate", {
   //       method: "POST",
   //       headers: { "Content-Type": "application/json" },
   //       body: JSON.stringify({ text: inputText }),
@@ -303,7 +301,7 @@ const AIAssistant = () => {
 
   const testAPI = async () => {
     try {
-      const response = await fetch("http://localhost:5002/test_api");
+      const response = await fetch(`${PATH}/test_api`);
       const data = await response.json();
 
       if (response.ok) {
@@ -324,7 +322,7 @@ const AIAssistant = () => {
 
   const testWebData = async () => {
     try {
-      const response = await fetch("http://localhost:5002/web_data");
+      const response = await fetch(`${PATH}/web_data`);
       const data = await response.json();
 
       if (response.ok) {
@@ -343,13 +341,15 @@ const AIAssistant = () => {
 
   const testDoctorDetail = async () => {
     try {
-      const response = await fetch("http://localhost:5002/test_doctor_detail");
+      const response = await fetch(`${PATH}/test_doctor_detail`);
       const data = await response.json();
 
       if (response.ok) {
         console.log("Doctor detail test successful:", data.message);
         console.log("Doctor detail:", data.data);
-        alert(`Thông tin bác sĩ chi tiết: ${JSON.stringify(data.data, null, 2)}`);
+        alert(
+          `Thông tin bác sĩ chi tiết: ${JSON.stringify(data.data, null, 2)}`
+        );
       } else {
         console.log("Doctor detail test failed:", data.message);
         alert(`Lỗi: ${data.message}`);
@@ -447,8 +447,9 @@ const AIAssistant = () => {
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`message ${message.isBot ? "bot-message" : "user-message"
-                  }`}
+                className={`message ${
+                  message.isBot ? "bot-message" : "user-message"
+                }`}
               >
                 <div className="message-content">
                   {message.text}

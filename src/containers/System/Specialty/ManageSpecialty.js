@@ -173,10 +173,10 @@ class ManageSpecialty extends Component {
       console.log("check res ...", res);
       if (res && res.errCode === 0 && res.data) {
         this.setState({
-          name: res.data.name,
+          name: res.data.specialtyData[0].name,
           imageBase64: res.data.image,
-          contentHTML: res.data.specialtyMarkdown.contentHTML,
-          contentMarkdown: res.data.specialtyMarkdown.contentMarkdown,
+          contentHTML: res.data.specialtyMarkdown[0].contentHTML,
+          contentMarkdown: res.data.specialtyMarkdown[0].contentMarkdown,
           previewImageUrl: res.data.image,
           hasOldData: true,
         });

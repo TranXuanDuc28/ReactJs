@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 import "./ProfileDoctor.scss";
 import { getProfileDoctorById } from "../../../services/doctorServices";
 import { LANGUAGE } from "../../../utils";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import moment from "moment";
 import _ from "lodash";
 import { Link } from "react-router-dom";
@@ -136,7 +136,7 @@ class DoctorInfo extends Component {
             {dataProfile &&
               dataProfile.Doctor_Infor &&
               language === LANGUAGE.VI && (
-                <NumberFormat
+                <NumericFormat
                   value={dataProfile.Doctor_Infor.priceTypeData.valueVi}
                   className="currency me-2"
                   displayType={"text"}
@@ -147,7 +147,7 @@ class DoctorInfo extends Component {
             {dataProfile &&
               dataProfile.Doctor_Infor &&
               language === LANGUAGE.EN && (
-                <NumberFormat
+                <NumericFormat
                   value={dataProfile.Doctor_Infor.priceTypeData.valueEn}
                   className="currency me-2"
                   displayType={"text"}

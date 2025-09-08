@@ -12,7 +12,7 @@ import Select from "react-select";
 import { postPatientBookAppointment } from "../../../../services/doctorServices";
 import { toast } from "react-toastify";
 import moment from "moment";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 class BookingModal extends Component {
   constructor(props) {
     super(props);

@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions";
 import { handlePatientChatLogin } from "../../services/userServices";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import FacebookLogin from "react-facebook-login";
-import { jwtDecode } from "jwt-decode";
+import FacebookLogin from "@greatsumini/react-facebook-login";
+import { jwtDecode } from "jwt-decode"; // đúng với version mới
 import "./LoginModal.scss";
 import RegisterModal from "./RegisterModal"; // Thêm dòng này
 
@@ -177,10 +177,10 @@ const LoginModal = ({ onClose, onLoginSuccess, patientLoginSuccess }) => {
                     appId="2514015902296614"
                     autoLoad={false}
                     fields="name,email,picture"
-                    callback={handleFacebookResponse}
-                    icon="fa-facebook"
-                    textButton="&nbsp;Đăng nhập bằng Facebook"
-                    cssClass="facebook-custom-btn"
+                    onSuccess={handleFacebookResponse}
+                    onFail={(error) =>
+                      console.log("Facebook Login Failed:", error)
+                    }
                   />
                 </div>
               </div>

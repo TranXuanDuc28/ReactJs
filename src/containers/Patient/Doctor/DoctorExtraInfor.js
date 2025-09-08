@@ -11,7 +11,7 @@ import {
 } from "../../../services/doctorServices";
 import { FormattedMessage } from "react-intl";
 import "./DoctorExtraInfor.scss";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { LANGUAGES } from "../../../utils";
 class DoctorExtraInfor extends Component {
   constructor(props) {
@@ -92,7 +92,7 @@ class DoctorExtraInfor extends Component {
               {extraInfor &&
                 extraInfor.priceTypeData &&
                 language === LANGUAGE.VI && (
-                  <NumberFormat
+                  <NumericFormat
                     value={extraInfor.priceTypeData.valueVi}
                     className="currency me-2"
                     displayType={"text"}
@@ -103,7 +103,7 @@ class DoctorExtraInfor extends Component {
               {extraInfor &&
                 extraInfor.priceTypeData &&
                 language === LANGUAGE.EN && (
-                  <NumberFormat
+                  <NumericFormat
                     value={extraInfor.priceTypeData.valueEn}
                     className="currency me-2"
                     displayType={"text"}
@@ -132,7 +132,7 @@ class DoctorExtraInfor extends Component {
                     {extraInfor &&
                       extraInfor.priceTypeData &&
                       language === LANGUAGE.VI && (
-                        <NumberFormat
+                        <NumericFormat
                           value={extraInfor.priceTypeData.valueVi}
                           className="currency"
                           displayType={"text"}
@@ -143,7 +143,7 @@ class DoctorExtraInfor extends Component {
                     {extraInfor &&
                       extraInfor.priceTypeData &&
                       language === LANGUAGE.EN && (
-                        <NumberFormat
+                        <NumericFormat
                           value={extraInfor.priceTypeData.valueEn}
                           className="currency"
                           displayType={"text"}

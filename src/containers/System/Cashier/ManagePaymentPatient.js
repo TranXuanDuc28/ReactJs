@@ -17,7 +17,7 @@ import {
 import moment from "moment";
 import RemedyModal from "./PaymentModal";
 import { getSocket } from "../../../socket";
-import LoadingOverlay from "react-loading-overlay";
+import { ClipLoader } from "react-spinners";
 
 const socket = getSocket();
 class ManagePaymentPatient extends Component {
@@ -174,112 +174,112 @@ class ManagePaymentPatient extends Component {
   };
 
   render() {
-    let { dataPatient, isOpenModal, dataModal } = this.state;
+    let { dataPatient, isOpenModal, dataModal, isShowLoading } = this.state;
     let language = this.props.language;
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
     return (
       <>
-        <LoadingOverlay
-          active={this.state.isShowLoading}
-          spinner
-          text="Loading..."
-        >
-          <div className="manage-schedule-container">
-            <div className="manage-schedule-title">
-              Quản lí bệnh nhân khám bệnh
-            </div>
-            <div className="d-flex flex-column">
-              <div className="col-4 form-group">
-                <label>Chọn ngày</label>
-                <DatePicker
-                  onChange={this.handleOnChangeDatePicker}
-                  className="form-control"
-                  value={this.state.currentDate}
-                  minDate={yesterday}
-                />
+        {isShowLoading ? (
+          <ClipLoader color="#36d7b7" size={50} />
+        ) : (
+          <>
+            <div className="manage-schedule-container">
+              <div className="manage-schedule-title">
+                Quản lí bệnh nhân khám bệnh
               </div>
-              <div className="col-12 form-group">
-                <table className="table">
-                  <tbody>
-                    <tr>
-                      <th>STT</th>
-                      <th>Thời gian</th>
-                      <th>Bác sĩ khám</th>
-                      <th>Họ tên bệnh nhân</th>
-                      <th>Giới tính</th>
-                      <th>Số điện thoại</th>
-                      <th>Địa chỉ</th>
-                      <th>Action</th>
-                    </tr>
-                    {dataPatient && dataPatient.length > 0 ? (
-                      dataPatient.map((item, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>
-                              {language === LANGUAGE.VI
-                                ? item.timeTypeDataPatient.valueVi
-                                : item.timeTypeDataPatient.valueEn}
-                            </td>
-                            <td>
-                              {item.doctorInforData
-                                ? item.doctorInforData.doctorData.firstName +
-                                  " " +
-                                  item.doctorInforData.doctorData.lastName
-                                : "Chưa cập nhật"}
-                            </td>
-
-                            <td>
-                              {item.patientData.firstName +
-                                " " +
-                                item.patientData.lastName}
-                            </td>
-
-                            <td>
-                              {language === LANGUAGE.VI
-                                ? item.patientData.genderData.valueVi
-                                : item.patientData.genderData.valueEn}
-                            </td>
-                            <td>{item.patientData.phoneNumber}</td>
-                            <td>{item.patientData.address}</td>
-                            <td>
-                              {item.statusId === "S5" ? (
-                                <button className="btn btn-primary">
-                                  Đã thanh toán!
-                                </button>
-                              ) : item.statusId === "S6" ? (
-                                <button
-                                  className="btn btn-warning text-white"
-                                  onClick={() => this.handleBtnPayment(item)}
-                                >
-                                  Thanh toán ngay!
-                                </button>
-                              ) : null}
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
+              <div className="d-flex flex-column">
+                <div className="col-4 form-group">
+                  <label>Chọn ngày</label>
+                  <DatePicker
+                    onChange={this.handleOnChangeDatePicker}
+                    className="form-control"
+                    value={this.state.currentDate}
+                    minDate={yesterday}
+                  />
+                </div>
+                <div className="col-12 form-group">
+                  <table className="table">
+                    <tbody>
                       <tr>
-                        <td colSpan="6" className="text-center">
-                          Không có bệnh nhân hôm nay
-                        </td>
+                        <th>STT</th>
+                        <th>Thời gian</th>
+                        <th>Bác sĩ khám</th>
+                        <th>Họ tên bệnh nhân</th>
+                        <th>Giới tính</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Action</th>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
+                      {dataPatient && dataPatient.length > 0 ? (
+                        dataPatient.map((item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td>{index + 1}</td>
+                              <td>
+                                {language === LANGUAGE.VI
+                                  ? item.timeTypeDataPatient.valueVi
+                                  : item.timeTypeDataPatient.valueEn}
+                              </td>
+                              <td>
+                                {item.doctorInforData
+                                  ? item.doctorInforData.doctorData.firstName +
+                                    " " +
+                                    item.doctorInforData.doctorData.lastName
+                                  : "Chưa cập nhật"}
+                              </td>
+
+                              <td>
+                                {item.patientData.firstName +
+                                  " " +
+                                  item.patientData.lastName}
+                              </td>
+
+                              <td>
+                                {language === LANGUAGE.VI
+                                  ? item.patientData.genderData.valueVi
+                                  : item.patientData.genderData.valueEn}
+                              </td>
+                              <td>{item.patientData.phoneNumber}</td>
+                              <td>{item.patientData.address}</td>
+                              <td>
+                                {item.statusId === "S5" ? (
+                                  <button className="btn btn-primary">
+                                    Đã thanh toán!
+                                  </button>
+                                ) : item.statusId === "S6" ? (
+                                  <button
+                                    className="btn btn-warning text-white"
+                                    onClick={() => this.handleBtnPayment(item)}
+                                  >
+                                    Thanh toán ngay!
+                                  </button>
+                                ) : null}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan="6" className="text-center">
+                            Không có bệnh nhân hôm nay
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-          {isOpenModal && (
-            <RemedyModal
-              isOpenModal={isOpenModal}
-              dataModal={dataModal}
-              closePaymentModal={this.closeRemedyModal}
-              handleSendPayment={this.handleSendPayment}
-            />
-          )}
-        </LoadingOverlay>
+            {isOpenModal && (
+              <RemedyModal
+                isOpenModal={isOpenModal}
+                dataModal={dataModal}
+                closePaymentModal={this.closeRemedyModal}
+                handleSendPayment={this.handleSendPayment}
+              />
+            )}
+          </>
+        )}
       </>
     );
   }

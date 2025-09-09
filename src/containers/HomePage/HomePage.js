@@ -11,6 +11,8 @@ import About from "./Section/About";
 import HomeFooter from "./HomeFooter";
 import AIAssistant from "./AIAssistant";
 import "./HomePage.scss";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 class HomePage extends Component {
   render() {
     const { isLoggedIn } = this.props;
